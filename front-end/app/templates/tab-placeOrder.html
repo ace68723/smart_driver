@@ -122,7 +122,7 @@
 		  				  	   		 		class="input__field input__field--hoshi disabled-color" 
 		  				  	     			type="text"  
 		  				  	     			name="formattedAddress" 
-		  				  	     			ng-model="poc.orderData.formattedAddress" 
+		  				  	     			ng-model="poc.cformatted_address" 
 		  				  	     			required/>
 		  				  	    
 			  				  	     <label class="input__label input__label--hoshi input__label--hoshi-color-4">
@@ -193,15 +193,15 @@
 		  				  	    
 		  				  	    <button class="button button-login  button-energized" 
 		  				  	    		ng-click="poc.preorderSubmit()"
-		  				  	    		ng-if=" !focusName && 
-		  				  	   					!focusTel && 
-		  				  	   					!focusApt&&
-		  				  	   					!focusPretax&&
-		     				  	   				submitOrderForm.name.$valid &&
-			  				  	   				submitOrderForm.tel.$valid &&
-			  				  	   				submitOrderForm.apt.$valid &&
-			  				  	   				submitOrderForm.pretax.$valid">
-		  				  	      提交
+		  				  	    		ng-disabled=" focusName || 
+		  				  	   					focusTel || 
+		  				  	   					focusApt ||
+		  				  	   					focusPretax ||
+		     				  	   				!submitOrderForm.name.$valid ||
+			  				  	   				!submitOrderForm.tel.$valid ||
+			  				  	   				
+			  				  	   				!submitOrderForm.pretax.$valid">
+		  				  	      Submit
 		  				  	    </button>
 				  	  		</form>	
 			  	  			   

@@ -10,13 +10,44 @@ smartApp.use(bodyParser.json());
 
 smartApp.post('/login', function(req, res) {
 	
-	var user = req.body;
-	
+	var user = req.body.username;
+	console.log(user);
 
 	res.status(200).send({
-		token: token,
-		username: user.username
+		result: 0,
+            msg: 'message',
+            token: 'test_token',
+            lat: '43.589045',
+            lng: '-79.644120',
+            uid: '1'
 	})
+
+})
+smartApp.get('/get_sumamry', function(req, res) {
+      var headers                = req.headers;
+      var authorizationSplit     = headers.authorization.split(" ", 2);
+      var token                        = authorizationSplit[1]
+      // get token to identity user
+      console.log(token);
+      res.status(200).send({
+           actions:actions,
+           orders:orders
+      })
+
+
+})
+
+smartApp.post('/action', function(req, res) {
+      var headers                = req.headers;
+      var authorizationSplit     = headers.authorization.split(" ", 2);
+      var token                        = authorizationSplit[1]
+      // get token to identity user
+      console.log(token);
+      res.status(200).send({
+            result: 1,
+            msg   : 'message'
+      })
+
 
 })
 
@@ -71,6 +102,30 @@ smartApp.post('/order', function(req, res) {
 smartApp.listen(3000, function() {
 	console.log("smartJwt listening on 3000")
 })
+
+
+//for orders test
+var summaryData = {};
+
+var actions = [{ oid : 213,
+                       price: 56,
+                       reason: "Customer did't answer"
+                       },
+                       { oid : 237,
+                       price: 42,
+                       reason: "Restaurant Delay"
+                       }
+  ];
+
+var orders = [{ oid : 213,
+                       price: 56,
+                       status: "Done"
+                       },
+                       { oid : 237,
+                       price: 42,
+                       status: "Delivering"
+                       }
+  ];
 
 
 

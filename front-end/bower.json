@@ -5,7 +5,8 @@
     "ionic": "v1.0.0-rc.4",
     "angular-google-maps": "~2.0.19",
     "lodash": "~3.7.0",
-    "animate.css": "~3.2.6"
+    "animate.css": "~3.2.6",
+    "ngCordova": "~0.1.15-alpha"
   },
   "devDependencies": {
     "angular-mocks": "~1.2.17",

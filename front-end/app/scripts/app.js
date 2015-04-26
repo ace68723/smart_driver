@@ -6,12 +6,13 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
-angular.module('smartApp', ['ionic', 'config','google-maps'])
+angular.module('smartApp', ['ionic', 'config','google-maps','ngCordova'])
 
-.run(function($ionicPlatform) {
+.run(function($ionicPlatform, $rootScope) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
+    $rootScope.showLogin = true;
     if(window.cordova && window.cordova.plugins.Keyboard) {
       cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
     }
@@ -22,12 +23,19 @@ angular.module('smartApp', ['ionic', 'config','google-maps'])
   });
 })
 
-.config(function($stateProvider, $urlRouterProvider,$httpProvider) {
+.config(function($stateProvider, $urlRouterProvider, $httpProvider) {
   
   //add token to headers
   $httpProvider.interceptors.push('authInterceptor');
   
   $stateProvider
+
+
+    .state('login', {
+      url: '/login',
+      templateUrl: 'templates/login.html',
+      controller: 'LoginCtrl as lc'
+    })
 
     // setup an abstract state for the tabs directive
     .state('tab', {
@@ -38,15 +46,6 @@ angular.module('smartApp', ['ionic', 'config','google-maps'])
 
     // Each tab has its own nav history stack:
 
-    .state('tab.dash', {
-      url: '/dash',
-      views: {
-        'tab-dash': {
-          templateUrl: 'templates/tab-dash.html'
-          
-        }
-      }
-    })
 
     .state('tab.placeOrder', {
       url: '/placeOrder',
@@ -63,23 +62,23 @@ angular.module('smartApp', ['ionic', 'config','google-maps'])
       views: {
         'tab-summary': {
           templateUrl: 'templates/tab-summary.html',
-          // controller: 'FriendsCtrl'
+          controller: 'SummaryCtrl as sc'
         }
       }
     });
    
 
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/tab/placeOrder');
+  $urlRouterProvider.otherwise('/login');
 
 })
 .constant('API_URL', 'http://localhost:3000/')//api url constant
   
 //add token to headers
-.service('authInterceptor',  function(){
+.service('authInterceptor',  function(authToken){
 
   function addToken (config) {
-    var token = '15651561'
+    var token = authToken.getToken();
     if (token) {
       config.headers = config.headers || {};
       config.headers.Authorization = 'Bearer ' + token;

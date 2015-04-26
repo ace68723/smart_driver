@@ -3,7 +3,7 @@
 /*jshint -W099*/
 
 angular.module('smartApp')
-  	.controller('PlaceOrderCtrl', function (API_URL,$q,postService,$timeout,$ionicPopup) {
+  	.controller('PlaceOrderCtrl', function (API_URL,$q,postService,$timeout,$ionicPopup,$location) {
 
   		var poc = this;
 
@@ -270,6 +270,8 @@ angular.module('smartApp')
     				poc.backToAreaCheck()
 
     				poc.cleanAreaCheckData()	
+
+    				$location.path( "/tab/summary" );
    
  	    		} else{
  	    			console.log(response);
