@@ -5,14 +5,16 @@ dist
 .DS_Store
 
 bower_components
-api/node_modules
+/api/node_modules
 
-front-end/node_modules
-front-end/app/lib
-front-end/www
-front-end/platforms
+/front-end/node_modules
+/front-end/app/lib
+/front-end/www
+/front-end/platforms
+/front-end/.tmp
 
-front-end-old/node_modules
-front-end-old/app/lib
-front-end-old/www
-front-end-old/platforms
+/front-end-old/node_modules
+/front-end-old/app/lib
+/front-end-old/www
+/front-end-old/platforms
+/front-end-old/.tmp
