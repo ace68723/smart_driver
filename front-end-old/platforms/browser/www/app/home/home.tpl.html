@@ -1,0 +1,109 @@
+<ion-view view-title="HOME">
+  		<div class="row">
+  			<div class="card position-1">
+	  			<div class="item item-text-wrap">
+	  	  			<ul class="list">
+	  	  				<li class="item button-height">
+	  	  					待处理订单	
+	  	  				</li>
+	  	  			    <li class="item button-height" >
+		  	  			  	<div class="row">
+		  	  			  	  <div class="col col-20">单号</div> 
+		  	  			  	  <div class="col col-20">下单时间</div>
+		  	  			  	  <div class="col col-20">类型</div>
+		  	  			  	  <div class="col col-20">餐费</div>
+		  	  			  	  <div class="col col-20">   </div>
+		  	  			  	</div>
+	  	  			    </li>
+	  	  			</ul>
+	  	  		</div>
+  			</div>
+  			<div class="card position-2">
+	  			<div class="item item-text-wrap">
+	  	  			<ul class="list">
+	  	  				<li class="item button-height">
+	  	  					待处理订单	
+	  	  				</li>
+	  	  			    <li class="item button-height" >
+		  	  			  	<div class="row">
+		  	  			  	  <div class="col col-20">单号</div> 
+		  	  			  	  <div class="col col-20">下单时间</div>
+		  	  			  	  <div class="col col-20">类型</div>
+		  	  			  	  <div class="col col-20">餐费</div>
+		  	  			  	  <div class="col col-20">备注</div>
+		  	  			  	</div>
+	  	  			    </li>
+	  	  			</ul>
+	  	  		</div>
+  			</div>
+  				<ion-content class="test padding col col-50" >
+		  			<div class="card orderlist">
+		  			  	<div class="item item-text-wrap">
+				  	  			<ul class="list">
+				  	  			    <li class="item test" ng-repeat="(id, item) in hc.newItem">
+					  	  			  	<div class="row">
+					  	  			  	  <div class="col col-20">{{item.oid}}</div>
+					  	  			  	  <div class="col col-20">{{item.time.hour}}:{{item.time.minute}}</div>
+					  	  			  	  <div class="col col-20" ng-if="item.dltype == 1 ">送餐</div>
+					  	  			  	  <div class="col col-20" ng-if="item.dltype == 2 ">自取</div>
+					  	  			  	  <div class="col col-20">{{item.total | currency}}</div>
+
+					  	  			  	  <div class="col col-20">   
+					  	  			  	  	<button class="button button-energized" ng-click="hc.getOrderDetail(item.oid)">
+					  	  			  	  	  处理
+					  	  			  	  	</button>
+					  	  			  	  </div>
+					  	  			  	</div>
+				  	  			    </li>
+				  	  			</ul>
+			  				
+		  				</div>
+		  			</div>
+				</ion-content>
+  			
+	  	  	<ion-content class="padding col col-50 col-offset-50">
+	  	  		  			<div class="card orderlist">
+	  	  		  			  	<div class="item item-text-wrap">
+	  	  				  	  			<ul class="list">
+	  	  				  	  			    <li class="item">
+	  	  					  	  			  	<div class="row">
+	  	  					  	  			  	  <div class="col col-20">1</div>
+	  	  					  	  			  	  <div class="col col-20">21:20</div>
+	  	  					  	  			  	  <div class="col col-20">送餐</div>
+	  	  					  	  			  	  <div class="col col-20">$20.99</div>
+	  	  					  	  			  	  <div class="col col-20" ng-class="{inProgress:true, finish:false, reject:false}">   
+	  	  					  	  			  	  	  已接单 </br> 正在准备
+	  	  					  	  			  	  </div>
+	  	  					  	  			  	</div>
+	  	  				  	  			    </li>
+	  	  				  	  			    <li class="item">
+	  	  					  	  			  	<div class="row">
+	  	  					  	  			  	  <div class="col col-20">1234</div>
+	  	  					  	  			  	  <div class="col col-20">21:20</div>
+	  	  					  	  			  	  <div class="col col-20">送餐</div>
+	  	  					  	  			  	  <div class="col col-20">$20.99</div>
+	  	  					  	  			  	  <div class="col col-20" ng-class="{inProgress:false, finish:true, reject:false}">   
+	  	  					  	  			  	  	  已完成
+	  	  					  	  			  	  </div>
+	  	  					  	  			  	</div>
+	  	  				  	  			    </li>
+	  	  				  	  			    <li class="item">
+	  	  					  	  			  	<div class="row">
+	  	  					  	  			  	  <div class="col col-20">1234</div>
+	  	  					  	  			  	  <div class="col col-20">21:20</div>
+	  	  					  	  			  	  <div class="col col-20">送餐</div>
+	  	  					  	  			  	  <div class="col col-20">$20.99</div>
+	  	  					  	  			  	  <div class="col col-20" ng-class="{inProgress:false, finish:false, reject:true}">   
+	  	  					  	  			  	  	  打回
+	  	  					  	  			  	  </div>
+	  	  					  	  			  	</div>
+	  	  				  	  			    </li>
+	  	  				  	  			   <button class="button button-energized" ng-click="hc.logout()">
+	  	  				  	  			     Logout
+	  	  				  	  			   </button> 
+	  	  				  	  			</ul>
+	  	  		  				</div>
+	  	  		  			</div>
+	  	  	</ion-content>
+	  	</div>
+</ion-view>

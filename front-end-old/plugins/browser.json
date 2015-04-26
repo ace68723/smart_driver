@@ -1,0 +1,27 @@
+{
+    "prepare_queue": {
+        "installed": [],
+        "uninstalled": []
+    },
+    "config_munge": {
+        "files": {}
+    },
+    "installed_plugins": {
+        "org.apache.cordova.splashscreen": {
+            "PACKAGE_NAME": "com.ionicframework.ionictest823938"
+        },
+        "com.ionic.keyboard": {
+            "PACKAGE_NAME": "com.ionicframework.ionictest823938"
+        },
+        "org.pbernasconi.progressindicator": {
+            "PACKAGE_NAME": "com.ionicframework.ionictest823938"
+        },
+        "org.apache.cordova.dialogs": {
+            "PACKAGE_NAME": "com.ionicframework.ionictest823938"
+        },
+        "nl.x-services.plugins.actionsheet": {
+            "PACKAGE_NAME": "com.ionicframework.ionictest823938"
+        }
+    },
+    "dependent_plugins": {}
+}

@@ -1,0 +1,229 @@
+<ion-view view-title="关于我们" cache-view ="false">
+  		
+ 
+  			<div class="card-information-header">
+  					<div class="row ">
+  					  	<div class="colP col-50 ">
+  					  				
+  					  		<div class="list">
+  					  		  <div class="item ">
+  					  		   馋猫订餐 chanmao.ca
+  					  		  </div>
+  					  		</div>	
+
+  					  	</div>
+  					  	<div class="colP col-20">
+
+  					  		<div class="list">
+  					  		  <div class="item ">
+  					  		   退出登录<br>
+
+  					  		  </div>
+  					  		</div>
+  					  		  					  	</div>
+  					  	<div class="colP col-30">
+  					  		
+  					  		<div class="list">
+  					  		  <div class="item ">
+  					  		   团队<br>
+  					  		    
+  					  		  </div>
+  					  		</div>
+
+  					  	</div>
+  					</div>
+  			</div>
+
+	  		
+	  			<ion-content class=" card-information-left"
+		  						class="padding  "  
+		  						ng-class="{fadeOutUp:poc.showOrderSubmit}"
+		  						scroll="false">
+					<img class="information-logo animated bounceIn" 
+						 ng-src="http://chanmao.ca/img/logo.png"
+						 ng-if="ic.showLogo">
+
+					<div class="information-text animated fadeIn"
+						  ng-if="ic.showText">
+						让美食来敲门
+					</div>
+
+		  			<div class="information-tel animated fadeIn"
+		  				 ng-if="ic.showTel"
+		  				 >
+						客服电话：647-515-6699
+					</div>	
+					
+					<div class="information-social animated bounceInUp"
+						 ng-if="ic.showSocial">
+						<div class="row">
+							<div class="col-50"> 
+								微信: chanmaoweixin
+								<img class="img-social" src="http://chanmao.ca/img/mobile/wechat.jpg">	
+							</div>
+							<div class="col-50">
+								微博: 馋猫订餐
+								<img class="img-social" src="http://chanmao.ca/img/mobile/weibo.png">
+							</div>
+						</div>
+					</div>		
+
+				</ion-content>
+
+			  	<ion-content	class="col-offset-75 card-information-right"
+		  						class="padding  animated zoomIn"  
+		  						ng-class="{fadeOutUp:poc.showOrderSubmit}">
+		  				
+		  					
+		  					  
+		  					  	<div >
+		  					  		
+		  					  		<ion-list scroll="false">
+		  					  		      <ion-item class="item-avatar"  type="item-text-wrap">
+		  					  		        <img ng-src="http://chanmao.ca/img/index/type11.png">
+		  					  		        <h2>馋猫</h2>
+		  					  		      </ion-item>
+		  					  		      <ion-item class="item-avatar"  type="item-text-wrap">
+		  					  		        <img ng-src="http://chanmao.ca/img/index/type11.png">
+		  					  		        <h2>馋猫</h2>
+		  					  		      </ion-item>
+
+		  					  		      <ion-item class="item-avatar"  type="item-text-wrap">
+		  					  		        <img ng-src="http://chanmao.ca/img/index/type11.png">
+		  					  		        <h2>馋猫</h2>
+		  					  		      </ion-item>
+
+		  					  		      <ion-item class="item-avatar"  type="item-text-wrap">
+		  					  		        <img ng-src="http://chanmao.ca/img/index/type11.png">
+		  					  		        <h2>馋猫</h2>
+		  					  		      </ion-item>
+
+		  					  		      <ion-item class="item-avatar"  type="item-text-wrap">
+		  					  		        <img ng-src="http://chanmao.ca/img/index/type11.png">
+		  					  		        <h2>馋猫</h2>
+		  					  		      </ion-item>
+
+		  					  		      <ion-item class="item-avatar"  type="item-text-wrap">
+		  					  		        <img ng-src="http://chanmao.ca/img/index/type11.png">
+		  					  		        <h2>馋猫</h2>
+		  					  		      </ion-item>
+
+		  					  		      <ion-item class="item-avatar"  type="item-text-wrap">
+		  					  		        <img ng-src="http://chanmao.ca/img/index/type11.png">
+		  					  		        <h2>馋猫</h2>
+		  					  		      </ion-item>
+
+		  					  		</ion-list>
+
+		  					  	</div>
+		  					
+
+
+		  			
+			  			
+			  	</ion-content>
+		  	
+	  	  	
+	  	  	
+
+</ion-view>
+
+
+
+<!--   					<div class="card ">
+		  			  	<div class="item item-text-wrap">
+			  	  			
+			  	  			<form name="placeOrderForm">
+		  				  	    <span class="input input--hoshi " ng-class="{'input--filled':placeOrderForm.address.$valid}">
+		  				  	      <input class="input__field input__field--hoshi"  
+		  				  	      		 type="text" 
+		  				  	      		 name="address" 
+		  				  	      		 ng-model="poc.areaCheckData.address" 
+		  				  	      		 ng-focus="focusAddress=true"
+		  				  	      		 ng-blur="focusAddress=false"
+		  				  	      		 required  />
+		  				  	      <label class="input__label input__label--hoshi input__label--hoshi-color-1" >
+		  				  	        <span class="input__label-content input__label-content--hoshi ">配送地址: </span>
+		  				  	      </label>
+		  				  	    </span>
+
+
+		  				  	   <span class="input input--hoshi" ng-class="{'input--filled':placeOrderForm.city.$valid}">
+		  				  	     <input class="input__field input__field--hoshi" 
+		  				  	     		type="text"  
+		  				  	     		name="city" 
+		  				  	     		ng-model="poc.areaCheckData.city" 
+		  				  	     		ng-focus="focusCity=true"
+		  				  	      		ng-blur="focusCity=false"
+		  				  	     		required/>
+		  				  	     <label class="input__label input__label--hoshi input__label--hoshi-color-2">
+		  				  	       <span class="input__label-content input__label-content--hoshi">城市:</span>
+		  				  	     </label>
+		  				  	   </span>
+
+
+		  				  	   <span class="input input--hoshi" ng-class="{'input--filled':placeOrderForm.postalCode.$valid}">
+		  				  	     <input class="input__field input__field--hoshi" 
+		  				  	     		type="text"  
+		  				  	     		name="postalCode" 
+		  				  	     		ng-model="poc.areaCheckData.postalCode " 
+		  				  	     		ng-focus="focusPostalCode=true"
+		  				  	      		ng-blur="focusPostalCode=false"
+		  				  	     		required/>
+		  				  	     <label class="input__label input__label--hoshi input__label--hoshi-color-3">
+		  				  	       <span class="input__label-content input__label-content--hoshi">邮编:</span>
+		  				  	     </label>
+		  				  	   </span>
+
+		  				  	   <span class="input input--hoshi" 
+		  				  	   			
+		  				  	   			ng-if=" !focusAddress && 
+		  				  	   					!focusCity && 
+		  				  	   					!focusPostalCode&&
+		     				  	   				placeOrderForm.address.$valid &&
+			  				  	   				placeOrderForm.city.$valid &&
+			  				  	   				placeOrderForm.postalCode.$valid"
+		  				  	   			ng-init="poc.getCodeAddress()"
+		  				  	   			ng-class="{'input--filled':placeOrderForm.formattedAddress.$valid}">
+		  				  	   		 
+		  				  	   		 <input disabled="true"
+		  				  	   		 		class="input__field input__field--hoshi disabled-color" 
+		  				  	     			type="text"  
+		  				  	     			name="formattedAddress" 
+		  				  	     			ng-model="poc.areaCheckData.formattedAddress" 
+		  				  	     			required/>
+		  				  	    
+			  				  	     <label class="input__label input__label--hoshi input__label--hoshi-color-4">
+			  				  	        <span ng-if="!poc.showError"
+			  				  	       		class="input__label-content input__label-content--hoshi">
+			  				  	       			完整地址:
+										</span>
+
+			  				  	       	<span ng-if="poc.showError" 
+			  				  	       		class="input__label-content input__label-content--hoshi">
+			  				  	       			地址不正确:
+			  				  	       	</span>
+
+			  				  	     </label>
+		  				  	   
+		  				  	   </span>
+		  				  	    <button class="button button-login  button-energized" 
+		  				  	    		ng-click="poc.areaCheck()"
+		  				  	    		ng-if="placeOrderForm.formattedAddress.$valid ">
+		  				  	      查看运费
+		  				  	    </button>
+				  	  		</form>	
+
+			  	  			   
+			  	  			  
+					  	  		<br>
+			  	  			    <br>
+			  	  			    <br>
+			  	  			    <br>
+			  	  			    <br>
+			  	  			    <br>
+			  	  			    <br>
+
+			  	  			</ul>
+		  				</div>
+		  			</div> -->
