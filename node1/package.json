@@ -12,7 +12,6 @@
     "body-parser": "^1.12.3",
     "cors": "^2.5.3",
     "express": "^4.12.3",
-    "express-jwt": "^3.0.0",
-    "firebase": "^2.2.4"
+    "express-jwt": "^3.0.0"
   }
 }

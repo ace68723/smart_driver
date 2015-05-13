@@ -69,10 +69,10 @@ angular.module('smartApp', ['ionic', 'config','google-maps','ngCordova'])
    
 
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/login');
+  $urlRouterProvider.otherwise('/tab/placeOrder');
 
 })
-.constant('API_URL', 'http://localhost:3000/')//api url constant
+.constant('API_URL', 'http://www.ajaxmart.ca:3000/')//api url constant
   
 //add token to headers
 .service('authInterceptor',  function(authToken){
