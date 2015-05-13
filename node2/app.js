@@ -1,7 +1,9 @@
 var redis 			= require('redis');
-var client 			= redis.createClient();
+//connect redis
+// var client 			= redis.createClient();
+//connect redis end
 var moment 			= require('moment');
-var jobSchedule 	= require('jobSchedule//build/Release/jobSchedule');
+var jobSchedule 	= require('jobscheduling/build/Release/jobSchedule');
 
 
 // client.on('connect', function() {
@@ -30,61 +32,34 @@ var jobSchedule 	= require('jobSchedule//build/Release/jobSchedule');
 
 
 
-// var drivers = [
-// { "ID": "Xunrui", "avlbTime": 0, "offTime": 600, "venue": "Chanmao Inc." },
-// { "ID": "Aiden", "avlbTime": 100, "offTime": 400, "venue": "Chanmao Inc." }
-// ];
+// var jobSchedule = require('./build/Release/jobSchedule');
 
-// var tasks = [ 
-// { "ID":"order1-fetch", "venue":"Chanmao Inc.", "deadline":110, "asgnDriver":"", "prevTaskID":"" }, 
-// { "ID":"order1-deliver", "venue":"Client1", "deadline":210, "asgnDriver":"", "prevTaskID":"order1-fetch" }, 
-// { "ID":"order2-deliver", "venue":"Client2", "deadline":310, "asgnDriver":"Aiden", "prevTaskID":"" } 
-// ];
+var drivers = [
+{ "ID": "Xunrui", "avlbTime": 0, "offTime": 600, "venue": "Chanmao Inc." },
+{ "ID": "Aiden", "avlbTime": 100, "offTime": 400, "venue": "Chanmao Inc." }
+];
 
-// var paths = [ 
-// { "src":"Chanmao Inc.", "dst":"Client1", "distance":10},
-// { "dst":"Chanmao Inc.", "src":"Client1", "distance":10},
-// { "src":"Chanmao Inc.", "dst":"Client2", "distance":20},
-// { "dst":"Chanmao Inc.", "src":"Client2", "distance":20},
-// { "src":"Client1", "dst":"Client2", "distance":25},
-// { "dst":"Client1", "src":"Client2", "distance":25}
-// ];
+var tasks = [ 
+{ "ID":"order1-fetch", "venue":"Chanmao Inc.", "deadline":110, "asgnDriver":"", "prevTaskID":"" }, 
+{ "ID":"order1-deliver", "venue":"Client1", "deadline":210, "asgnDriver":"", "prevTaskID":"order1-fetch" }, 
+{ "ID":"order2-deliver", "venue":"Client2", "deadline":310, "asgnDriver":"Aiden", "prevTaskID":"" } 
+];
 
+var paths = [ 
+{ "src":"Chanmao Inc.", "dst":"Client1", "distance":10},
+{ "dst":"Chanmao Inc.", "src":"Client1", "distance":10},
+{ "src":"Chanmao Inc.", "dst":"Client2", "distance":20},
+{ "dst":"Chanmao Inc.", "src":"Client2", "distance":20},
+{ "src":"Client1", "dst":"Client2", "distance":25},
+{ "dst":"Client1", "src":"Client2", "distance":25}
+];
 
-// if (!k) {
-// 	console.log('not')
-// };
+function callbackFunc(str) {
+	console.log(str);
+}
 
-// var k = jobSchedule.search(JSON.stringify({"drivers":drivers, "tasks":tasks, "paths":paths}))
-
-// if (k) {
-// 	console.log('got it')
-// };
-
-
-var k;
-
-timeout_test = function() {
-	k=3
-	setTimeout(function() {
-		k=2
-	},100)
-	
-};
-
-test = function() {
-	console.log(1)
-	timeout_test() 
-	console.log(k)
-	console.log(4);
-
-	setTimeout(function() {
-		console.log(k, ' wait for timout')
-	},100)
-};
-
-test();
-
+jobSchedule.search(JSON.stringify({"drivers":drivers, "tasks":tasks, "paths":paths}), callbackFunc);
+//console.log(jobSchedule.search(JSON.stringify({"drivers":drivers, "tasks":tasks, "paths":paths})));
 
 
 
