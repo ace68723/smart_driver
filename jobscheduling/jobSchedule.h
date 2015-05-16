@@ -21,7 +21,6 @@ typedef int CTime;
 typedef int CRTime;
 typedef string CID;
 #define NULL_ID    ""
-//how to define a NULL string?
 
 typedef CID CLocationID;
 class ALG;
@@ -30,15 +29,17 @@ class CDriver
 {
 public:
 	CDriver(CID driverID=NULL_ID, CTime availableTime=0, CTime offWorkTime=0, CLocationID availableLoc=NULL_ID)
-		:id(driverID), avlbTime(availableTime), offTime(offWorkTime), avlbLocation(availableLoc){};
-	CID 	id;
-	CTime	avlbTime; 
-	CTime	offTime; // when he gets off work
-	CLocationID	avlbLocation;
-	/******* may be changed in algorithm: avlbTime ********************/
+		:did(driverID), available(availableTime), off(offWorkTime), location(availableLoc){};
+	CID 	did;
+	/******* may be changed in algorithm: available ********************/
+	CTime	available; 
+	CTime	off; // when he gets off work
+	CLocationID	location;
 protected:
 	vector<int>	tasksAtHand;
 	vector<int>	taskList;
+	CTime   origin_available;
+	int 	iOrigin_location;
 	int	iLocation;
 	CTime   finishTime;
 	CTime	delayTime;
@@ -49,13 +50,13 @@ class CTask
 {
 public:
 	CTask(CID taskID=NULL_ID, CLocationID destVenue=NULL_ID, CTime _deadline=0, CTime _readyTime=0, CID asgnDriver=NULL_ID, CID prevTask=NULL_ID)
-	       	:id(taskID), venue(destVenue), deadline(_deadline), readyTime(_readyTime), asgnDriverID(asgnDriver), prevTaskID(prevTask){};
-	CID 	id;
-	CLocationID	venue;
+	       	:tid(taskID), location(destVenue), deadline(_deadline), ready(_readyTime), did(asgnDriver), depend(prevTask){};
+	CID 	tid;
+	CLocationID	location;
 	CTime	deadline; 
-	CTime	readyTime;  // set this to positive values if the driver has to wait when he arrives at the restaurant
-	CID	asgnDriverID; //if != NULL_DRIVERID, this task can only be assigned to this driver
-	CID	prevTaskID; // this task can only start after prevTaskID, and be carried out by the same driver
+	CTime	ready;  // set this to positive values if the driver has to wait when he arrives at the restaurant
+	CID	did; //if != NULL_DRIVERID, this task can only be assigned to this driver
+	CID	depend; // this task can only start after prevTaskID, and be carried out by the same driver
 	//double	profit, penalty; //reserved for adjusting algorithm's behavior
 	/******* may be changed in algorithm:  iAsgnDriver ********************/
 protected:
@@ -71,10 +72,10 @@ class CPath
 {
 public:
 	CPath(CLocationID src=NULL_ID, CLocationID dst=NULL_ID, CTime travelTime=0)
-	       	:source(src), dest(dst), dist(travelTime) {};
-	CLocationID source; 
-	CLocationID dest;
-	CRTime dist;
+	       	:start(src), end(dst), time(travelTime) {};
+	CLocationID start; 
+	CLocationID end;
+	CRTime time;
 protected:
 	int iSrc, iDst;
 	friend class ALG;
@@ -83,8 +84,11 @@ protected:
 class CScheduleItem
 { 
 public:
-	CID driverID;
-	vector<CID>  asgnTaskID; //the tasks assigned to this driver, in chronological order
+	CID did;
+	vector<CID>  tids; //the tasks assigned to this driver, in chronological order
+	int updated;
+	CTime available;
+	CLocationID location;
 };
 
 //parameter: drivers[in], tasks[in], paths[in], schedule[out]. returns if the scheduling is normal
@@ -92,10 +96,10 @@ public:
 //abnormal cases include: ...
 class ALG{
 public:
-	static bool findScheduleGreedy(vector<CDriver> & drivers, vector<CTask> & tasks, vector<CPath> & paths, vector<CScheduleItem> &schedule);
-	static bool findScheduleBasic(vector<CDriver> & drivers, vector<CTask> & tasks, vector<CPath> & paths, vector<CScheduleItem> &schedule);
+	static bool findScheduleGreedy(CTime curTime, vector<CDriver> & drivers, vector<CTask> & tasks, vector<CPath> & paths, vector<CScheduleItem> &schedule);
+	static bool findScheduleBasic(CTime curTime, vector<CDriver> & drivers, vector<CTask> & tasks, vector<CPath> & paths, vector<CScheduleItem> &schedule);
 private:
-	static bool preProcess(vector<CDriver> & drivers, vector<CTask> & tasks, vector<CPath> & paths, int &nLocations);
+	static bool preProcess(CTime curTime, vector<CDriver> & drivers, vector<CTask> & tasks, vector<CPath> & paths, int &nLocations);
 	static void assignTaskToDriver(int iTask, int iDriver, vector<CDriver> & drivers, vector<CTask> & tasks);
 	static bool select_next_task(CDriver & driver, int iDriver, vector<CTask> & tasks, int & iSelectedTask);
 	static void arrange_future_tasks(CDriver & driver, vector<CTask> & tasks);

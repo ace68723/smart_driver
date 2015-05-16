@@ -16,7 +16,7 @@ void ALG::calDFTime(int iStart, int iEnd, CDriver & driver, vector<CTask> & task
 double ALG::tryAddTask(int iTask, int iDriver, CDriver & driver, vector<CTask> & tasks)
 	//return the evaluation, the higher the better
 {
-	CTime fTime= driver.avlbTime;
+	CTime fTime= driver.available;
 	CTime dTime=0;
 	//calculate the new finish time and delay time
 	int curLoc = driver.iLocation;
@@ -43,9 +43,9 @@ double ALG::tryAddTask(int iTask, int iDriver, CDriver & driver, vector<CTask> &
 				tempd += tempf - tasks[introTask].deadline;
 			iLoc = tasks[introTask].iVenue;
 			calDFTime(i+1, driver.tasksAtHand.size(), driver, tasks, iLoc, tempd, tempf);
-			if (tempf > driver.offTime) continue;
+			if (tempf > driver.off) continue;
 			if (driver.delayTime <=0 && tempd > 0) continue;
-			if (bestFTime > driver.offTime || bestDTime > tempd) {
+			if (bestFTime > driver.off || bestDTime > tempd) {
 				bestFTime = tempf;
 				bestDTime = tempd;
 			}
@@ -56,7 +56,7 @@ double ALG::tryAddTask(int iTask, int iDriver, CDriver & driver, vector<CTask> &
 
 
 	//printf("try assign task %d to dirver %d.\n", iTask, iDriver);
-	if (fTime > driver.offTime) {
+	if (fTime > driver.off) {
 		//printf("infeasible because of offwork time\n");
 		return 0;
 	}
@@ -72,7 +72,7 @@ void ALG::arrange_future_tasks(CDriver & driver, vector<CTask> & tasks)
 {
 	driver.finishTime = 0;
 	driver.delayTime = 0;
-	CTime curTime = driver.avlbTime;
+	CTime curTime = driver.available;
 	vector<bool> mark(driver.tasksAtHand.size(), false);
 	int curLoc = driver.iLocation;
 	for (unsigned int i=0; i<driver.tasksAtHand.size(); i++) {
@@ -137,10 +137,10 @@ bool ALG::select_next_task(CDriver & driver, int iDriver, vector<CTask> & tasks,
 	return (iSelectedTask != -1);
 }
 //assume each task has only one prevTask or nextTask
-bool ALG::findScheduleGreedy(vector<CDriver> & drivers, vector<CTask> & tasks, vector<CPath> & paths, vector<CScheduleItem> &schedule)
+bool ALG::findScheduleGreedy(CTime curTime, vector<CDriver> & drivers, vector<CTask> & tasks, vector<CPath> & paths, vector<CScheduleItem> &schedule)
 {
 	int nLocations;
-	if (!preProcess(drivers, tasks, paths, nLocations)) 
+	if (!preProcess(curTime, drivers, tasks, paths, nLocations)) 
 		return false;
 	vector<int> prior(drivers.size());
 	for (unsigned int i=0; i<drivers.size(); i++) prior[i] = i;
@@ -163,13 +163,25 @@ bool ALG::findScheduleGreedy(vector<CDriver> & drivers, vector<CTask> & tasks, v
 	}
 	//set up schedule according to each driver's taskList
 	schedule.clear();
-	for (unsigned int i=0; i<drivers.size(); i++) if (drivers[i].taskList.size()){
+	for (unsigned int i=0; i<drivers.size(); i++) //if (drivers[i].taskList.size()){
+	{
 		CScheduleItem si;
-		si.driverID = drivers[i].id;
-		si.asgnTaskID.clear();
+		si.did = drivers[i].did;
+		si.tids.clear();
 		for (unsigned int j=0; j<drivers[i].taskList.size(); j++) {
 			int idx = drivers[i].taskList[j];
-			si.asgnTaskID.push_back(tasks[idx].id);
+			si.tids.push_back(tasks[idx].tid);
+		}
+		if (drivers[i].origin_available <= curTime && drivers[i].taskList.size() > 0) {
+			int idx = drivers[i].taskList[0];
+			si.available = curTime + map[drivers[i].iOrigin_location][tasks[idx].iVenue]; 
+			si.location = tasks[idx].location;
+			si.updated = true;
+		}
+		else {
+			si.location = drivers[i].location;
+			si.available = drivers[i].origin_available;
+			si.updated = false;
 		}
 		schedule.push_back(si);
 	}
@@ -181,7 +193,7 @@ void ALG::assignTaskToDriver(int iTask, int iDriver, vector<CDriver> & drivers, 
 	//printf("assign task %d to driver %d\n", iTask, iDriver);
 	drivers[iDriver].taskList.push_back(iTask);
 	tasks[iTask].iDriver = iDriver;
-	drivers[iDriver].avlbTime += map[drivers[iDriver].iLocation][tasks[iTask].iVenue];
+	drivers[iDriver].available += map[drivers[iDriver].iLocation][tasks[iTask].iVenue];
 	drivers[iDriver].iLocation = tasks[iTask].iVenue;
 	if (tasks[iTask].iAsgnDriver == iDriver) {
 		//assert the last taskAtHand is chosen 
@@ -200,29 +212,29 @@ void ALG::assignTaskToDriver(int iTask, int iDriver, vector<CDriver> & drivers, 
 		arrange_future_tasks(drivers[iDriver], tasks);
 	}
 }
-bool ALG::preProcess(vector<CDriver> & drivers, vector<CTask> & tasks, vector<CPath> & paths, int &nLocations)
+bool ALG::preProcess(CTime curTime, vector<CDriver> & drivers, vector<CTask> & tasks, vector<CPath> & paths, int &nLocations)
 {
 	vector<CLocationID> locationIDs;
 	for (unsigned int i=0; i<paths.size(); i++) {
 		int findID = -1;
 		for (unsigned int j=0; j<locationIDs.size(); j++)
-			if (locationIDs[j] == paths[i].source){
+			if (locationIDs[j] == paths[i].start){
 				findID = j;
 				break;
 			}
 		if (findID < 0) {
-			locationIDs.push_back(paths[i].source);
+			locationIDs.push_back(paths[i].start);
 			findID = locationIDs.size() -1;
 		}
 		paths[i].iSrc = findID;
 		findID = -1;
 		for (unsigned int j=0; j<locationIDs.size(); j++)
-			if (locationIDs[j] == paths[i].dest){
+			if (locationIDs[j] == paths[i].end){
 				findID = j;
 				break;
 			}
 		if (findID < 0) {
-			locationIDs.push_back(paths[i].dest);
+			locationIDs.push_back(paths[i].end);
 			findID = locationIDs.size() -1;
 		}
 		paths[i].iDst = findID;
@@ -234,7 +246,7 @@ bool ALG::preProcess(vector<CDriver> & drivers, vector<CTask> & tasks, vector<CP
 		for (int j=0; j<nLocations; j++)
 			map[i][j] = (i==j)? 0: -1;
 	for (unsigned int i=0; i<paths.size(); i++) 
-		map[paths[i].iSrc][paths[i].iDst] = paths[i].dist;
+		map[paths[i].iSrc][paths[i].iDst] = paths[i].time;
 	/* find the shortest paths, this should NOT be necessary */
 	for (int k=0; k<nLocations; k++)
 		for (int i=0; i<nLocations; i++) {
@@ -246,15 +258,19 @@ bool ALG::preProcess(vector<CDriver> & drivers, vector<CTask> & tasks, vector<CP
 			}
 		}
 	for (unsigned int i=0; i<drivers.size(); i++) {
+		if (drivers[i].available <= curTime)
+			drivers[i].available = curTime;
 		drivers[i].tasksAtHand.clear();
 		drivers[i].taskList.clear();
+		drivers[i].origin_available = drivers[i].available;
 		drivers[i].iLocation = -1;
 		for (int j=0; j<nLocations; j++) 
-			if (drivers[i].avlbLocation == locationIDs[j]) {
+			if (drivers[i].location == locationIDs[j]) {
 				drivers[i].iLocation = j;
 				break;
 			}
 		if (drivers[i].iLocation == -1) return false;
+		drivers[i].iOrigin_location = drivers[i].iLocation;
 	}
 	// convert tasks.asgnDriverID/prevTaskID to integer id -- the corresponding index
 	// set drivers[].tasksAtHand tasks[].iNextTask
@@ -262,9 +278,9 @@ bool ALG::preProcess(vector<CDriver> & drivers, vector<CTask> & tasks, vector<CP
 	for (unsigned int i=0; i<tasks.size(); i++) {
 		tasks[i].iDriver = -1;
 		tasks[i].iAsgnDriver = -1;
-		if (tasks[i].asgnDriverID != NULL_ID) {
+		if (tasks[i].did != NULL_ID) {
 			for (unsigned int j=0; j<drivers.size(); j++)
-				if (drivers[j].id == tasks[i].asgnDriverID) {
+				if (drivers[j].did == tasks[i].did) {
 					drivers[j].tasksAtHand.push_back(i);
 					tasks[i].iAsgnDriver = j;
 					break;
@@ -273,9 +289,9 @@ bool ALG::preProcess(vector<CDriver> & drivers, vector<CTask> & tasks, vector<CP
 			if (tasks[i].iAsgnDriver == -1) return false;
 		}
 		tasks[i].iPrevTask = -1;
-		if (tasks[i].prevTaskID != NULL_ID) {
+		if (tasks[i].depend != NULL_ID) {
 			for (unsigned int j=0; j<tasks.size(); j++) 
-				if (tasks[j].id == tasks[i].prevTaskID) {
+				if (tasks[j].tid == tasks[i].depend) {
 					tasks[i].iPrevTask = j;
 					tasks[j].iNextTask = i;
 					break;
@@ -285,7 +301,7 @@ bool ALG::preProcess(vector<CDriver> & drivers, vector<CTask> & tasks, vector<CP
 		}
 		tasks[i].iVenue = -1;
 		for (int j=0; j<nLocations; j++) 
-			if (tasks[i].venue == locationIDs[j]) {
+			if (tasks[i].location == locationIDs[j]) {
 				tasks[i].iVenue = j;
 				break;
 			}
@@ -297,10 +313,10 @@ bool ALG::preProcess(vector<CDriver> & drivers, vector<CTask> & tasks, vector<CP
 
 	return true;
 }
-bool ALG::findScheduleBasic(vector<CDriver> & drivers, vector<CTask> & tasks, vector<CPath> & paths, vector<CScheduleItem> &schedule)
+bool ALG::findScheduleBasic(CTime curTime, vector<CDriver> & drivers, vector<CTask> & tasks, vector<CPath> & paths, vector<CScheduleItem> &schedule)
 {
 	int nLocations;
-	if (!preProcess(drivers, tasks, paths, nLocations)) 
+	if (!preProcess(0, drivers, tasks, paths, nLocations)) 
 		return false;
 	int nDrivers = drivers.size();
 	int lastDriver = -1;
@@ -324,11 +340,22 @@ bool ALG::findScheduleBasic(vector<CDriver> & drivers, vector<CTask> & tasks, ve
 	schedule.clear();
 	for (unsigned int i=0; i<drivers.size(); i++) if (drivers[i].taskList.size()){
 		CScheduleItem si;
-		si.driverID = drivers[i].id;
-		si.asgnTaskID.clear();
+		si.did = drivers[i].did;
+		si.tids.clear();
 		for (unsigned int j=0; j<drivers[i].taskList.size(); j++) {
 			int idx = drivers[i].taskList[j];
-			si.asgnTaskID.push_back(tasks[idx].id);
+			si.tids.push_back(tasks[idx].tid);
+		}
+		if (drivers[i].origin_available <= curTime && drivers[i].taskList.size() > 0) {
+			int idx = drivers[i].taskList[0];
+			si.available = curTime + map[drivers[i].iOrigin_location][tasks[idx].iVenue]; 
+			si.location = tasks[idx].location;
+			si.updated = 1;
+		}
+		else {
+			si.location = drivers[i].location;
+			si.available = drivers[i].origin_available;
+			si.updated = 0;
 		}
 		schedule.push_back(si);
 	}
