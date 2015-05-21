@@ -1,6 +1,6 @@
 #include <iostream>
 #include <stdlib.h>
-#include "paras.h"
+#include "jobSchedule.h"
 using namespace std;
 
 void printSchedule(vector<CScheduleItem> &schedule);
@@ -15,11 +15,11 @@ bool checkConstraints(vector<CDriver> & drivers, vector<CTask> & tasks, vector<C
 	vector< vector<int> > s(drivers.size(), vector<int>(tasks.size(),-1));
 	vector<int> task_to_driver(tasks.size(), -1);
 	for (int i=0; i<schedule.size(); i++) {
-		vector<CID> &tasklist = schedule[i].asgnTaskID;
+		vector<CID> &tasklist = schedule[i].tids;
 		bool found = false;
 		int iDriver = -1;
 		for (int j=0; j<drivers.size(); j++) {
-			if (schedule[i].driverID == drivers[j].id) {
+			if (schedule[i].did == drivers[j].did) {
 				driver_count[j]++;
 				iDriver = j;
 				found = true;
@@ -27,13 +27,13 @@ bool checkConstraints(vector<CDriver> & drivers, vector<CTask> & tasks, vector<C
 			}
 		}
 		if (!found) {
-			cout<< "returned unknown driverID:"<< schedule[i].driverID << endl;
+			cout<< "returned unknown driverID:"<< schedule[i].did << endl;
 			return false;
 		}
 		for (int k=0; k<tasklist.size(); k++) {
 			found = false;
 			for (int j=0; j<tasks.size(); j++)
-				if (tasks[j].id == tasklist[k]) {
+				if (tasks[j].tid == tasklist[k]) {
 					s[iDriver][k] = j;
 					task_to_driver[j] = iDriver;
 					found = true;
@@ -48,36 +48,36 @@ bool checkConstraints(vector<CDriver> & drivers, vector<CTask> & tasks, vector<C
 	}
 	for (int i=0; i<tasks.size(); i++) 
 		if (task_count[i] > 1) {
-			cout<< "duplicate task in schedule: "<< tasks[i].id << endl;
+			cout<< "duplicate task in schedule: "<< tasks[i].tid << endl;
 			return false;
 		}
 	for (int i=0; i<drivers.size(); i++) 
 		if (driver_count[i] > 1) {
-			cout<< "duplicate driver in schedule: "<< drivers[i].id << endl;
+			cout<< "duplicate driver in schedule: "<< drivers[i].did << endl;
 			return false;
 		}
 	//check asgnDriver and  prevTask
 	for (int i=0; i<tasks.size(); i++) {
 		int iDriver = task_to_driver[i];
 		if (iDriver == -1) {
-			cout << "Unassigned task " << tasks[i].id << endl;
+			cout << "Unassigned task " << tasks[i].tid << endl;
 			continue;
 		}
-		if (tasks[i].asgnDriverID != NULL_ID) {
-			if (tasks[i].asgnDriverID != drivers[iDriver].id) {
-				cout<< "task "<< tasks[i].id << "assigned to "<< drivers[iDriver].id << ", pre-assigned to : " << tasks[i].asgnDriverID<< endl;
+		if (tasks[i].did != NULL_ID) {
+			if (tasks[i].did != drivers[iDriver].did) {
+				cout<< "task "<< tasks[i].tid << "assigned to "<< drivers[iDriver].did << ", pre-assigned to : " << tasks[i].did<< endl;
 				return false;
 			}
 		} 
-		if (tasks[i].prevTaskID != NULL_ID) {
+		if (tasks[i].depend != NULL_ID) {
 			int iPrevTask = -1;
 			for (int j=0; j<tasks.size(); j++) 
-				if (tasks[j].id == tasks[i].prevTaskID) {
+				if (tasks[j].tid == tasks[i].depend) {
 					iPrevTask = j;
 					break;
 				}
 			if (iPrevTask == -1) {
-				cout << "Input error. Cannot find prevTask " << tasks[i].prevTaskID << endl;
+				cout << "Input error. Cannot find prevTask " << tasks[i].depend << endl;
 				return false;
 			}
 			if (task_to_driver[iPrevTask] != iDriver) {
@@ -102,29 +102,29 @@ bool checkConstraints(vector<CDriver> & drivers, vector<CTask> & tasks, vector<C
 	}
 	//check driver's off work time
 	for (int i=0; i<drivers.size(); i++) {
-		CTime t = drivers[i].avlbTime;
-		CLocationID venue = drivers[i].avlbLocation;
+		CTime t = drivers[i].available;
+		CLocationID venue = drivers[i].location;
 		for(int j=0; j<tasks.size(); j++) {
 			int k = s[i][j];
 			if (k<0) break;
-			if (venue == tasks[k].venue) continue;
+			if (venue == tasks[k].location) continue;
 			CRTime deltT;
 			bool found = false;
 			for (int o=0; o<paths.size(); o++) 
-				if (paths[o].source == venue && paths[o].dest == tasks[k].venue){
-					deltT = paths[o].dist;
+				if (paths[o].start == venue && paths[o].end == tasks[k].location){
+					deltT = paths[o].time;
 					found = true;
 					break;
 				}
 			if (!found) {
-				cout<< "Cannot find a path from " << venue << " to " << tasks[k].venue << endl;
+				cout<< "Cannot find a path from " << venue << " to " << tasks[k].location << endl;
 				return false;
 			}
 			t += deltT;
-			venue = tasks[k].venue;
+			venue = tasks[k].location;
 		}
-		if (t>drivers[i].offTime) {
-			cout<< "Driver " << drivers[i].id << " has to work late." << endl;
+		if (t>drivers[i].off) {
+			cout<< "Driver " << drivers[i].did << " has to work late." << endl;
 			return false;
 		}
 	}
@@ -138,22 +138,22 @@ void genRandomPath(vector<CDriver> & drivers, vector<CTask> & tasks, vector<CPat
 	for (int i=0; i<drivers.size(); i++) {
 		bool found = false;
 		for (int j=0; j<locations.size(); j++) 
-			if (drivers[i].avlbLocation == locations[j]) {
+			if (drivers[i].location == locations[j]) {
 				found = true;
 				break;
 			}
 		if (!found) 
-			locations.push_back(drivers[i].avlbLocation);
+			locations.push_back(drivers[i].location);
 	}
 	for (int i=0; i<tasks.size(); i++) {
 		bool found = false;
 		for (int j=0; j<locations.size(); j++) 
-			if (tasks[i].venue == locations[j]) {
+			if (tasks[i].location == locations[j]) {
 				found = true;
 				break;
 			}
 		if (!found) 
-			locations.push_back(tasks[i].venue);
+			locations.push_back(tasks[i].location);
 	}
 	srand(time(0));
 	int n = locations.size();
@@ -191,8 +191,8 @@ void testCase1()
 	tasks0 = tasks;
 	paths0 = paths;
 	bool ret;
-	//ret = ALG::findScheduleBasic(drivers, tasks, paths, schedule);
-	ret = ALG::findScheduleGreedy(drivers, tasks, paths, schedule);
+	//ret = ALG::findScheduleBasic(0, drivers, tasks, paths, schedule);
+	ret = ALG::findScheduleGreedy(0, drivers, tasks, paths, schedule);
 	cout << "returned: " << ret << endl;
 	checkConstraints(drivers0, tasks0, paths0, schedule);
 	printSchedule(schedule);
@@ -264,7 +264,7 @@ void testCase2()
 	tasks0 = tasks;
 	paths0 = paths;
 	bool ret;
-	ret = ALG::findScheduleGreedy(drivers, tasks, paths, schedule);
+	ret = ALG::findScheduleGreedy(0, drivers, tasks, paths, schedule);
 	cout << "returned: " << ret << endl;
 	checkConstraints(drivers0, tasks0, paths0, schedule);
 	printSchedule(schedule);
@@ -299,7 +299,7 @@ void testCase3() //after one task finished in testCase2
 	tasks0 = tasks;
 	paths0 = paths;
 	bool ret;
-	ret = ALG::findScheduleGreedy(drivers, tasks, paths, schedule);
+	ret = ALG::findScheduleGreedy(0, drivers, tasks, paths, schedule);
 	cout << "returned: " << ret << endl;
 	checkConstraints(drivers0, tasks0, paths0, schedule);
 	printSchedule(schedule);
@@ -334,7 +334,7 @@ void testCase4() // same map as testCase2, but two driver cannot complete all th
 	tasks0 = tasks;
 	paths0 = paths;
 	bool ret;
-	ret = ALG::findScheduleGreedy(drivers, tasks, paths, schedule);
+	ret = ALG::findScheduleGreedy(0, drivers, tasks, paths, schedule);
 	cout << "returned: " << ret << endl;
 	checkConstraints(drivers0, tasks0, paths0, schedule);
 	printSchedule(schedule);
@@ -351,8 +351,8 @@ int main()
 void printSchedule(vector<CScheduleItem> &schedule)
 {
 	for (vector<CScheduleItem>::iterator it = schedule.begin(); it<schedule.end(); it++) {
-		vector<CID> &tasklist = it->asgnTaskID;
-		cout << "Driver:" << it->driverID << " is assigned with "<< tasklist.size() << " tasks:" << endl;
+		vector<CID> &tasklist = it->tids;
+		cout << "Driver:" << it->did << " is assigned with "<< tasklist.size() << " tasks:" << endl;
 		for (int i=0; i<tasklist.size(); i++) {
 			cout << "  " << tasklist[i] << "; ";
 		}
