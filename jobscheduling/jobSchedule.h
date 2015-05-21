@@ -88,6 +88,7 @@ public:
 	vector<CID>  tids; //the tasks assigned to this driver, in chronological order
 	int updated;
 	CTime available;
+	CTime off;
 	CLocationID location;
 };
 

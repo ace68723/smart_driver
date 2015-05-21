@@ -65,6 +65,7 @@ std::string prepareOutput(vector<CScheduleItem> &schedule)
 		}
 		schdItem["tids"] = taskList;
 		schdItem["available"] = schedule[i].available;
+		schdItem["off"] = schedule[i].off;
 		schdItem["location"] = schedule[i].location;
 		schdItem["updated"] = schedule[i].updated;
 		schd.append(schdItem);

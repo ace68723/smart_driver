@@ -167,6 +167,7 @@ bool ALG::findScheduleGreedy(CTime curTime, vector<CDriver> & drivers, vector<CT
 	{
 		CScheduleItem si;
 		si.did = drivers[i].did;
+		si.off = drivers[i].off;
 		si.tids.clear();
 		for (unsigned int j=0; j<drivers[i].taskList.size(); j++) {
 			int idx = drivers[i].taskList[j];
