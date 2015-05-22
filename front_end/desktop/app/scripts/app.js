@@ -72,7 +72,7 @@ angular.module('smartApp', ['ionic', 'config','google-maps','ngCordova'])
   $urlRouterProvider.otherwise('/tab/placeOrder');
 
 })
-.constant('API_URL', 'http://www.ajaxmart.ca:3000/')//api url constant
+.constant('API_URL', 'http://localhost:3000/')//api url constant
   
 //add token to headers
 .service('authInterceptor',  function(authToken){

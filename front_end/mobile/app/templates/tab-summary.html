@@ -1,0 +1,91 @@
+<ion-view view-title="Summary" cache-view ="false">
+			
+  			<ion-content class="padding">
+	  			<div class="card animated fadeInDown" 
+	  				 ng-if="sc.showSummary">
+		  			<div class="list">
+		  				<div id="action">
+			  			    <div class="item item-divider">
+			  			    	Action 
+			  			    </div>
+
+			  			 	<div class="row">
+
+			  			 		<div class="col col-25">
+					  			    Order No.
+				  			    </div>
+
+			  			 		<div class="col col-25">
+					  			    Price
+				  			    </div>
+
+			  			 		<div class="col col-50">
+					  			    Reason
+				  			    </div>
+
+				  			</div>
+							
+			  			 	<div class="item row"
+			  			 		 ng-repeat="(id, action) in sc.actions"
+			  			 		 ng-click="sc.doAction(id)">
+
+			  			 		<div class="col col-25">
+					  			    {{action.oid}}
+				  			    </div>
+
+			  			 		<div class="col col-25">
+					  			    {{action.price}}
+				  			    </div>
+
+			  			 		<div class="col col-50">
+					  			    {{action.reason}}
+				  			    </div>
+
+				  			</div>
+				  		</div>
+
+				  		<div id="order">
+			  			    <div class="item item-divider">
+			  			    	Order 
+			  			    </div>
+
+			  			 	<div class="row">
+
+			  			 		<div class="col col-25">
+					  			    Order No.
+				  			    </div>
+
+			  			 		<div class="col col-25">
+					  			    Price
+				  			    </div>
+
+			  			 		<div class="col col-50">
+					  			    Status
+				  			    </div>
+
+				  			</div>
+							
+			  			 	<div class="item row"
+			  			 		 ng-repeat="(id, order) in sc.orders">
+
+			  			 		<div class="col col-25">
+					  			    {{order.oid}}
+				  			    </div>
+
+			  			 		<div class="col col-25">
+					  			    {{order.price}}
+				  			    </div>
+
+			  			 		<div class="col col-50">
+					  			    {{order.status}}
+				  			    </div>
+
+				  			</div>
+				  		</div>
+
+			  			
+		  			</div>
+	  			</div>
+	  		</ion-content>
+
+</ion-view>

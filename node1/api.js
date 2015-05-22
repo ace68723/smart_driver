@@ -26,7 +26,7 @@ smartApp.post('/login', function(req, res) {
 smartApp.get('/get_sumamry', function(req, res) {
       var headers                = req.headers;
       var authorizationSplit     = headers.authorization.split(" ", 2);
-      var token                        = authorizationSplit[1]
+      var token                  = authorizationSplit[1]
       // get token to identity user
       console.log(token);
       res.status(200).send({
@@ -40,7 +40,7 @@ smartApp.get('/get_sumamry', function(req, res) {
 smartApp.post('/action', function(req, res) {
       var headers                = req.headers;
       var authorizationSplit     = headers.authorization.split(" ", 2);
-      var token                        = authorizationSplit[1]
+      var token                  = authorizationSplit[1]
       // get token to identity user
       console.log(token);
       res.status(200).send({
