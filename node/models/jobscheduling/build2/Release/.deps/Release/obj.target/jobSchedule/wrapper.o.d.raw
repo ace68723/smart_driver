@@ -1,0 +1,10 @@
+Release/obj.target/jobSchedule/wrapper.o: ../wrapper.cpp \
+  /Users/yichenghuang/.node-gyp/0.10.32/src/node.h \
+  /Users/yichenghuang/.node-gyp/0.10.32/deps/uv/include/uv.h \
+  /Users/yichenghuang/.node-gyp/0.10.32/deps/uv/include/uv-private/uv-unix.h \
+  /Users/yichenghuang/.node-gyp/0.10.32/deps/uv/include/uv-private/ngx-queue.h \
+  /Users/yichenghuang/.node-gyp/0.10.32/deps/uv/include/uv-private/uv-darwin.h \
+  /Users/yichenghuang/.node-gyp/0.10.32/deps/v8/include/v8.h \
+  /Users/yichenghuang/.node-gyp/0.10.32/deps/v8/include/v8stdint.h \
+  /Users/yichenghuang/.node-gyp/0.10.32/src/node_object_wrap.h \
+  ../json/json.h ../jobSchedule.h
