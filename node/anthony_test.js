@@ -63,34 +63,34 @@ smartApp.get('/test', function(req, res) {
       // get token to identity user
     var rr = new ifRr(pool);
     
-    var iv_lat = "43.825466";
-    var iv_lng = "-79.288094";
-    var iv_clat = "43.7935474" ;
-    var iv_clng = "-79.2931461";
+    var iv_lat = '43.825466';
+    var iv_lng = '-79.288094';
+    var iv_clat = '43.7935474' ;
+    var iv_clng = '-79.2931461';
     var ia_path = [
         {
-            "start": "43.7935474, -79.2931461",
-            "end": "43.825466, -79.288094",
-            "duration": 505,
-            "distance": 5011
+            start: '43.7935474, -79.2931461',
+            end: '43.825466, -79.288094',
+            duration: '505',
+            distance: '5011'
         },
         {
-            "start": "43.7935474, -79.2931461",
-            "end": "43.825466, -79.288094",
-            "duration": 505,
-            "distance": 5011
+            start: '43.7935474, -79.2931461',
+            end: '43.825466, -79.288094',
+            duration: '505',
+            distance: '5011'
         },
         {
-            "start": "43.7935474, -79.2931461",
-            "end": "43.825466, -79.288094",
-            "duration": 505,
-            "distance": 5011
+            start: '43.7935474, -79.2931461',
+            end: '43.825466, -79.288094',
+            duration: '505',
+            distance: '5011'
         },
         {
-            "start": "43.7935474, -79.2931461",
-            "end": "43.825466, -79.288094",
-            "duration": 505,
-            "distance": 5011
+            start: '43.7935474, -79.2931461',
+            end: '43.825466, -79.288094',
+            duration: '505',
+            distance: '5011'
         }
     ]
     var iv_token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1aWQiOjIwLCJleHBpcmVkIjoiMjAxNS0wNi0yMSAwMDoxMDo0MyIsImlhdCI6MTQzMjI2Nzg0M30.xAPktfkYkQMIu3L1wkq4m13IpUk8OKyVvjK8IjR_nFo";

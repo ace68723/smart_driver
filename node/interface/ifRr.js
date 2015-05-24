@@ -13,15 +13,16 @@ function Rr(pool) {
         return new Promise(function (resolve, reject) {
             var eo_result = { };
             var lr_login = new ifLogin(pool);
-            
             lr_login.authorize(iv_token, iv_secret).then( function(login_result) {
                     var node2 = new ifNode2;
                     var la_path = [ ];
-                    for(var lo_path_item in ia_path){
+                    for(var lv_item in ia_path){
                         var lo_path = { };
-                        lo_path.start = String(lo_path_item.start).split(' ').join('');
-                        lo_path.end = String(lo_path_item.end).split(' ').join('');
-                        lo_path.time = lo_path_item.duration;
+                       
+                        lo_path.start = String(ia_path[lv_item].start).split(' ').join('');
+                        lo_path.end = String(ia_path[lv_item].end).split(' ').join('');
+                        lo_path.pid = lo_path.start+','+lo_path.end;
+                        lo_path.time = String(ia_path[lv_item].duration);
                         la_path.push( lo_path );
                     }
                     

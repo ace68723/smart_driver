@@ -45,11 +45,12 @@ function Node2( ) {
             redis.getAll(lv_tb_type, iv_name).then( function (result){
                 switch (iv_name){
                     case 'Path':
-                        for(var lv_result in result){
+                        for(var lv_result_i in result){
+                            var lo_result = result[lv_result_i];
                             var lo_data = { };
-                            lo_data.start   = lv_result.start;
-                            lo_data.end = lv_result.start;
-                            lo_data.time = lv_result.start;
+                            lo_data.start   = lo_result.start;
+                            lo_data.end = lo_result.start;
+                            lo_data.time = lo_result.start;
                             ea_data.push( lo_data );
                         }
                     case 'Driver':
@@ -58,13 +59,14 @@ function Node2( ) {
                     case 'Task':
                         var lv_assign = 'Assign' + (moment(new Date())).format("YYYYMMDD");
                         redis.getAll(2, lv_assign).then( function (assign_result){
-                            for(var lv_result in assign_result){
+                            for(var lv_result_i in assign_result){
+                                var lo_result = assign_result[lv_result_i];
                                 var lo_data = { };
-                                lo_data.tid   = lv_result.tid;
-                                lo_data.location = lv_result.location;
-                                lo_data.deadline = lv_result.deadline;
-                                lo_data.ready = lv_result.ready;
-                                lo_data.depend = lv_result.depend;
+                                lo_data.tid   = lo_result.tid;
+                                lo_data.location = lo_result.location;
+                                lo_data.deadline = lo_result.deadline;
+                                lo_data.ready = lo_result.ready;
+                                lo_data.depend = lo_result.depend;
                                 
                                 var lv_assign = assign_result.filter(function(item) {
                                     return item.tid == lo_data.tid;
@@ -88,18 +90,20 @@ function Node2( ) {
 
     this.setTable = function( iv_name, ia_data ) {
         
+        
+        
         return new Promise(function (resolve, reject) {
             var redis = new modelRedis(client);
-            var lv_name = iv_name + (moment(new Date())).format("YYYYMMDD");
+//            var lv_name = iv_name + (moment(new Date())).format("YYYYMMDD");
             if (iv_name == 'Task') {
-                redis.sortSet(lv_name, ia_data).then( function (result){
+                redis.sortSet(iv_name, ia_data).then( function (result){
                     resolve(result);
                 }).catch(function(e) {
                     reject(e);
                 });
             } else {
-                console.log('set');
-                redis.hashSet(lv_name, ia_data).then( function (result){
+                console.log(iv_name);
+                redis.hashSet(iv_name, ia_data).then( function (result){
                     resolve(result);
                 }).catch(function(e) {
                     reject(e);
@@ -116,7 +120,8 @@ function Node2( ) {
             var la_driver = [ ] ;
             var redis = new modelRedis(client);
             
-            for(var lo_data in ia_data){
+            for(var lv_data in ia_data){
+                var lo_data = ia_data[lv_data];
                 if (lo_data.updated == 1) {
                     var lo_driver = { };
                     lo_driver.did = lo_data.did;
@@ -125,7 +130,7 @@ function Node2( ) {
                     lo_driver.off = lo_data.off;
                     for(var lv_tid in lo_data.tid){
                         var lo_assign = { };
-                        lo_assign.tid = lv_tid;
+                        lo_assign.tid = lo_data.tid[lv_tid];
                         lo_assign.did = lo_driver.did;
                         la_assign.push( lo_assign );
                     }

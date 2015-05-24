@@ -32,16 +32,24 @@ function Redis(ir_client) {
 
     
     this.hashSet = function(iv_tb_name, ia_items) {
+        console.log(iv_tb_name);
         return new Promise(function (resolve, reject) {
-            var la_param = [ iv_tb_name ];
-            console.log( 'start');
+            var lv_tb_name = iv_tb_name + (moment(new Date())).format("YYYYMMDD");
+            var la_param = [ lv_tb_name ];
             for (var i = 0; i < ia_items.length; i++) {
-                var lj_item = ia_items[i];  
-                la_param.push(lj_item.id);
+                var lj_item = ia_items[i]; 
+                switch (iv_name){
+                    case 'Path':
+                        la_param.push(lj_item.pid);
+                    case 'Driver':
+                        la_param.push(lj_item.did);
+                    case 'Assign':
+                        la_param.push(lj_item.tid);
+                }
+                        
                 la_param.push(JSON.stringify(lj_item));        
             }
             ir_client.hmsetAsync( la_param ).then( function(result){
-                 console.log( 'done');
                 resolve(result);
             }).catch(function(e) {
 //                console.log(e);
@@ -85,7 +93,8 @@ function Redis(ir_client) {
     
     this.sortSet = function(iv_tb_name, ia_items) {
         return new Promise(function (resolve, reject) {
-            var la_param = [ iv_tb_name ];
+            var lv_tb_name = iv_tb_name + (moment(new Date())).format("YYYYMMDD");
+            var la_param = [ lv_tb_name ];
             for(var i = 0; i < ia_items.length; i++) {
                 var lj_item = ia_items[i];
                 la_param.push( (new Date()).getTime());
