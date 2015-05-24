@@ -18,7 +18,7 @@ function Rr(pool) {
             
                     var node2 = new node2;
                     var la_path = [ ];
-                    for(var lo_path_item of ia_path){
+                    for(var lo_path_item in ia_path){
                         var lo_path = { };
                         lo_path.start = lo_path_item.start.replace(/\s+/g, ' ');
                         lo_path.end = lo_path_item.end.replace(/\s+/g, ' ');

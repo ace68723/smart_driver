@@ -45,7 +45,7 @@ function Node2( ) {
             redis.getAll(lv_tb_type, iv_name).then( function (result){
                 switch (iv_name){
                     case 'Path':
-                        for(var lv_result of result){
+                        for(var lv_result in result){
                             var lo_data = { };
                             lo_data.start   = lv_result.start;
                             lo_data.end = lv_result.start;
@@ -58,7 +58,7 @@ function Node2( ) {
                     case 'Task':
                         var lv_assign = 'Assign' + (moment(new Date())).format("YYYYMMDD");
                         redis.getAll(2, lv_assign).then( function (assign_result){
-                            for(var lv_result of assign_result){
+                            for(var lv_result in assign_result){
                                 var lo_data = { };
                                 lo_data.tid   = lv_result.tid;
                                 lo_data.location = lv_result.location;
@@ -115,14 +115,14 @@ function Node2( ) {
             var la_driver = [ ] ;
             var redis = new modelRedis(client);
             
-            for(var lo_data of ia_data){
+            for(var lo_data in ia_data){
                 if (lo_data.updated == 1) {
                     var lo_driver = { };
                     lo_driver.did = lo_data.did;
                     lo_driver.available = lo_data.available;
                     lo_driver.location = lo_data.location;
                     lo_driver.off = lo_data.off;
-                    for(var lv_tid of lo_data.tid){
+                    for(var lv_tid in lo_data.tid){
                         var lo_assign = { };
                         lo_assign.tid = lv_tid;
                         lo_assign.did = lo_driver.did;

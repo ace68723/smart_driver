@@ -35,7 +35,7 @@ function Redis(ir_client) {
         return new Promise(function (resolve, reject) {
             var la_param = [ iv_tb_name ];
 
-            for(var i = 0; i < ia_items.length; i++) {
+            for (var i = 0; i < ia_items.length; i++) {
                 var lj_item = ia_items[i];  
                 la_param.push(lj_item.id);
                 la_param.push(JSON.stringify(lj_item));        
