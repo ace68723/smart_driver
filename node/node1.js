@@ -164,9 +164,10 @@ smartApp.post('/preorder', function(req, res) {
     var iv_secret   = secret;
 
     rr.order(iv_token, iv_secret, iv_lat, iv_lng, iv_addr, iv_city, iv_unit, iv_postal, iv_tel, iv_name, iv_price, iv_paytype, iv_charge, iv_tips, iv_ready, iv_clat, iv_clng).then( function (result) {
-    
-    }).catch(function(e){
-        console.log(e);
+        
+        res.status(200).send(result);
+    }).catch(function(error){
+        res.status(400).send(error);
     });
 
     // res.status(200).send({
