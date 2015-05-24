@@ -75,6 +75,7 @@ smartApp.post('/login', function(req, res) {
     })
     .catch(function(error) {
         console.log(error);
+         res.status(401).send(result)
     })
 
 
