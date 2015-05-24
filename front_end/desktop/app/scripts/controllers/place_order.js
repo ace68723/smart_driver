@@ -253,7 +253,9 @@ angular.module('smartApp')
 								paytype : '1',
 								charge 	: poc.orderData.delCharge,
 								clat 	: poc.clat,
-								clng 	: poc.clng
+								clng 	: poc.clng,
+								lat		: '43.825466', 
+								lng		: '-79.288094'
 
 			}
 

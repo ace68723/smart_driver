@@ -54,15 +54,31 @@ smartApp.post('/login', function(req, res) {
 	var user = req.body.username;
 	console.log(user);
 
+    var name        = user.username;
+    var password    = user.password;
 
-	res.status(200).send({
-		result: 0,
-        msg: 'message',
-        token: 'test_token',
-        lat: '43.589045',
-        lng: '-79.644120',
-        uid: '1'
-	})
+    login.login(name,password,secret).then(function(result) {
+        console.log('login')
+        console.log(result)
+
+        //for test
+        // res.status(200).send({
+        //     result: 0,
+        //     msg: 'message',
+        //     token: 'test_token',
+        //     lat: '43.589045',
+        //     lng: '-79.644120',
+        //     uid: '1'
+        // })
+
+        res.status(200).send(result)
+    })
+    .catch(function(error) {
+        console.log(error);
+    })
+
+
+
 
 })
 smartApp.get('/get_sumamry', function(req, res) {
