@@ -18,14 +18,15 @@ smartApp.use(bodyParser.json());
 
 var login = new ifLogin(pool);
 
-
+var secret;
 
 //init secret
 var getSecret   =   function() {
     login.getSecret().then(function(result) {
         console.log(result.secret)
-        var secret      = result.secret;
+        secret = result.secret;    
     })
+
 };
 
 getSecret();
