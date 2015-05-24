@@ -82,6 +82,27 @@ smartApp.post('/login', function(req, res) {
 
 
 })
+
+smartApp.post('/authorize', function(req, res) {
+    
+    var authorize = req.body;
+    console.log(authorize);
+
+    var token        = authorize.token;
+
+    login.authorize(token,secret).then(function(result) {
+            console.log(result)
+            res.status(200).send(result)
+        })
+        .catch(function(error) {
+            console.log(error);
+            res.status(401).send(error)
+        })
+
+
+
+})
+
 smartApp.get('/get_sumamry', function(req, res) {
     var headers                = req.headers;
     var authorizationSplit     = headers.authorization.split(" ", 2);
