@@ -32,13 +32,12 @@ function Redis(ir_client) {
 
     
     this.hashSet = function(iv_tb_name, ia_items) {
-        console.log(iv_tb_name);
         return new Promise(function (resolve, reject) {
             var lv_tb_name = iv_tb_name + (moment(new Date())).format("YYYYMMDD");
             var la_param = [ lv_tb_name ];
             for (var i = 0; i < ia_items.length; i++) {
                 var lj_item = ia_items[i]; 
-                switch (iv_name){
+                switch (iv_tb_name){
                     case 'Path':
                         la_param.push(lj_item.pid);
                     case 'Driver':
