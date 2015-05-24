@@ -9,13 +9,37 @@ var modelRedis = require("./../model/modelRedis");
 
 function Node2( ) { 
     
+    this.delItem = function( iv_name, ia_key ) {
+        return new Promise(function (resolve, reject) {
+            var redis = new modelRedis(client);
+            var lv_name = redis.getTableName( iv_name );
+            switch (iv_name){
+                case 'Path':
+                case 'Driver':
+                case 'Assign':
+                    redis.hashDel(lv_name, ia_key).then( function (hash_result){
+                        resolve(0);
+                    }).catch(function(e) {
+                        reject(e);
+                    });
+                case 'Task':
+                    redis.sortDel(lv_name, ia_key).then( function (sort_result){
+                        resolve(0);
+                    }).catch(function(e) {
+                        reject(e);
+                    });
+            }
+        });
+    };
+    
+    
     this.getTable = function( iv_name ) {
         return new Promise(function (resolve, reject) {
             
             var ea_data = [ ] ;
             
             var redis = new modelRedis(client);
-            var lv_tb_type = ( iv_name == 'task' ) ? 1 : 2;
+            var lv_tb_type = ( iv_name == 'Task' ) ? 1 : 2;
             var lv_name = iv_name + (moment(new Date())).format("YYYYMMDD");
             
             redis.getAll(lv_tb_type, iv_name).then( function (result){

@@ -60,8 +60,9 @@ function User(ir_pool) {
 
             var sql_fetch_user = "SELECT * FROM ?? WHERE ?? = ? LIMIT 1";
             var parameter_fetch_user = ['user', 'username', lv_username];
-
+            
             ir_pool.queryAsync(sql_fetch_user, parameter_fetch_user).spread( function (rows, columns) {
+               console.log(rows);
                 if (rows[0] != null) {
                     bcrypt.compare(lv_password, rows[0].password , function(err, isMatch) {
 
@@ -89,6 +90,8 @@ function User(ir_pool) {
 
                    }); 
 
+                } else {
+                    reject( {'result': 1, 'message': 'User or Password incorrect' });
                 }
             }).catch(function(e) {
                 reject(e);

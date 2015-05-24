@@ -39,10 +39,8 @@ function Login(ir_pool) {
                 } else {
                     var user = new modelUser(ir_pool);
                     user.authorize(decoded.uid, iv_token).then( function (result){
-                        if (result == 0) {
-                            eo_result.result = 0;
-                            resolve(eo_result);
-                        }  
+                        eo_result.result = 0;
+                        resolve(eo_result);  
                     }).catch(function(e) {
                         eo_result.result = 1;
                         eo_result.message = e;

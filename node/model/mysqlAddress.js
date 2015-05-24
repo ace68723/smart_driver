@@ -41,7 +41,20 @@ function Address(ir_pool) {
         });
     }; 
     
-
+    this.findOne = function( iv_aid ) {
+        return new Promise(function (resolve, reject) {
+            var sql_select_address = "SELECT * FROM ?? WHERE ?? = ? LIMIT 1";
+            var parameter_select_address = ['address', 'aid', iv_aid];
+            ir_pool.queryAsync(sql_select_address, parameter_select_address).spread( function (rows, columns) {
+                if (rows[0] != null) {
+                    resolve( { lat: rows[0].lat, lng: rows[0].lng  } );
+                }
+            }).catch(function(e) {
+                reject(e);
+            }); 
+        });
+    };
+    
 	this.change = function(iv_aid, iv_lat, iv_lng, iv_addr, iv_city, iv_unit, iv_postal, iv_tel, iv_name, iv_status, iv_comment) { 
         return new Promise(function (resolve, reject) {
             var lv_aid = iv_aid;

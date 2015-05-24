@@ -3,7 +3,11 @@ var redis = require("redis");
 var moment = require('moment');
 
 function Redis(ir_client) { 
-
+    
+    this.getTableName = function ( iv_name ) {
+        return (iv_name + (moment(new Date())).format("YYYYMMDD"));
+    }
+    
     this.getAll = function(iv_type, iv_tb_name) {
         return new Promise(function (resolve, reject) {
             if (iv_type == 1) {
@@ -104,10 +108,8 @@ function Redis(ir_client) {
                 la_param.push( ia_key[i] );
             }
             ir_client.zremAsync( la_param ).then( function(result){
-//                console.log( result);
                 resolve(result);
             }).catch(function(e) {
-//                console.log(e);
                 reject(e);
             });    
         }); 
