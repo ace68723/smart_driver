@@ -18,7 +18,7 @@ function Mysql() {
           connectionLimit : 30,
           host            : 'localhost',
           user            : 'root',
-          password        : 'MySmartSQL',
+          password        : '',
           database        : 'node'    
     });      
 };

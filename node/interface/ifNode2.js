@@ -91,9 +91,7 @@ function Node2( ) {
     }  
 
     this.setTable = function( iv_name, ia_data ) {
-        
-        
-        
+
         return new Promise(function (resolve, reject) {
             var redis = new modelRedis(client);
 //            var lv_name = iv_name + (moment(new Date())).format("YYYYMMDD");

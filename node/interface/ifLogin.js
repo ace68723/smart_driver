@@ -18,11 +18,13 @@ function Login(ir_pool) {
                eo_result.result = 0;
                eo_result.token = result.token;
                eo_result.type = result.type;
+               eo_result.lat = result.lat;
+               eo_result.lng = result.lng;
                resolve (eo_result);   
            }).catch(function(e) {
-               eo_result.result = 1;
-               eo_result.message = e;
-               reject(eo_result);
+//               eo_result.result = 1;
+//               eo_result.message = e;
+               reject(e);
            });
        });
     };

@@ -56,6 +56,45 @@ smartApp.get('/get_sumamry', function(req, res) {
 
 })
 
+smartApp.get('/test11', function(req, res) {
+   var login = new ifLogin(pool); 
+   login.login('test6', 'asd8', '8').then( function(result) {
+     console.log(result);
+   })
+});
+
+smartApp.get('/test', function(req, res) {
+    var iv_addr = "2620 Kennedy Road, Scarborough, ON M1T 3H1, Canada";
+    var iv_city = "Scarborough";
+    var iv_unit = "515";
+    var iv_postal = "M1T 3H1";
+    var iv_tel = "5197745881";
+    var iv_name = "aiden";
+    var iv_price = "35.99";
+    var iv_paytype = "1";
+    var iv_charge = "5";
+    var iv_lat = "43.7935474";
+    var iv_lng = "-79.2931461";
+    var iv_clat = "43.7935474";
+    var iv_clng = "-79.2931461";
+    var iv_tips = 5;
+    var iv_ready = 1800;
+
+    var iv_token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1aWQiOjIwLCJleHBpcmVkIjoiMjAxNS0wNi0yMSAwMDoxMDo0MyIsImlhdCI6MTQzMjI2Nzg0M30.xAPktfkYkQMIu3L1wkq4m13IpUk8OKyVvjK8IjR_nFo";
+    var iv_secret = "8";
+    rr.order(iv_token, iv_secret, iv_lat, iv_lng, iv_addr, iv_city, iv_unit, iv_postal, iv_tel, iv_name, iv_price, iv_paytype, iv_charge, iv_tips, iv_ready, iv_clat, iv_clng).then( function (result) {
+    
+    }).catch(function(e){
+        console.log(e);
+    });
+    
+    
+    
+    
+})
+
+
+
 smartApp.get('/test', function(req, res) {
 //      var headers                = req.headers;
 //      var authorizationSplit     = headers.authorization.split(" ", 2);

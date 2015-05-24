@@ -3,6 +3,7 @@ var moment = require('moment');
 var jwt = require('jsonwebtoken');
 var bcrypt = require('bcrypt'); 
 var lv_extension = 30;
+var modelRr = require("./../model/mysqlRr");
 
 function User(ir_pool) { 
        
@@ -62,10 +63,11 @@ function User(ir_pool) {
             var parameter_fetch_user = ['user', 'username', lv_username];
             
             ir_pool.queryAsync(sql_fetch_user, parameter_fetch_user).spread( function (rows, columns) {
-               console.log(rows);
+               
                 if (rows[0] != null) {
-                    bcrypt.compare(lv_password, rows[0].password , function(err, isMatch) {
-
+                    var lv_user = rows[0];
+                    bcrypt.compare(lv_password, lv_user.password , function(err, isMatch) {
+                        
                         if(err) {
                             reject('Error');
                         } else if (isMatch == false ) {
@@ -73,16 +75,24 @@ function User(ir_pool) {
                             reject( result );
                         } else if (isMatch == true ) {
                             var lv_expired = moment(new Date()).add(lv_extension, 'days').format("YYYY-MM-DD HH:mm:ss");
-                            var lv_token = jwt.sign( { uid : rows[0].uid, expired : lv_expired }, lv_secret);
+                            var lv_token = jwt.sign( { uid : lv_user.uid, expired : lv_expired }, lv_secret);
 
                             var sql_update_user = "UPDATE user SET ? WHERE ?? = ? ";
                             var value_update_user = { };     
                             value_update_user.token = lv_token;
                             value_update_user.expired = lv_expired;
-                            var parameter_update_user = [ value_update_user, 'uid' , rows[0].uid ];
-
+                            var parameter_update_user = [ value_update_user, 'uid' , lv_user.uid ];
+                            
                             ir_pool.queryAsync(sql_update_user, parameter_update_user).spread( function (result) {
-                                resolve( {'token': lv_token, 'type': rows[0].type  }); 
+                                var lm_rr = new modelRr(ir_pool);
+                                
+                                lm_rr.getLatLng(lv_user.uid).then( function( rr_result) {
+                                    resolve( {'lat': rr_result.lat, 'lng':rr_result.lng, 'token': lv_token, 'type': lv_user.type  }); 
+                                }).catch(function(e) {
+                                    console.log(e);
+                                    reject(e);
+                                }); 
+                                
                             }).catch(function(e) {
                                 reject(e);
                             });     

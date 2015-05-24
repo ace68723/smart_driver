@@ -1,6 +1,9 @@
 var moment = require('moment');
 var Promise = require('bluebird');
-function Rr(pool) { 
+var modelAddress = require("./../model/mysqlAddress");
+
+function Rr(ir_pool) { 
+    var rr = this;
     
 	this.create = function(iv_uid, iv_aid, iv_area, iv_created) { 
         return new Promise(function (resolve, reject) {
@@ -31,9 +34,11 @@ function Rr(pool) {
         return new Promise(function (resolve, reject) {
             var sql_select_rr = "SELECT * FROM ?? WHERE ?? = ? LIMIT 1";
             var parameter_select_rr = ['rr', 'uid', iv_uid];
-            ir_pool.queryAsync(sql_select_rr, parameter_select_rr).spread( function (rows, columns) {
+            
+            ir_pool.queryAsync(sql_select_rr, parameter_select_rr).then( function (rows, columns, fields) {
+                        
                 if (rows[0] != null) {
-                    resolve( rows[0] );
+                    resolve( rows[0][0] );
                 } else {
                     reject('No result');
                 }
@@ -42,7 +47,26 @@ function Rr(pool) {
             }); 
         });
     };
+    
+    this.getLatLng = function( iv_uid ) {
+        return new Promise(function (resolve, reject) {
+            
+            rr.findOne( iv_uid ).then( function(lo_rr) {
+                    console.log(lo_rr.aid);
+                    var lm_address = new modelAddress(ir_pool);
+                    lm_address.findOne( lo_rr.aid ).then( function(rr_address_result) {
+                        resolve({ lat:rr_address_result.lat , lng: rr_address_result.lng});
 
+                    }).catch( function(e) {
+                        reject(e);
+                    });
+                    
+            }).catch(function(e) {
+                reject(e);
+            }); 
+        });
+    }; 
+    
     this.findStartEnd = function( iv_uid ) {
         return new Promise(function (resolve, reject) {
             
