@@ -17,8 +17,8 @@ var smartApp        = express();
 smartApp.use(cors());
 smartApp.use(bodyParser.json());
 
-var login = new ifLogin(pool);
-
+var login   = new ifLogin(pool);
+var rr      = new ifRr(pool);
 var secret;
 
 //init secret
@@ -144,26 +144,16 @@ smartApp.post('/preorder', function(req, res) {
     
     console.log(req.body);
 
-    var iv_addr     =   preorder.addr;
-    var iv_city     =   preorder.city;
-    var iv_unit     =   preorder.unit;
-    var iv_postal   =   preorder.postal;
-    var iv_tel      =   preorder.tel;
-    var iv_name     =   preorder.name;
-    var iv_price    =   preorder.price;
-    var iv_paytype  =   preorder.paytype;
-    var iv_charge   =   preorder.charge;
-    var iv_lat      =   preorder.lat;
-    var iv_lng      =   preorder.lng;
-    var iv_clat     =   preorder.clat;
-    var iv_clng     =   preorder.clng;
-    var iv_tips     =   preorder.tips;
-    var iv_ready    =   preorder.ready;
+    var iv_lat  = preorder.lat;
+    var iv_lng  = preorder.lng;
+    var iv_clat = preorder.clat;
+    var iv_clng = preorder.clng;
+    var ia_path = preorder.path;
 
     var iv_token    = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1aWQiOjIwLCJleHBpcmVkIjoiMjAxNS0wNi0yMSAwMDoxMDo0MyIsImlhdCI6MTQzMjI2Nzg0M30.xAPktfkYkQMIu3L1wkq4m13IpUk8OKyVvjK8IjR_nFo";
     var iv_secret   = secret;
 
-    rr.order(iv_token, iv_secret, iv_lat, iv_lng, iv_addr, iv_city, iv_unit, iv_postal, iv_tel, iv_name, iv_price, iv_paytype, iv_charge, iv_tips, iv_ready, iv_clat, iv_clng).then( function (result) {
+    rr.preorder(iv_token, iv_secret, iv_lat, iv_lng, iv_clat, iv_clng, ia_path).then( function (result) {
         
         res.status(200).send(result);
     }).catch(function(error){
@@ -178,6 +168,50 @@ smartApp.post('/preorder', function(req, res) {
     // })
 
 })
+
+// smartApp.post('/preorder', function(req, res) {
+//     // var headers          = req.headers;
+//     // var authorizationSplit   = headers.authorization.split(" ", 2);
+//     // var token                = authorizationSplit[1]
+    
+//     var preorder    = req.body;
+    
+//     console.log(req.body);
+
+//     var iv_addr     =   preorder.addr;
+//     var iv_city     =   preorder.city;
+//     var iv_unit     =   preorder.unit;
+//     var iv_postal   =   preorder.postal;
+//     var iv_tel      =   preorder.tel;
+//     var iv_name     =   preorder.name;
+//     var iv_price    =   preorder.price;
+//     var iv_paytype  =   preorder.paytype;
+//     var iv_charge   =   preorder.charge;
+//     var iv_lat      =   preorder.lat;
+//     var iv_lng      =   preorder.lng;
+//     var iv_clat     =   preorder.clat;
+//     var iv_clng     =   preorder.clng;
+//     var iv_tips     =   preorder.tips;
+//     var iv_ready    =   preorder.ready;
+
+//     var iv_token    = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1aWQiOjIwLCJleHBpcmVkIjoiMjAxNS0wNi0yMSAwMDoxMDo0MyIsImlhdCI6MTQzMjI2Nzg0M30.xAPktfkYkQMIu3L1wkq4m13IpUk8OKyVvjK8IjR_nFo";
+//     var iv_secret   = secret;
+
+//     rr.order(iv_token, iv_secret, iv_lat, iv_lng, iv_addr, iv_city, iv_unit, iv_postal, iv_tel, iv_name, iv_price, iv_paytype, iv_charge, iv_tips, iv_ready, iv_clat, iv_clng).then( function (result) {
+        
+//         res.status(200).send(result);
+//     }).catch(function(error){
+//         res.status(400).send(error);
+//     });
+
+//     // res.status(200).send({
+//     //     result  : 0,
+//     //     msg     : 'message',
+//     //     wait    : '50s',
+//     //     charge  : '50'
+//     // })
+
+// })
 smartApp.post('/order', function(req, res) {
     // var headers          = req.headers;
     // var authorizationSplit   = headers.authorization.split(" ", 2);
