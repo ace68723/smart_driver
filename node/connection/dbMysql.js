@@ -16,7 +16,7 @@ function Mysql() {
 
     this.pool = mysql.createPool({
           connectionLimit : 30,
-          host            : '45.33.95.211',
+          host            : 'localhost',
           user            : 'root',
           password        : 'MySmartSQL',
           database        : 'node'    
