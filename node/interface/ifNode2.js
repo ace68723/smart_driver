@@ -98,6 +98,7 @@ function Node2( ) {
                     reject(e);
                 });
             } else {
+                console.log('set');
                 redis.hashSet(lv_name, ia_data).then( function (result){
                     resolve(result);
                 }).catch(function(e) {

@@ -12,16 +12,15 @@ function Rr(pool) {
     this.preorder = function(iv_token, iv_secret, iv_lat, iv_lng, iv_clat, iv_clng, ia_path) {
         return new Promise(function (resolve, reject) {
             var eo_result = { };
-            var lr_login = new ifLogin;
+            var lr_login = new ifLogin(pool);
             
             lr_login.authorize(iv_token, iv_secret).then( function(login_result) {
-            
-                    var node2 = new node2;
+                    var node2 = new ifNode2;
                     var la_path = [ ];
                     for(var lo_path_item in ia_path){
                         var lo_path = { };
-                        lo_path.start = lo_path_item.start.replace(/\s+/g, ' ');
-                        lo_path.end = lo_path_item.end.replace(/\s+/g, ' ');
+                        lo_path.start = String(lo_path_item.start).split(' ').join('');
+                        lo_path.end = String(lo_path_item.end).split(' ').join('');
                         lo_path.time = lo_path_item.duration;
                         la_path.push( lo_path );
                     }
@@ -37,9 +36,10 @@ function Rr(pool) {
                     });
 
             }).catch(function(login_error) {
+                eo_result = { };
                 eo_result.result = 1;
-                eo_result.message = login_error.message;
-                reject(eo_result);
+                eo_result.message = 'error';
+                reject(login_error);
             });
         });
     }

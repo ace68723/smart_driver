@@ -34,14 +34,14 @@ function Redis(ir_client) {
     this.hashSet = function(iv_tb_name, ia_items) {
         return new Promise(function (resolve, reject) {
             var la_param = [ iv_tb_name ];
-
+            console.log( 'start');
             for (var i = 0; i < ia_items.length; i++) {
                 var lj_item = ia_items[i];  
                 la_param.push(lj_item.id);
                 la_param.push(JSON.stringify(lj_item));        
             }
             ir_client.hmsetAsync( la_param ).then( function(result){
-//                console.log( result);
+                 console.log( 'done');
                 resolve(result);
             }).catch(function(e) {
 //                console.log(e);

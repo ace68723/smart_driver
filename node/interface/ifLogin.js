@@ -13,7 +13,7 @@ function Login(ir_pool) {
            var lv_password = iv_password;
            var lv_secret = iv_secret;
            var user = new modelUser(ir_pool);
-
+           
            user.login(iv_username, iv_password, iv_secret).then( function (result){
                eo_result.result = 0;
                eo_result.token = result.token;
@@ -31,7 +31,9 @@ function Login(ir_pool) {
         
         return new Promise(function (resolve, reject) {
             var eo_result = { };
+            
             jwt.verify(iv_token, iv_secret, function(err, decoded) {
+                
                 if (err) {
                     eo_result.result = 1;
                     eo_result.message = err;
@@ -39,9 +41,11 @@ function Login(ir_pool) {
                 } else {
                     var user = new modelUser(ir_pool);
                     user.authorize(decoded.uid, iv_token).then( function (result){
+                        
                         eo_result.result = 0;
                         resolve(eo_result);  
                     }).catch(function(e) {
+                        
                         eo_result.result = 1;
                         eo_result.message = e;
                         reject(eo_result);
