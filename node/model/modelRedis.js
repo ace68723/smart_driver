@@ -40,14 +40,18 @@ function Redis(ir_client) {
                 switch (iv_tb_name){
                     case 'Path':
                         la_param.push(lj_item.pid);
+                        break;
                     case 'Driver':
                         la_param.push(lj_item.did);
+                        break;
                     case 'Assign':
                         la_param.push(lj_item.tid);
+                        break;
                 }
                         
                 la_param.push(JSON.stringify(lj_item));        
             }
+            
             ir_client.hmsetAsync( la_param ).then( function(result){
                 resolve(result);
             }).catch(function(e) {

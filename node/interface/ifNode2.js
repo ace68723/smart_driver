@@ -53,9 +53,10 @@ function Node2( ) {
                             lo_data.time = lo_result.start;
                             ea_data.push( lo_data );
                         }
+                        break;
                     case 'Driver':
                         ea_data = result;                      
-                        
+                        break;
                     case 'Task':
                         var lv_assign = 'Assign' + (moment(new Date())).format("YYYYMMDD");
                         redis.getAll(2, lv_assign).then( function (assign_result){
@@ -78,6 +79,7 @@ function Node2( ) {
                         }).catch(function(e) {
                             reject(e);
                         });
+                        break;
                     
                 }
                 resolve(ea_data);
