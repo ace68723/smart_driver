@@ -19,23 +19,24 @@ function Order(ir_pool) {
             var lv_created = moment(new Date()).format("YYYY-MM-DD HH:mm:ss");
 
 
-            var sql_insert_order = "INSERT INTO order SET ?"; 
-            var parameter_insert_order = {};
-            parameter_insert_order.uid = lv_uid;
-            parameter_insert_order.aid = lv_aid;   
-            parameter_insert_order.price = lv_price;
-            parameter_insert_order.paytype = lv_paytype; 
-            parameter_insert_order.charge = lv_charge;
-            parameter_insert_order.area = lv_area;         
-            parameter_insert_order.status = lv_status;    
-            parameter_insert_order.created = lv_created;   
-            parameter_insert_order.tips = lv_tips;    
-            parameter_insert_order.ready = lv_ready; 
-            
+            var sql_insert_order = "INSERT INTO orders SET ?"; 
+            var value_insert_order = {};
+            value_insert_order.uid = lv_uid;
+            value_insert_order.aid = lv_aid;   
+            value_insert_order.price = lv_price;
+            value_insert_order.paytype = lv_paytype; 
+            value_insert_order.charge = lv_charge;
+            value_insert_order.area = lv_area;         
+            value_insert_order.status = lv_status;    
+            value_insert_order.created = lv_created;   
+            value_insert_order.tips = lv_tips;    
+            value_insert_order.ready = lv_ready; 
+            var parameter_insert_order = [ value_insert_order ];
+                    
             ir_pool.queryAsync(sql_insert_order, parameter_insert_order).spread( function (result) {
     //            console.log(users[0].username);   
                 
-                resolve([{'result': result.insertId} ]);
+                resolve([{'oid': result.insertId} ]);
             }).catch(function(e) {
 //                console.log("Exception " + e);
                 reject(e);
@@ -46,7 +47,7 @@ function Order(ir_pool) {
     this.findOne = function( iv_oid ) {
         return new Promise(function (resolve, reject) {
             var sql_select_order = "SELECT * FROM ?? WHERE ?? = ? LIMIT 1";
-            var parameter_select_order = ['order', 'order', iv_oid];
+            var parameter_select_order = ['orders', 'order', iv_oid];
             ir_pool.queryAsync(sql_select_order, parameter_select_order).spread( function (rows, columns) {
                 if (rows[0] != null) {
                     resolve( rows[0] );
@@ -92,7 +93,7 @@ function Order(ir_pool) {
         var lv_area = iv_area;     
         var lv_status = iv_status;           
         var sql_select_order = "SELECT * FROM ?? WHERE ?? = ? LIMIT 1";
-        var parameter_select_order = ['order', 'order', lv_oid];
+        var parameter_select_order = ['orders', 'order', lv_oid];
  
         ir_pool.queryAsync(sql_select_order, parameter_select_order).spread( function (rows, columns) {
             if (rows[0] != null) {

@@ -45,6 +45,7 @@ function Login(ir_pool) {
                     user.authorize(decoded.uid, iv_token).then( function (result){
                         
                         eo_result.result = 0;
+                        eo_result.uid = decoded.uid;
                         resolve(eo_result);  
                     }).catch(function(e) {
                         

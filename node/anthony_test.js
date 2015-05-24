@@ -72,16 +72,17 @@ smartApp.get('/test', function(req, res) {
     var iv_name = "aiden";
     var iv_price = "35.99";
     var iv_paytype = "1";
-    var iv_charge = "5";
+    var iv_charge = "5.00";
     var iv_lat = "43.7935474";
     var iv_lng = "-79.2931461";
-    var iv_clat = "43.7935474";
-    var iv_clng = "-79.2931461";
-    var iv_tips = 5;
-    var iv_ready = 1800;
+    var iv_clat = "43.7935478";
+    var iv_clng = "-79.2931469";
+    var iv_tips = "5.00";
+    var iv_ready = "1800";
 
     var iv_token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1aWQiOjIwLCJleHBpcmVkIjoiMjAxNS0wNi0yMSAwMDoxMDo0MyIsImlhdCI6MTQzMjI2Nzg0M30.xAPktfkYkQMIu3L1wkq4m13IpUk8OKyVvjK8IjR_nFo";
     var iv_secret = "8";
+    var rr = new ifRr(pool);
     rr.order(iv_token, iv_secret, iv_lat, iv_lng, iv_addr, iv_city, iv_unit, iv_postal, iv_tel, iv_name, iv_price, iv_paytype, iv_charge, iv_tips, iv_ready, iv_clat, iv_clng).then( function (result) {
     
     }).catch(function(e){
@@ -95,7 +96,7 @@ smartApp.get('/test', function(req, res) {
 
 
 
-smartApp.get('/test', function(req, res) {
+smartApp.get('/test3', function(req, res) {
 //      var headers                = req.headers;
 //      var authorizationSplit     = headers.authorization.split(" ", 2);
 //      var token                  = authorizationSplit[1]

@@ -103,6 +103,7 @@ function Redis(ir_client) {
                 la_param.push( (new Date()).getTime());
                 la_param.push( JSON.stringify( lj_item ) );
             }
+            console.log("sort set");
             ir_client.zaddAsync( la_param ).then( function(result){
 //                console.log( result);
                 resolve(result);

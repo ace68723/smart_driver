@@ -33,7 +33,7 @@ function Address(ir_pool) {
             ir_pool.queryAsync(sql_insert_address, parameter_insert_address).spread( function (result) {
 //                console.log(users[0].username);
               
-                resolve([{'result': result.insertId }]);
+                resolve([{'aid': result.insertId }]);
             }).catch(function(e) {
 //                console.log("Exception " + e);
                 reject(e);
