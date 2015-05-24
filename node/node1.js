@@ -51,7 +51,7 @@ login.authorize(token,secret).then(function(result) {
 
 smartApp.post('/login', function(req, res) {
 	
-	var user = req.body.username;
+	var user = req.body;
 	console.log(user);
 
     var name        = user.username;
@@ -75,7 +75,7 @@ smartApp.post('/login', function(req, res) {
     })
     .catch(function(error) {
         console.log(error);
-         res.status(401).send(result)
+         res.status(401).send(error)
     })
 
 
