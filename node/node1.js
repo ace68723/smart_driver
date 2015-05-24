@@ -1,7 +1,7 @@
-var express 	    = require('express');
-var expressJwt 	    = require('express-jwt');
+var express         = require('express');
+var expressJwt      = require('express-jwt');
 var cors            = require('cors');
-var bodyParser 	    = require('body-parser');
+var bodyParser      = require('body-parser');
 
 
 var mysql           = require('./connection/dbMysql');
@@ -18,59 +18,44 @@ smartApp.use(bodyParser.json());
 
 var login = new ifLogin(pool);
 
-// console.log(login.getSecret().secret)
 
-// var getSecret = login.getSecret();
 
-login.getSecret().then(function(result) {
-    console.log(result.secret)
+//init secret
+var getSecret   =   function() {
+    login.getSecret().then(function(result) {
+        console.log(result.secret)
+        var secret      = result.secret;
+    })
+};
+
+getSecret();
+
+//init secret end
+
+smartApp.post('/tool', function(req, res) {
+    
+    //update secret
+   getSecret();
+   res.status(200).send('ok')
 })
-
-var name        = 'test';
-var password    = 'test123';
-var secret      = '8'; 
-
-login.login(name,password,secret).then(function(result) {
-        console.log('login')
-        console.log(result)
-    })
-    .catch(function(error) {
-        console.log(error);
-    })
-
-var token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1aWQiOjIwLCJleHBpcmVkIjoiMjAxNS0wNi0yMSAyMzoxNDowOCIsImlhdCI6MTQzMjM1MDg0OH0.BBEe3Oc7W7TMcWKQWCtCY2EnBSqH2u6ag5JeewG9KcQ';
-
-login.authorize(token,secret).then(function(result) {
-        console.log(result)
-    })
-    .catch(function(error) {
-        console.log(error);
-    })
-
 
 
 smartApp.post('/login', function(req, res) {
-	
-	var user = req.body;
-	console.log(user);
+    
+    var user = req.body;
+    console.log(user);
 
     var name        = user.username;
     var password    = user.password;
+    
+    //check secret
+    if (!secret) {
+        getSecret();
+    };
 
     login.login(name,password,secret).then(function(result) {
         console.log('login')
         console.log(result)
-
-        //for test
-        // res.status(200).send({
-        //     result: 0,
-        //     msg: 'message',
-        //     token: 'test_token',
-        //     lat: '43.589045',
-        //     lng: '-79.644120',
-        //     uid: '1'
-        // })
-
         res.status(200).send(result)
     })
     .catch(function(error) {
@@ -89,6 +74,11 @@ smartApp.post('/authorize', function(req, res) {
     console.log(authorize);
 
     var token        = authorize.token;
+
+    //check secret
+    if (!secret) {
+        getSecret();
+    };
 
     login.authorize(token,secret).then(function(result) {
             console.log(result)
@@ -131,55 +121,55 @@ smartApp.post('/action', function(req, res) {
 })
 
 smartApp.get('/get_addresses', function(req, res) {
-	// var headers 			= req.headers;
-	// var authorizationSplit 	= headers.authorization.split(" ", 2);
-	// var token 				= authorizationSplit[1]
-	// get token to identity user
+    // var headers          = req.headers;
+    // var authorizationSplit   = headers.authorization.split(" ", 2);
+    // var token                = authorizationSplit[1]
+    // get token to identity user
 
-	res.status(200).send({
-		addresses: addresses
-	})
+    res.status(200).send({
+        addresses: addresses
+    })
 
 
 })
 
 smartApp.post('/preorder', function(req, res) {
-	// var headers 			= req.headers;
-	// var authorizationSplit 	= headers.authorization.split(" ", 2);
-	// var token 				= authorizationSplit[1]
-	
-	var preorder 			= req.body;
-	
-	console.log(req.body);
+    // var headers          = req.headers;
+    // var authorizationSplit   = headers.authorization.split(" ", 2);
+    // var token                = authorizationSplit[1]
+    
+    var preorder            = req.body;
+    
+    console.log(req.body);
 
-	res.status(200).send({
-		result	: 0,
-		msg		: 'message',
-		wait	: '50s',
-		charge	: '50'
-	})
+    res.status(200).send({
+        result  : 0,
+        msg     : 'message',
+        wait    : '50s',
+        charge  : '50'
+    })
 
 })
 smartApp.post('/order', function(req, res) {
-	// var headers 			= req.headers;
-	// var authorizationSplit 	= headers.authorization.split(" ", 2);
-	// var token 				= authorizationSplit[1]
-	
-	var order 				= req.body;
-	
-	console.log(req)
+    // var headers          = req.headers;
+    // var authorizationSplit   = headers.authorization.split(" ", 2);
+    // var token                = authorizationSplit[1]
+    
+    var order               = req.body;
+    
+    console.log(req)
 
-	res.status(200).send({
-		result	: 0,
-		message	: 'message'
-	})
+    res.status(200).send({
+        result  : 0,
+        message : 'message'
+    })
 
 })
 
 
 
 smartApp.listen(3000, function() {
-	console.log("smartJwt listening on 3000")
+    console.log("smartJwt listening on 3000")
 })
 
 
