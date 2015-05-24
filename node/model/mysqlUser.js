@@ -1,4 +1,4 @@
-
+var Promise         = require("bluebird");
 var moment = require('moment');
 var jwt = require('jsonwebtoken');
 var bcrypt = require('bcrypt'); 

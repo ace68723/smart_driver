@@ -122,14 +122,14 @@ angular.module('smartApp')
 					      	var origin_addresses = response.originAddresses;
 					    	var destination_addresses = response.destinationAddresses;
 					    	var rows = response.rows;
-
+					    	console.log(response);
 					    	_.forEach(poc.task_address, function(origin, key) {
 
 					    		var row = key
 					    		_.forEach(destinations, function(destination, key){
 
-					    			var duration = rows[row].elements[key].duration.value;
-					    			var distance = rows[row].elements[key].distance.value;
+					    			// var duration = rows[row].elements[key].duration.value;
+					    			// var distance = rows[row].elements[key].distance.value;
 					    			
 					    			poc.addresses_array.push({
 					    				start 	: origin,

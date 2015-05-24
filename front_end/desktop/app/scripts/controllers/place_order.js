@@ -54,8 +54,8 @@ angular.module('smartApp')
 	    	     	
 	         	console.log(results);
 	    			poc.cformatted_address 	= results[0].formatted_address;
-	    			poc.clat 				= results[0].geometry.location.k;
-					poc.clng 				= results[0].geometry.location.D;		    	
+	    			poc.clat 				= results[0].geometry.location.A;
+					poc.clng 				= results[0].geometry.location.F;		    	
 		    	} else {
 		    		
 		    		// console.log(status);
@@ -122,7 +122,7 @@ angular.module('smartApp')
 					      	var origin_addresses = response.originAddresses;
 					    	var destination_addresses = response.destinationAddresses;
 					    	var rows = response.rows;
-
+					    	console.log(response);
 					    	_.forEach(poc.task_address, function(origin, key) {
 
 					    		var row = key
@@ -158,8 +158,8 @@ angular.module('smartApp')
 		poc.preorderSubmit = function(preorderData) {
 			
 			preorderData =	{
-				lat	: 43.825466, 
-				lng	: -79.288094,
+				lat	: '43.825466', 
+				lng	: '-79.288094',
 				clat: poc.clat,
 				clng: poc.clng
 			}

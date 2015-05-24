@@ -1,52 +1,93 @@
-var express 	= require('express');
-var expressJwt 	= require('express-jwt');
-var cors 		= require('cors');
-var bodyParser 	= require('body-parser');
+var express 	    = require('express');
+var expressJwt 	    = require('express-jwt');
+var cors            = require('cors');
+var bodyParser 	    = require('body-parser');
 
-var smartApp = express();
+
+var mysql           = require('./connection/dbMysql');
+var pool            = (new mysql).pool;
+var Promise         = require("bluebird");
+var ifLogin         = require("./interface/ifLogin");
+var ifNode2         = require("./interface/ifNode2");
+var ifDriver        = require("./interface/ifDriver");
+
+var smartApp        = express();
 
 smartApp.use(cors());
 smartApp.use(bodyParser.json());
+
+var login = new ifLogin(pool);
+
+// console.log(login.getSecret().secret)
+
+// var getSecret = login.getSecret();
+
+login.getSecret().then(function(result) {
+    console.log(result.secret)
+})
+
+var name        = 'test';
+var password    = 'test123';
+var secret      = '8'; 
+
+login.login(name,password,secret).then(function(result) {
+        console.log('login')
+        console.log(result)
+    })
+    .catch(function(error) {
+        console.log(error);
+    })
+
+var token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1aWQiOjIwLCJleHBpcmVkIjoiMjAxNS0wNi0yMSAyMzoxNDowOCIsImlhdCI6MTQzMjM1MDg0OH0.BBEe3Oc7W7TMcWKQWCtCY2EnBSqH2u6ag5JeewG9KcQ';
+
+login.authorize(token,secret).then(function(result) {
+        console.log(result)
+    })
+    .catch(function(error) {
+        console.log(error);
+    })
+
+
 
 smartApp.post('/login', function(req, res) {
 	
 	var user = req.body.username;
 	console.log(user);
 
+
 	res.status(200).send({
 		result: 0,
-            msg: 'message',
-            token: 'test_token',
-            lat: '43.589045',
-            lng: '-79.644120',
-            uid: '1'
+        msg: 'message',
+        token: 'test_token',
+        lat: '43.589045',
+        lng: '-79.644120',
+        uid: '1'
 	})
 
 })
 smartApp.get('/get_sumamry', function(req, res) {
-      var headers                = req.headers;
-      var authorizationSplit     = headers.authorization.split(" ", 2);
-      var token                  = authorizationSplit[1]
-      // get token to identity user
-      console.log(token);
-      res.status(200).send({
-           actions:actions,
-           orders:orders
-      })
-
+    var headers                = req.headers;
+    var authorizationSplit     = headers.authorization.split(" ", 2);
+    var token                  = authorizationSplit[1]
+        // get token to identity user
+    console.log(token);
+    res.status(200).send({
+        actions:actions,
+        orders:orders
+    })
 
 })
 
 smartApp.post('/action', function(req, res) {
-      var headers                = req.headers;
-      var authorizationSplit     = headers.authorization.split(" ", 2);
-      var token                  = authorizationSplit[1]
-      // get token to identity user
-      console.log(token);
-      res.status(200).send({
-            result: 1,
-            msg   : 'message'
-      })
+    var headers                = req.headers;
+    var authorizationSplit     = headers.authorization.split(" ", 2);
+    var token                  = authorizationSplit[1]
+    // get token to identity user
+    console.log(token);
+    res.status(200).send({
+        result: 1,
+        msg   : 'message'
+    })
 
 
 })

@@ -1,6 +1,6 @@
 var jwt = require('jsonwebtoken');
-var modelUser = require("./../model/mysqlUser");
-var modelParameter = require("./../model/mysqlParameter");
+var modelUser = require("../model/mysqlUser");
+var modelParameter = require("../model/mysqlParameter");
 var Promise = require('bluebird');
 
 
