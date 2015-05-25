@@ -56,6 +56,13 @@ smartApp.get('/get_sumamry', function(req, res) {
 
 })
 
+smartApp.get('/test22', function(req, res) {
+   var node = new ifNode2( ); 
+   node.getTable( 'Task' ).then( function(result) {
+     console.log(result);
+   })
+});
+
 smartApp.get('/test11', function(req, res) {
    var login = new ifLogin(pool); 
    login.login('test6', 'asd8', '8').then( function(result) {

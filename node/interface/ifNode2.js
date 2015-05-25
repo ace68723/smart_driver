@@ -42,47 +42,73 @@ function Node2( ) {
             var lv_tb_type = ( iv_name == 'Task' ) ? 1 : 2;
             var lv_name = iv_name + (moment(new Date())).format("YYYYMMDD");
             
-            redis.getAll(lv_tb_type, iv_name).then( function (result){
+            redis.getAll(lv_tb_type, lv_name).then( function (result){
                 switch (iv_name){
                     case 'Path':
+                        
                         for(var lv_result_i in result){
-                            var lo_result = result[lv_result_i];
+                            var lo_result =  JSON.parse(result[lv_result_i] );
                             var lo_data = { };
-                            lo_data.start   = lo_result.start;
-                            lo_data.end = lo_result.start;
-                            lo_data.time = lo_result.start;
+                            lo_data.start = lo_result.start;
+                            lo_data.end = lo_result.end;
+                            lo_data.time = lo_result.time;
                             ea_data.push( lo_data );
                         }
+                        resolve(ea_data);
                         break;
                     case 'Driver':
-                        ea_data = result;                      
+                        for(var lv_result_i in result){
+                            var lo_result =  JSON.parse(result[lv_result_i] );
+//                            var lo_data = { };
+//                            lo_data.start = lo_result.start;
+//                            lo_data.end = lo_result.end;
+//                            lo_data.time = lo_result.time;
+                            ea_data.push( lo_result );
+                        }     
+                        resolve(ea_data);
                         break;
                     case 'Task':
+                        var lv_task = 'Task' + (moment(new Date())).format("YYYYMMDD");
                         var lv_assign = 'Assign' + (moment(new Date())).format("YYYYMMDD");
                         redis.getAll(2, lv_assign).then( function (assign_result){
-                            for(var lv_result_i in assign_result){
-                                var lo_result = assign_result[lv_result_i];
-                                var lo_data = { };
-                                lo_data.tid   = lo_result.tid;
-                                lo_data.location = lo_result.location;
-                                lo_data.deadline = lo_result.deadline;
-                                lo_data.ready = lo_result.ready;
-                                lo_data.depend = lo_result.depend;
+                            
+                            redis.getAll(1, lv_task).then( function (task_result){
+                            
+                                for(var lv_task_i in task_result){
+                                    var lo_task = JSON.parse(task_result[lv_task_i]);
+                                    var lo_data = { };
+                                    lo_data.tid   = lo_task.tid;
+                                    lo_data.location = lo_task.location;
+                                    lo_data.deadline = lo_task.deadline;
+                                    lo_data.ready = lo_task.ready;
+                                    lo_data.depend = lo_task.depend;
                                 
-                                var lv_assign = assign_result.filter(function(item) {
-                                    return item.tid == lo_data.tid;
-                                });
-                                lo_data.did = lv_assign.did;
-                                ea_data.push( lo_data );
-
-                            }
+                                    if (assign_result != null) {
+                                        for(var lv_assign_i in assign_result){
+                                            var lo_assign = JSON.parse(task_result[lv_task_i]);
+                                            if ( lo_assign.tid == lo_data.tid ) { lo_data.did = lo_assign.did; };
+                                        }
+                                    } else {
+                                        lo_data.did = '';
+                                    }
+                                    console.log('YY');
+                                    ea_data.push( lo_data );
+                                }
+                             
+                             }).then( function(result){
+                                console.log('done');
+                                resolve(ea_data);    
+                             }).catch(function(e) {
+                                    reject(e);
+                             });
+                        
                         }).catch(function(e) {
                             reject(e);
                         });
-                        break;
+                        
                     
                 }
-                resolve(ea_data);
+                
                 
             }).catch(function(e) {
                 reject(e);

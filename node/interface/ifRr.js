@@ -62,7 +62,7 @@ function Rr(ir_pool) {
                             var la_task = [];
                             var lo_task = { };
                             
-                            lo_task.tid = '0,0,0,0,'+iv_lat+','+iv_lng+','+moment(new Date()).utc();
+                            lo_task.tid = '0,0,'+iv_lat+','+iv_lng+','+moment(new Date()).utc();
                             var lv_depend_id = lo_task.tid ;
                             lo_task.location = iv_lat+','+iv_lng;              
                             lo_task.deadline = moment(new Date()).utc()+(iv_ready + 1800)*1000; 

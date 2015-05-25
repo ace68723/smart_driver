@@ -4,22 +4,22 @@ var moment = require('moment');
 
 function Redis(ir_client) { 
     
+    var redis = this;
+    
     this.getTableName = function ( iv_name ) {
-        return (iv_name + (moment(new Date())).format("YYYYMMDD"));
+        return (String(iv_name) + (moment(new Date())).format("YYYYMMDD"));
     }
     
     this.getAll = function(iv_type, iv_tb_name) {
         return new Promise(function (resolve, reject) {
-            if (iv_type == 1) {
+            if (iv_type == 2) {
                 ir_client.hgetallAsync( iv_tb_name ).then( function(result){
-//                    console.log( result);
                     resolve(result);
                 }).catch(function(e) {
-//                    console.log(e);
                     reject(e);
                 });
-            } else if (iv_type == 2) {
-                ir_client.zrangeAsync( iv_tb_name, 0, -1 ).then( function(result){
+            } else if (iv_type == 1) {
+                ir_client.zrangeAsync( iv_tb_name , 0, -1 ).then( function(result){
 //                    console.log( result);
                     resolve(result);
                 }).catch(function(e) {
