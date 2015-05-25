@@ -160,13 +160,6 @@ smartApp.post('/preorder', function(req, res) {
         res.status(400).send(error);
     });
 
-    // res.status(200).send({
-    //     result  : 0,
-    //     msg     : 'message',
-    //     wait    : '50s',
-    //     charge  : '50'
-    // })
-
 })
 
 smartApp.post('/order', function(req, res) {
@@ -204,29 +197,7 @@ smartApp.post('/order', function(req, res) {
         res.status(400).send(error);
     });
 
-    // res.status(200).send({
-    //     result  : 0,
-    //     msg     : 'message',
-    //     wait    : '50s',
-    //     charge  : '50'
-    // })
-
 })
-// smartApp.post('/order', function(req, res) {
-//     // var headers          = req.headers;
-//     // var authorizationSplit   = headers.authorization.split(" ", 2);
-//     // var token                = authorizationSplit[1]
-    
-//     var order               = req.body;
-    
-//     console.log(req)
-
-//     res.status(200).send({
-//         result  : 0,
-//         message : 'message'
-//     })
-
-// })
 
 
 

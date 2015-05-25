@@ -14,7 +14,7 @@ var jobSchedule 	= require('./models/jobscheduling/build/Release/jobSchedule');
 // var current_date = now.format("YYYYMMDD");
 // console.log(current_date)
 
-//  	var array_task = [ 'array_task',20, JSON.stringify({time:10} )];
+ 	// var array_task = [ 'array_task',20, JSON.stringify({time:10} )];
  	
 
 //  	client.zadd(array_task, function (err, response) {
@@ -35,8 +35,16 @@ var jobSchedule 	= require('./models/jobscheduling/build/Release/jobSchedule');
 // var jobSchedule = require('./build/Release/jobSchedule');
 
 var drivers = [
-{ "did": "Xunrui", "available": 100, "off": 600, "location": "Chanmao Inc." },
-{ "did": "Aiden", "available": 5, "off": 400, "location": "Chanmao Inc." }
+{ 	"did": "Xunrui", 
+	"available": 1432516683235, 
+	"off": 1432519683235, 
+	"location": "43.624203,-79.485100"
+},
+
+{ 	"did": "Aiden", 
+	"available": 1432516683235, 
+	"off": 1432519683235,  
+	"location": "43.624203,-79.485100"}
 ];
 
 var tasks = [ 
