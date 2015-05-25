@@ -17,8 +17,8 @@ using std::vector;
    };
  */
 
-typedef int CTime;
-typedef int CRTime;
+typedef double CTime;
+typedef double CRTime;
 typedef string CID;
 #define NULL_ID    ""
 

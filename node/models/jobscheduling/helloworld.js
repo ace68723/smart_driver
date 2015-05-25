@@ -1,14 +1,14 @@
 var jobSchedule = require('./build/Release/jobSchedule');
 
 var drivers = [
-{ "did": "Xunrui", "available": 100, "off": 600, "location": "Chanmao Inc." },
-{ "did": "Aiden", "available": 5, "off": 400, "location": "Chanmao Inc." }
+{ "did": "Xunrui", "available": 1432516683235, "off": 1432519683235, "location": "Chanmao Inc." },
+{ "did": "Aiden", "available": 1432516683235, "off": 1432519683235, "location": "Chanmao Inc." }
 ];
 
 var tasks = [ 
-{ "tid":"order1-fetch", "location":"Chanmao Inc.", "deadline":110, "did":"", "depend":"" }, 
-{ "tid":"order1-deliver", "location":"Client1", "deadline":210, "did":"", "depend":"order1-fetch" }, 
-{ "tid":"order2-deliver", "location":"Client2", "deadline":310, "did":"Aiden", "depend":"" } 
+{ "tid":"order1-fetch", "location":"Chanmao Inc.", "deadline":1432519683235, "did":"", "depend":"" }, 
+{ "tid":"order1-deliver", "location":"Client1", "deadline":1432519683235, "did":"", "depend":"order1-fetch" }, 
+{ "tid":"order2-deliver", "location":"Client2", "deadline":1432519683235, "did":"Aiden", "depend":"" } 
 ];
 
 var paths = [ 
