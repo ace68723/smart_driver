@@ -1,7 +1,7 @@
 
 var moment 			= require('moment');
 var Q 				= require('q');
-// var jobSchedule 	= require('./models/jobscheduling/build/Release/jobSchedule');
+var jobSchedule 	= require('./models/jobscheduling/build/Release/jobSchedule');
 var ifNode2         = require("./interface/ifNode2");
 
 var node2 = new ifNode2( ); 
@@ -15,7 +15,14 @@ var paths;
      	console.log(tasks)
    	})
 
+var drivers = [
+{ "did": "Xunrui", "available": 1432532133879, "off": 1432532233879, "location": "43.7935476,-79.2931461" },
+{ "did": "Aiden", "available": 1432532133879, "off": 1432532223879, "location": "43.7935476,-79.2931461" }
+];
 
+function callbackFunc(str) {
+	console.log(str);
+}
 
 var getTables = function() {
 	var deferred = Q.defer();
@@ -62,6 +69,8 @@ var getTables = function() {
    			console.log(drivers);
    			console.log(tasks);
    			console.log(paths);
+   			jobSchedule.search(JSON.stringify({"curTime":10, "drivers":drivers, "tasks":tasks, "paths":paths}), callbackFunc);
+
    			deferred.resolve(drivers); //register resolve -R
    		})
 
@@ -89,31 +98,28 @@ getTables();
 
 
 
-var drivers = [
-{ "did": "Xunrui", "available": 1432516683235, "off": 1432519683235, "location": "Chanmao Inc." },
-{ "did": "Aiden", "available": 1432516683235, "off": 1432519683235, "location": "Chanmao Inc." }
-];
+// var drivers = [
+// { "did": "Xunrui", "available": 1432532133879, "off": 1432532233879, "location": "43.7935476,-79.2931461" },
+// { "did": "Aiden", "available": 1432532133879, "off": 1432532223879, "location": "43.7935476,-79.2931461" }
+// ];
 
-var tasks = [ 
-{ "tid":"order1-fetch", "location":"Chanmao Inc.", "deadline":1432519683235, "did":"", "depend":"" }, 
-{ "tid":"order1-deliver", "location":"Client1", "deadline":1432519683235, "did":"", "depend":"order1-fetch" }, 
-{ "tid":"order2-deliver", "location":"Client2", "deadline":1432519683235, "did":"Aiden", "depend":"" } 
-];
+// var tasks = [ 
+// { "tid":"order1-fetch", "location":"Chanmao Inc.", "deadline":1432519683235, "did":"", "depend":"" }, 
+// { "tid":"order1-deliver", "location":"Client1", "deadline":1432519683235, "did":"", "depend":"order1-fetch" }, 
+// { "tid":"order2-deliver", "location":"Client2", "deadline":1432519683235, "did":"Aiden", "depend":"" } 
+// ];
 
-var paths = [ 
-{ "start":"Chanmao Inc.", "end":"Client1", "time":10},
-{ "end":"Chanmao Inc.", "start":"Client1", "time":10},
-{ "start":"Chanmao Inc.", "end":"Client2", "time":20},
-{ "end":"Chanmao Inc.", "start":"Client2", "time":20},
-{ "start":"Client1", "end":"Client2", "time":25},
-{ "end":"Client1", "start":"Client2", "time":25}
-];
+// var paths = [ 
+// { "start":"Chanmao Inc.", "end":"Client1", "time":10},
+// { "end":"Chanmao Inc.", "start":"Client1", "time":10},
+// { "start":"Chanmao Inc.", "end":"Client2", "time":20},
+// { "end":"Chanmao Inc.", "start":"Client2", "time":20},
+// { "start":"Client1", "end":"Client2", "time":25},
+// { "end":"Client1", "start":"Client2", "time":25}
+// ];
 
 
-function callbackFunc(str) {
-	console.log(str);
-}
 
-jobSchedule.search(JSON.stringify({"curTime":10, "drivers":drivers, "tasks":tasks, "paths":paths}), callbackFunc);
+
 //console.log(jobSchedule.search(JSON.stringify({"drivers":drivers, "tasks":tasks, "paths":paths})));
 
