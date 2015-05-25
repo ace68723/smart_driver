@@ -169,64 +169,64 @@ smartApp.post('/preorder', function(req, res) {
 
 })
 
-// smartApp.post('/preorder', function(req, res) {
-//     // var headers          = req.headers;
-//     // var authorizationSplit   = headers.authorization.split(" ", 2);
-//     // var token                = authorizationSplit[1]
-    
-//     var preorder    = req.body;
-    
-//     console.log(req.body);
-
-//     var iv_addr     =   preorder.addr;
-//     var iv_city     =   preorder.city;
-//     var iv_unit     =   preorder.unit;
-//     var iv_postal   =   preorder.postal;
-//     var iv_tel      =   preorder.tel;
-//     var iv_name     =   preorder.name;
-//     var iv_price    =   preorder.price;
-//     var iv_paytype  =   preorder.paytype;
-//     var iv_charge   =   preorder.charge;
-//     var iv_lat      =   preorder.lat;
-//     var iv_lng      =   preorder.lng;
-//     var iv_clat     =   preorder.clat;
-//     var iv_clng     =   preorder.clng;
-//     var iv_tips     =   preorder.tips;
-//     var iv_ready    =   preorder.ready;
-
-//     var iv_token    = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1aWQiOjIwLCJleHBpcmVkIjoiMjAxNS0wNi0yMSAwMDoxMDo0MyIsImlhdCI6MTQzMjI2Nzg0M30.xAPktfkYkQMIu3L1wkq4m13IpUk8OKyVvjK8IjR_nFo";
-//     var iv_secret   = secret;
-
-//     rr.order(iv_token, iv_secret, iv_lat, iv_lng, iv_addr, iv_city, iv_unit, iv_postal, iv_tel, iv_name, iv_price, iv_paytype, iv_charge, iv_tips, iv_ready, iv_clat, iv_clng).then( function (result) {
-        
-//         res.status(200).send(result);
-//     }).catch(function(error){
-//         res.status(400).send(error);
-//     });
-
-//     // res.status(200).send({
-//     //     result  : 0,
-//     //     msg     : 'message',
-//     //     wait    : '50s',
-//     //     charge  : '50'
-//     // })
-
-// })
 smartApp.post('/order', function(req, res) {
     // var headers          = req.headers;
     // var authorizationSplit   = headers.authorization.split(" ", 2);
     // var token                = authorizationSplit[1]
     
-    var order               = req.body;
+    var order    = req.body;
     
-    console.log(req)
+    console.log(req.body);
 
-    res.status(200).send({
-        result  : 0,
-        message : 'message'
-    })
+    var iv_addr     =   order.addr;
+    var iv_city     =   order.city;
+    var iv_unit     =   order.unit;
+    var iv_postal   =   order.postal;
+    var iv_tel      =   order.tel;
+    var iv_name     =   order.name;
+    var iv_price    =   order.price;
+    var iv_paytype  =   order.paytype;
+    var iv_charge   =   order.charge;
+    var iv_lat      =   order.lat;
+    var iv_lng      =   order.lng;
+    var iv_clat     =   order.clat;
+    var iv_clng     =   order.clng;
+    var iv_tips     =   order.tips;
+    var iv_ready    =   order.ready;
+
+    var iv_token    = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1aWQiOjIwLCJleHBpcmVkIjoiMjAxNS0wNi0yMSAwMDoxMDo0MyIsImlhdCI6MTQzMjI2Nzg0M30.xAPktfkYkQMIu3L1wkq4m13IpUk8OKyVvjK8IjR_nFo";
+    var iv_secret   = secret;
+
+    rr.order(iv_token, iv_secret, iv_lat, iv_lng, iv_addr, iv_city, iv_unit, iv_postal, iv_tel, iv_name, iv_price, iv_paytype, iv_charge, iv_tips, iv_ready, iv_clat, iv_clng).then( function (result) {
+        
+        res.status(200).send(result);
+    }).catch(function(error){
+        res.status(400).send(error);
+    });
+
+    // res.status(200).send({
+    //     result  : 0,
+    //     msg     : 'message',
+    //     wait    : '50s',
+    //     charge  : '50'
+    // })
 
 })
+// smartApp.post('/order', function(req, res) {
+//     // var headers          = req.headers;
+//     // var authorizationSplit   = headers.authorization.split(" ", 2);
+//     // var token                = authorizationSplit[1]
+    
+//     var order               = req.body;
+    
+//     console.log(req)
+
+//     res.status(200).send({
+//         result  : 0,
+//         message : 'message'
+//     })
+
+// })
 
 
 
