@@ -12,7 +12,7 @@ function Rr(ir_pool) {
     this.preorder = function(iv_token, iv_secret, iv_lat, iv_lng, iv_clat, iv_clng, ia_path) {
         return new Promise(function (resolve, reject) {
             var eo_result = { };
-            var lr_login = new ifLogin(pool);
+            var lr_login = new ifLogin(ir_pool);
             lr_login.authorize(iv_token, iv_secret).then( function(login_result) {
                     var node2 = new ifNode2;
                     var la_path = [ ];
@@ -36,11 +36,10 @@ function Rr(ir_pool) {
                         reject(e);
                     });
 
-            }).catch(function(login_error) {
-                eo_result = { };
+            }).catch(function(e) {
                 eo_result.result = 1;
                 eo_result.message = 'error';
-                reject(login_error);
+                reject(eo_result);
             });
         });
     }

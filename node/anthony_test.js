@@ -72,7 +72,7 @@ smartApp.get('/test', function(req, res) {
     var iv_name = "aiden";
     var iv_price = "35.99";
     var iv_paytype = "1";
-    var iv_charge = "5.00";
+    var iv_charge = "6.00";
     var iv_lat = "43.7935474";
     var iv_lng = "-79.2931461";
     var iv_clat = "43.7935478";
