@@ -1,38 +1,19 @@
-var redis 			= require('redis');
-//connect redis
-// var client 			= redis.createClient();
-//connect redis end
+
 var moment 			= require('moment');
 var jobSchedule 	= require('./models/jobscheduling/build/Release/jobSchedule');
+var ifNode2         = require("./interface/ifNode2");
 
+var node2 = new ifNode2( ); 
 
-// client.on('connect', function() {
-//     console.log('connected');
-// });
+var drivers;
+var tasks;
+var paths;
 
-// var now = moment(new Date());
-// var current_date = now.format("YYYYMMDD");
-// console.log(current_date)
+   	node2.getTable( 'Task' ).then( function(result) {
+     	tasks = result;
+     	consoel.log(tasks)
+   	})
 
- 	// var array_task = [ 'array_task',20, JSON.stringify({time:10} )];
- 	
-
-//  	client.zadd(array_task, function (err, response) {
-//  	    if (err) throw err;
-//  	    console.log('added '+response+' items.');
-//         });
-
-//  	var args1 = [ 'array_task', '+inf', '-inf' ];
-
-//  	client.ZRANGE('array_task', 0, -1,  function (err, response) {
-//         if (err) throw err;
-//         console.log('example1', response);
-//         // write your code here
-//     });
-
-
-
-// var jobSchedule = require('./build/Release/jobSchedule');
 
 var drivers = [
 { 	"did": "Xunrui", 
