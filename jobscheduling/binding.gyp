@@ -2,7 +2,9 @@
 	"targets":[
 	{
 		"target_name":"jobSchedule",
-		"sources":[ "wrapper.cpp", "jobSchedule.cpp", "jsoncpp.cpp" ],
+		"sources":[ "wrapper.cpp", "jobSchedule.cpp", "jsoncpp.cpp" ], 
+		'cflags!': [ '-fno-exceptions' ], 
+		'cflags_cc!': [ '-fno-exceptions' ],
 		"xcode_settings": {
 				"GCC_ENABLE_CPP_RTTI": "YES",
 				"GCC_ENABLE_CPP_EXCEPTIONS": "YES",

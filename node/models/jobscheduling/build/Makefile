@@ -334,8 +334,8 @@ ifeq ($(strip $(foreach prefix,$(NO_LOAD),\
 endif
 
 quiet_cmd_regen_makefile = ACTION Regenerating $@
-cmd_regen_makefile = cd $(srcdir); /usr/local/lib/node_modules/node-gyp/gyp/gyp_main.py -fmake --ignore-environment "--toplevel-dir=." -I/Users/yichenghuang/project/smart/node2/node_modules/jobscheduling/build/config.gypi -I/usr/local/lib/node_modules/node-gyp/addon.gypi -I/Users/yichenghuang/.node-gyp/0.12.2/common.gypi "--depth=." "-Goutput_dir=." "--generator-output=build" "-Dlibrary=shared_library" "-Dvisibility=default" "-Dnode_root_dir=/Users/yichenghuang/.node-gyp/0.12.2" "-Dmodule_root_dir=/Users/yichenghuang/project/smart/node2/node_modules/jobscheduling" binding.gyp
-Makefile: $(srcdir)/../../../../../../../usr/local/lib/node_modules/node-gyp/addon.gypi $(srcdir)/../../../../../.node-gyp/0.12.2/common.gypi $(srcdir)/build/config.gypi $(srcdir)/binding.gyp
+cmd_regen_makefile = cd $(srcdir); /usr/local/lib/node_modules/node-gyp/gyp/gyp_main.py -fmake --ignore-environment "--toplevel-dir=." -I/Users/stream/Downloads/projects/smart/node/models/jobscheduling/build/config.gypi -I/usr/local/lib/node_modules/node-gyp/addon.gypi -I/Users/stream/.node-gyp/0.12.4/common.gypi "--depth=." "-Goutput_dir=." "--generator-output=build" "-Dlibrary=shared_library" "-Dvisibility=default" "-Dnode_root_dir=/Users/stream/.node-gyp/0.12.4" "-Dmodule_root_dir=/Users/stream/Downloads/projects/smart/node/models/jobscheduling" binding.gyp
+Makefile: $(srcdir)/../../../../../../.node-gyp/0.12.4/common.gypi $(srcdir)/build/config.gypi $(srcdir)/binding.gyp $(srcdir)/../../../../../../../../usr/local/lib/node_modules/node-gyp/addon.gypi
 	$(call do_cmd,regen_makefile)
 
 # "all" is a concatenation of the "all" targets from all the included

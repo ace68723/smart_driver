@@ -19,7 +19,7 @@
     "icu_small": "true",
     "icu_ver_major": "54",
     "node_install_npm": "true",
-    "node_prefix": "",
+    "node_prefix": "/",
     "node_shared_cares": "false",
     "node_shared_http_parser": "false",
     "node_shared_libuv": "false",
@@ -45,7 +45,7 @@
     "v8_random_seed": 0,
     "v8_use_snapshot": "false",
     "want_separate_host_toolset": 0,
-    "nodedir": "/Users/yichenghuang/.node-gyp/0.12.2",
+    "nodedir": "/Users/stream/.node-gyp/0.12.4",
     "copy_dev_lib": "true",
     "standalone_static_library": 1
   }
