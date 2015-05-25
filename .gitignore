@@ -3,6 +3,7 @@ dist
 .tmp
 .sass-cache
 *.DS_Store
+*.o
 
 bower_components
 api/node_modules

@@ -15,7 +15,7 @@ bool parseInput(const char * cstr, CTime & curTime, vector<CDriver> & drivers, v
 		printf("parse failed."); 
 		return false;
 	}
-	curTime = root["curTime"].asInt();
+	curTime = root["curTime"].asDouble();
 	Json::Value driversA = root["drivers"];
 	Json::Value tasksA = root["tasks"];
 	Json::Value pathsA = root["paths"];
@@ -31,8 +31,8 @@ bool parseInput(const char * cstr, CTime & curTime, vector<CDriver> & drivers, v
 		CLocationID venue = tasksA[i]["location"].asCString();
 		CTime deadline = tasksA[i]["deadline"].asDouble(); 
 		CTime readyTime = 0;  
-		CID asgnDriverID = tasksA[i]["did"].asCString(); 
-		CID prevTaskID = tasksA[i]["depend"].asCString(); 
+		CID asgnDriverID = tasksA[i]["did"].isNull() ? "" : tasksA[i]["did"].asCString(); 
+		CID prevTaskID = tasksA[i]["depend"].isNull() ? "" : tasksA[i]["depend"].asCString(); 
 		tasks.push_back(CTask(id,venue,deadline,readyTime,asgnDriverID,prevTaskID));
 	}
 	for (unsigned int i=0; i<pathsA.size(); i++) {
