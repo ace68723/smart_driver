@@ -61,6 +61,12 @@ smartApp.get('/test22', function(req, res) {
    node.getTable( 'Task' ).then( function(result) {
      console.log(result);
    })
+      node.getTable( 'Driver' ).then( function(result) {
+     console.log(result);
+   })
+         node.getTable( 'Path' ).then( function(result) {
+     console.log(result);
+   })
 });
 
 smartApp.get('/test11', function(req, res) {
