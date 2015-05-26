@@ -51,7 +51,7 @@ function Node2( ) {
                             var lo_data = { };
                             lo_data.start = lo_result.start;
                             lo_data.end = lo_result.end;
-                            lo_data.time = lo_result.time;
+                            lo_data.time = Number(lo_result.time);
                             ea_data.push( lo_data );
                         }
                         resolve(ea_data);
@@ -59,10 +59,11 @@ function Node2( ) {
                     case 'Driver':
                         for(var lv_result_i in result){
                             var lo_result =  JSON.parse(result[lv_result_i] );
-//                            var lo_data = { };
-//                            lo_data.start = lo_result.start;
-//                            lo_data.end = lo_result.end;
-//                            lo_data.time = lo_result.time;
+                            var lo_data = { };
+                            lo_data.did = lo_result.start;
+                            lo_data.location = lo_result.location;
+                            lo_data.available = lo_result.available;
+                            lo_data.off = lo_result.off;
                             ea_data.push( lo_result );
                         }     
                         resolve(ea_data);
@@ -79,24 +80,22 @@ function Node2( ) {
                                     var lo_data = { };
                                     lo_data.tid   = lo_task.tid;
                                     lo_data.location = lo_task.location;
-                                    lo_data.deadline = lo_task.deadline;
-                                    lo_data.ready = lo_task.ready;
+                                    lo_data.deadline = Number(lo_task.deadline);
+                                    lo_data.ready = Number(lo_task.ready);
                                     lo_data.depend = lo_task.depend;
                                 
                                     if (assign_result != null) {
                                         for(var lv_assign_i in assign_result){
                                             var lo_assign = JSON.parse(task_result[lv_task_i]);
-                                            if ( lo_assign.tid == lo_data.tid ) { lo_data.did = lo_assign.did; };
+                                            if ( lo_assign.tid == lo_data.tid ) { lo_data.did = Number(lo_assign.did); };
                                         }
                                     } else {
                                         lo_data.did = '';
                                     }
-                                    console.log('YY');
                                     ea_data.push( lo_data );
                                 }
                              
                              }).then( function(result){
-                                console.log('done');
                                 resolve(ea_data);    
                              }).catch(function(e) {
                                     reject(e);

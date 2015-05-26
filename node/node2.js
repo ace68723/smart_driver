@@ -69,7 +69,9 @@ var getTables = function() {
    			console.log(drivers);
    			console.log(tasks);
    			console.log(paths);
-   			jobSchedule.search(JSON.stringify({"curTime":10, "drivers":drivers, "tasks":tasks, "paths":paths}), callbackFunc);
+   			var d = new Date();
+   			var curTime = d.getTime();
+   			jobSchedule.search(JSON.stringify({"curTime":curTime, "drivers":drivers, "tasks":tasks, "paths":paths}), callbackFunc);
 
    			deferred.resolve(drivers); //register resolve -R
    		})
