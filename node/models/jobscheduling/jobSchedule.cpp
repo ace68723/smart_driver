@@ -137,11 +137,12 @@ bool ALG::select_next_task(CDriver & driver, int iDriver, vector<CTask> & tasks,
 	return (iSelectedTask != -1);
 }
 //assume each task has only one prevTask or nextTask
-bool ALG::findScheduleGreedy(CTime curTime, vector<CDriver> & drivers, vector<CTask> & tasks, vector<CPath> & paths, vector<CScheduleItem> &schedule)
+int ALG::findScheduleGreedy(CTime curTime, vector<CDriver> & drivers, vector<CTask> & tasks, vector<CPath> & paths, vector<CScheduleItem> &schedule)
 {
 	int nLocations;
-	if (!preProcess(curTime, drivers, tasks, paths, nLocations)) 
-		return false;
+	int ret = preProcess(curTime, drivers, tasks, paths, nLocations);
+	if (ret != E_NORMAL) 
+		return ret;
 	vector<int> prior(drivers.size());
 	for (unsigned int i=0; i<drivers.size(); i++) prior[i] = i;
 	for (unsigned int i=0; i<drivers.size(); i++) {
@@ -187,7 +188,7 @@ bool ALG::findScheduleGreedy(CTime curTime, vector<CDriver> & drivers, vector<CT
 		schedule.push_back(si);
 	}
 
-	return true;
+	return E_NORMAL;
 }
 void ALG::assignTaskToDriver(int iTask, int iDriver, vector<CDriver> & drivers, vector<CTask> & tasks)
 {
@@ -213,7 +214,7 @@ void ALG::assignTaskToDriver(int iTask, int iDriver, vector<CDriver> & drivers, 
 		arrange_future_tasks(drivers[iDriver], tasks);
 	}
 }
-bool ALG::preProcess(CTime curTime, vector<CDriver> & drivers, vector<CTask> & tasks, vector<CPath> & paths, int &nLocations)
+int ALG::preProcess(CTime curTime, vector<CDriver> & drivers, vector<CTask> & tasks, vector<CPath> & paths, int &nLocations)
 {
 	vector<CLocationID> locationIDs;
 	for (unsigned int i=0; i<paths.size(); i++) {
@@ -242,7 +243,7 @@ bool ALG::preProcess(CTime curTime, vector<CDriver> & drivers, vector<CTask> & t
 	}
 	nLocations = locationIDs.size();
 	if (nLocations > MAXNLOCATIONS)
-		return false; // too many locations
+		return E_MAX_LOCATION; // too many locations
 	for (int i=0; i<nLocations; i++)
 		for (int j=0; j<nLocations; j++)
 			map[i][j] = (i==j)? 0: -1;
@@ -270,7 +271,7 @@ bool ALG::preProcess(CTime curTime, vector<CDriver> & drivers, vector<CTask> & t
 				drivers[i].iLocation = j;
 				break;
 			}
-		if (drivers[i].iLocation == -1) return false;
+		if (drivers[i].iLocation == -1) return E_UNKNOWN_LOC_DRIVER;
 		drivers[i].iOrigin_location = drivers[i].iLocation;
 	}
 	// convert tasks.asgnDriverID/prevTaskID to integer id -- the corresponding index
@@ -287,7 +288,7 @@ bool ALG::preProcess(CTime curTime, vector<CDriver> & drivers, vector<CTask> & t
 					break;
 				} 
 			//assert(tasks[i].iAsgnDriver != -1); //or return false;
-			if (tasks[i].iAsgnDriver == -1) return false;
+			if (tasks[i].iAsgnDriver == -1) return E_UNKNOWN_DRIVER_TASK;
 		}
 		tasks[i].iPrevTask = -1;
 		if (tasks[i].depend != NULL_ID) {
@@ -298,7 +299,7 @@ bool ALG::preProcess(CTime curTime, vector<CDriver> & drivers, vector<CTask> & t
 					break;
 				}
 			//assert(tasks[i].iPrevTask != -1); //or return false;
-			if (tasks[i].iPrevTask == -1) return false;
+			if (tasks[i].iPrevTask == -1) return E_UNKNOWN_DEPEND_TASK;
 		}
 		tasks[i].iVenue = -1;
 		for (int j=0; j<nLocations; j++) 
@@ -307,18 +308,19 @@ bool ALG::preProcess(CTime curTime, vector<CDriver> & drivers, vector<CTask> & t
 				break;
 			}
 			//assert(tasks[i].iVenue != -1); //or return false;
-			if (tasks[i].iVenue == -1) return false;
+			if (tasks[i].iVenue == -1) return E_UNKNOWN_LOC_TASK;
 	}
 	for (unsigned int i=0; i<drivers.size(); i++) 
 		arrange_future_tasks(drivers[i], tasks); //after the arrangement, the tasks are in reverse order
 
-	return true;
+	return E_NORMAL;
 }
-bool ALG::findScheduleBasic(CTime curTime, vector<CDriver> & drivers, vector<CTask> & tasks, vector<CPath> & paths, vector<CScheduleItem> &schedule)
+int ALG::findScheduleBasic(CTime curTime, vector<CDriver> & drivers, vector<CTask> & tasks, vector<CPath> & paths, vector<CScheduleItem> &schedule)
 {
 	int nLocations;
-	if (!preProcess(0, drivers, tasks, paths, nLocations)) 
-		return false;
+	int ret = preProcess(0, drivers, tasks, paths, nLocations); 
+	if (ret != E_NORMAL)
+		return ret;
 	int nDrivers = drivers.size();
 	int lastDriver = -1;
 	for (unsigned int j=0; j<tasks.size(); j++) 
@@ -360,6 +362,6 @@ bool ALG::findScheduleBasic(CTime curTime, vector<CDriver> & drivers, vector<CTa
 		}
 		schedule.push_back(si);
 	}
-	return true;
+	return E_NORMAL;
 }
 

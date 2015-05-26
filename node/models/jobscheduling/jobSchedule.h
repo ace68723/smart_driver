@@ -92,15 +92,21 @@ public:
 	CLocationID location;
 };
 
-//parameter: drivers[in], tasks[in], paths[in], schedule[out]. returns if the scheduling is normal
+//parameter: drivers[in], tasks[in], paths[in], schedule[out]. returns the error code
 //the private member of input classes may be altered. 
 //abnormal cases include: ...
+#define E_NORMAL  0
+#define E_MAX_LOCATION 1
+#define E_UNKNOWN_LOC_DRIVER 2
+#define E_UNKNOWN_LOC_TASK 3
+#define E_UNKNOWN_DRIVER_TASK 4
+#define E_UNKNOWN_DEPEND_TASK 5
 class ALG{
 public:
-	static bool findScheduleGreedy(CTime curTime, vector<CDriver> & drivers, vector<CTask> & tasks, vector<CPath> & paths, vector<CScheduleItem> &schedule);
-	static bool findScheduleBasic(CTime curTime, vector<CDriver> & drivers, vector<CTask> & tasks, vector<CPath> & paths, vector<CScheduleItem> &schedule);
+	static int findScheduleGreedy(CTime curTime, vector<CDriver> & drivers, vector<CTask> & tasks, vector<CPath> & paths, vector<CScheduleItem> &schedule);
+	static int findScheduleBasic(CTime curTime, vector<CDriver> & drivers, vector<CTask> & tasks, vector<CPath> & paths, vector<CScheduleItem> &schedule);
 private:
-	static bool preProcess(CTime curTime, vector<CDriver> & drivers, vector<CTask> & tasks, vector<CPath> & paths, int &nLocations);
+	static int preProcess(CTime curTime, vector<CDriver> & drivers, vector<CTask> & tasks, vector<CPath> & paths, int &nLocations);
 	static void assignTaskToDriver(int iTask, int iDriver, vector<CDriver> & drivers, vector<CTask> & tasks);
 	static bool select_next_task(CDriver & driver, int iDriver, vector<CTask> & tasks, int & iSelectedTask);
 	static void arrange_future_tasks(CDriver & driver, vector<CTask> & tasks);

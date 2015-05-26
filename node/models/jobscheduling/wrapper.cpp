@@ -31,8 +31,8 @@ bool parseInput(const char * cstr, CTime & curTime, vector<CDriver> & drivers, v
 		CLocationID venue = tasksA[i]["location"].asCString();
 		CTime deadline = tasksA[i]["deadline"].asDouble(); 
 		CTime readyTime = 0;  
-		CID asgnDriverID = tasksA[i]["did"].isNull() ? "" : tasksA[i]["did"].asCString(); 
-		CID prevTaskID = tasksA[i]["depend"].isNull() ? "" : tasksA[i]["depend"].asCString(); 
+		CID asgnDriverID = tasksA[i]["did"].isNull() ? NULL_ID : tasksA[i]["did"].asCString(); 
+		CID prevTaskID = tasksA[i]["depend"].isNull() ? NULL_ID : tasksA[i]["depend"].asCString(); 
 		tasks.push_back(CTask(id,venue,deadline,readyTime,asgnDriverID,prevTaskID));
 	}
 	for (unsigned int i=0; i<pathsA.size(); i++) {
@@ -92,7 +92,9 @@ void Method(const FunctionCallbackInfo<Value>& args) {
 	schedule.clear();
 	if (parseInput(cstr, curTime, drivers, tasks, paths))
 		ret = ALG::findScheduleGreedy(curTime, drivers, tasks, paths, schedule);
-	//printf("search algorithm returned %d (1 for normal).\n", ret);
+	if (ret != E_NORMAL) {
+		printf("search algorithm returned %d.\n", ret);
+	}
 	Local<String> schd_string = String::NewFromUtf8(isolate, prepareOutput(schedule).c_str());
 	//args.GetReturnValue().Set(schd_string);
 	Local<Function> cb = Local<Function>::Cast(args[1]);
