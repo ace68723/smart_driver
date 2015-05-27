@@ -126,35 +126,37 @@ function Rr(ir_pool) {
 
                         var la_task = [];
                         var lo_task = { };
-                        lo_task.tid = '0,0,0,0,'+order_result.start_lat+','+order_result.start_lng+(new Date());
+                        lo_task.tid = '0,0,'+order_result.start_lat+','+order_result.start_lng+','+moment(new Date()).utc();
                         var lv_depend_id = lo_task.tid ;
                         lo_task.location = order_result.start_lat+','+order_result.start_lng;              
-                        lo_task.deadline = moment(new Date()).add( 1800, 'seconds');  
-                        lo_task.ready = moment(new Date()).add( 0, 'seconds');  
+                        lo_task.deadline = moment(new Date()).utc()+(order_result.ready + 1800)*1000; 
+                        lo_task.ready = moment(new Date()).utc()+order_result.ready*1000;
                         lo_task.depend = null;
                         la_task.push(lo_task);
                         
                         lo_task = { };
-                        lo_task.tid = order_result.start_lat+','+order_result.start_lng+','+order_result.end_lat+','+order_result.end_lng+(new Date());
+                        lo_task.tid = order_result.start_lat+','+order_result.start_lng+','+order_result.end_lat+','+order_result.end_lng+','+moment(new Date()).utc();
                         lo_task.location = order_result.end_lat+','+order_result.end_lng;              
-                        lo_task.deadline = moment(new Date()).add(  5400, 'seconds');  ;
-                        lo_task.ready = moment(new Date()).add( 0, 'seconds');  
+                        lo_task.deadline = moment(new Date()).utc()+(order_result.ready + 5400)*1000; 
+                        lo_task.ready = moment(new Date()).utc()+order_result.ready*1000;   
                         lo_task.depend = lv_depend_id;
                         la_task.push(lo_task);
 
-                        node2.setTable('Task', la_task).then( function (redis_result){
+                        
+
+                        node2.setTable('Task', la_task).then( function (result_redis){
                             eo_result.result = 0;
-                            eo_result.message = e;
+                            eo_result.message = result_redis;
                             resolve(0);
-                        }).catch(function(e) {
+                        }).catch(function(error_redis) {
                             eo_result.result = 1;
-                            eo_result.message = e;
+                            eo_result.message = error_redis;
                             reject(eo_result);
                         });
                         
-                    }).catch(function(e) {
+                    }).catch(function(erro_order) {
                         eo_result.result = 1;
-                        eo_result.message = e;
+                        eo_result.message = erro_order;
                         reject(eo_result);
                     });
 
