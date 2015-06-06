@@ -69,7 +69,8 @@ function Order(ir_pool) {
                         lm_rr.getLatLng( lo_order.uid ).then( function(rr_address_result) {
                             
                             resolve({ start_lat:rr_address_result.lat , end_lat: rr_address_result.lng, 
-                                        start_lat: order_address_result.lat, end_lng: order_address_result.lng});
+                                        start_lat: order_address_result.lat, end_lng: order_address_result.lng,
+                                            ready: lo_order.ready});
                         }).catch( function(e) {
                             reject(e);
                         });

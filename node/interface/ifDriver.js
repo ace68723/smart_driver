@@ -1,14 +1,50 @@
-var modelUser = require("./../model/mysqlUser");
 var Promise = require("bluebird");
+var moment = require('moment');
 var ifLogin = require("./../interface/ifLogin");
 var ifNode2 = require("./../interface/ifNode2");
+var modelDriver = require('../model/mysqlDriver');
+var modelUser = require("../model/mysqlUser");
 
 function Driver(ir_pool) { 
 
+    this.checkin = function(iv_token, iv_secret) {
+        return new Promise(function (resolve, reject) {
+            var lr_login = new ifLogin(ir_pool);
+            var node2 = new ifNode2;
+            var eo_result = { };
 
+            lr_login.authorize(iv_token, iv_secret).then( function(auth_result) {
+                 
+                 var lo_driver = { };
+                 var la_driver = [ ] ;
+                
+                 lo_driver.did = auth_result.uid;
+                 lo_driver.location = '43.825466,-79.288094';
+                 lo_driver.available = moment().format("x");
+                 lo_driver.off = moment( moment().format("YYYY-MM-DD")+' 22:00:00'  ).format("x");
+                 la_driver.push( lo_driver );
+                 
+                 node2.setTable( 'Driver', la_driver ).then( function (order_result){
+                      eo_result.result = 0;
+                      resolve(eo_result);
+                 }).catch(function(e) {
+                      eo_result.result = 1;
+                      eo_result.message = e;
+                      reject(eo_result);
+                 });                
+                 
+                
+             }).catch(function(error_login) {
+                    eo_result.result = 1;
+                    eo_result.message = error_login;
+                    reject(eo_result.message);
+             });
+        });
+    }  
+    
     this.action = function(iv_token, iv_secret, iv_tid, iv_action) {
         return new Promise(function (resolve, reject) {
-               var lr_login = new ifLogin;
+               var lr_login = new ifLogin(ir_pool);
                var node2 = new ifNode2;
                var eo_result = { };
 
@@ -20,7 +56,7 @@ function Driver(ir_pool) {
                         var la_del_key = [ iv_tid ]; 
                         node2.delItem( 'Task', la_del_key ).then( function (order_result){
                             eo_result.result = 0;
-                            reject(eo_result);
+                            resolve(eo_result);
 
                         }).catch(function(e) {
                             eo_result.result = 1;
@@ -28,11 +64,11 @@ function Driver(ir_pool) {
                             reject(eo_result);
                         });
 
-                  } else { 
-                     eo_result.result = 1;
-                     eo_result.message = auth_result;
-                     reject(eo_result);
-                  }
+                     } else { 
+                         eo_result.result = 1;
+                         eo_result.message = auth_result;
+                         reject(eo_result);
+                     }
                }).catch(function(e) {
                     eo_result.result = 1;
                     eo_result.message = e;

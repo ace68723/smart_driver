@@ -34,6 +34,7 @@ function Redis(ir_client) {
     this.hashSet = function(iv_tb_name, ia_items) {
         return new Promise(function (resolve, reject) {
             var lv_tb_name = iv_tb_name + (moment(new Date())).format("YYYYMMDD");
+            console.log(lv_tb_name);
             var la_param = [ lv_tb_name ];
             for (var i = 0; i < ia_items.length; i++) {
                 var lj_item = ia_items[i]; 

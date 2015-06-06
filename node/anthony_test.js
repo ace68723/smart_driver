@@ -69,6 +69,14 @@ smartApp.get('/test22', function(req, res) {
    })
 });
 
+smartApp.get('/test12', function(req, res) {
+   var driver = new ifDriver(pool); 
+   driver.checkin('eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1aWQiOjIwLCJleHBpcmVkIjoiMjAxNS0wNi0yMSAwMDoxMDo0MyIsImlhdCI6MTQzMjI2Nzg0M30.xAPktfkYkQMIu3L1wkq4m13IpUk8OKyVvjK8IjR_nFo', '8').then( function(result) {
+     console.log(result);
+   })
+});
+
+
 smartApp.get('/test11', function(req, res) {
    var login = new ifLogin(pool); 
    login.login('test6', 'asd8', '8').then( function(result) {
