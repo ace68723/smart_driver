@@ -153,11 +153,12 @@ smartApp.post('/preorder', function(req, res) {
     var iv_token    = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1aWQiOjIwLCJleHBpcmVkIjoiMjAxNS0wNi0yMSAwMDoxMDo0MyIsImlhdCI6MTQzMjI2Nzg0M30.xAPktfkYkQMIu3L1wkq4m13IpUk8OKyVvjK8IjR_nFo";
     var iv_secret   = secret;
 
-    rr.preorder(iv_token, iv_secret, iv_lat, iv_lng, iv_clat, iv_clng, ia_path).then( function (result) {
-        
-        res.status(200).send(result);
-    }).catch(function(error){
-        res.status(400).send(error);
+    rr.preorder(iv_token, iv_secret, iv_lat, iv_lng, iv_clat, iv_clng, ia_path)
+        .then( function (result) {
+            res.status(200).send(result);
+    })
+        .catch(function(error){
+            res.status(400).send(error);
     });
 
 })

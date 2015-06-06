@@ -167,7 +167,7 @@ angular.module('smartApp')
 
 			//add address array 
 
-			preorderData.array = poc.addresses_array;
+			preorderData.path = poc.addresses_array;
 			
 			if (window.cordova) {
 				$cordovaProgress.showBarWithLabel(true, 30000, "Order Submitting");			     	
