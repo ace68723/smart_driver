@@ -2,7 +2,7 @@ var express         = require('express');
 var expressJwt      = require('express-jwt');
 var cors            = require('cors');
 var bodyParser      = require('body-parser');
-
+var Q               = require('q');
 
 var mysql           = require('./connection/dbMysql');
 var pool            = (new mysql).pool;
@@ -190,10 +190,22 @@ smartApp.post('/order', function(req, res) {
     var iv_token    = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1aWQiOjIwLCJleHBpcmVkIjoiMjAxNS0wNi0yMSAwMDoxMDo0MyIsImlhdCI6MTQzMjI2Nzg0M30.xAPktfkYkQMIu3L1wkq4m13IpUk8OKyVvjK8IjR_nFo";
     var iv_secret   = secret;
 
-    rr.order(iv_token, iv_secret, iv_lat, iv_lng, iv_addr, iv_city, iv_unit, iv_postal, iv_tel, iv_name, iv_price, iv_paytype, iv_charge, iv_tips, iv_ready, iv_clat, iv_clng).then( function (result) {
-        
+    rr.order(iv_token, iv_secret, iv_lat, iv_lng, iv_addr, iv_city, iv_unit, iv_postal, iv_tel, iv_name, iv_price, iv_paytype, iv_charge, iv_tips, iv_ready, iv_clat, iv_clng)
+      .then( function (result) {
+        var deferred = Q.defer();
+            node2.getTables()
+                .then(function(result) {
+                    deferred.resolve(result);
+                })
+                .then(function(error) {
+                    deferred.reject(error);
+                });
+        return deferred.promise;
+    })
+      .then(function() {
         res.status(200).send(result);
-    }).catch(function(error){
+    })
+      .catch(function(error){
         res.status(400).send(error);
     });
 

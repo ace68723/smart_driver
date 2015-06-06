@@ -20,24 +20,21 @@ var drivers = [
 { "did": "Aiden", "available": 1432532133879, "off": 1432532223879, "location": "43.7935476,-79.2931461" }
 ];
 
-function callbackFunc(str) {
-	console.log(str);
-}
-
 var getTables = function() {
 	var deferred = Q.defer();
 
 	node2.getTable( 'Driver' )
 		
 		.then(function(result) {
+            console.log('get driver')
      		drivers = result;
      		console.log(drivers)
      		return drivers
-   		})
+   	})
    		
    		.then(function() {
    			var deferred = Q.defer();//get task defer -T
-			
+			console.log('get Task')
 			node2.getTable( 'Task' )
 				.then(function(result) {
 		     		tasks = result;
@@ -48,11 +45,11 @@ var getTables = function() {
 		   			deferred.reject(error);//get task reject -T
 		   		})
 		   		return deferred.promise;//return get taskpromise -T
-   		})
+   	})
 
    		.then(function() {
    			var deferred = Q.defer();//get Path defer -P
-			
+			console.log('get Path')
 			node2.getTable( 'Path' )
 				.then(function(result) {
 		     		paths = result;
@@ -63,18 +60,36 @@ var getTables = function() {
 		   			deferred.reject(error);//get Path reject -P
 		   		})
 		   		return deferred.promise;//return get Path promise -P
-   		})
+   	})
 
    		.then(function() {
-   			console.log(drivers);
-   			console.log(tasks);
-   			console.log(paths);
-   			var d = new Date();
-   			var curTime = d.getTime();
-   			jobSchedule.search(JSON.stringify({"curTime":curTime, "drivers":drivers, "tasks":tasks, "paths":paths}), callbackFunc);
+   			// console.log(drivers);
+   			// console.log(tasks);
+   			// console.log(paths);
+            console.log('call algorithm')
+   			var d         = new Date();
+   			var curTime   = d.getTime();
+            var data      = {"curTime":curTime, "drivers":drivers, "tasks":tasks, "paths":paths}
+   			
+            jobSchedule.search(JSON.stringify(data), function(array) {
+                return array
+            });
 
-   			deferred.resolve(drivers); //register resolve -R
-   		})
+   	})
+        .then(function(array) {
+            var deferred = Q.defer();
+                console.log('update result')
+                node2.updateResult(array)
+                    .then(function(result) {
+                        console.log('done')
+                        deferred.resolve(result);
+                })
+                    .catch(function(error) {
+                         console.log('error')
+                        deferred.reject(error);
+                })
+            return deferred.promise;                    
+    })
 
    	.catch(function(error) {
    			console.log('error all',error);
@@ -89,9 +104,6 @@ var getTables = function() {
    	return deferred.promise;	
 };
 
-
-
-getTables();
 
 
 
