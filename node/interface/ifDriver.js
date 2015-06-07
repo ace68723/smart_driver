@@ -20,8 +20,8 @@ function Driver(ir_pool) {
                 
                  lo_driver.did = String(auth_result.uid);
                  lo_driver.location = '43.825466,-79.288094';
-                 lo_driver.available = moment().format("x");
-                 lo_driver.off = moment( moment().format("YYYY-MM-DD")+' 22:00:00'  ).format("x");
+                 lo_driver.available = parseInt(moment().format("x"));
+                 lo_driver.off = parseInt(moment( moment().format("YYYY-MM-DD")+' 22:00:00'  ).format("x"));
                  la_driver.push( lo_driver );
                  
                  node2.setTable( 'Driver', la_driver ).then( function (order_result){
