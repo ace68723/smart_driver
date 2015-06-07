@@ -12,6 +12,8 @@ var ifNode2         = require("./interface/ifNode2");
 var ifDriver        = require("./interface/ifDriver");
 var ifRr            = require("./interface/ifRr");
 
+var node2           = require("./node2");
+
 var smartApp        = express();
 
 smartApp.use(cors());

@@ -177,10 +177,10 @@ angular.module('smartApp')
 			poc.url = 'preorder/'
 
 			postService.post(preorderData, poc.url).then(function(response) {
-
+				console.log(response);
 				poc.response = response.data
 
-				 if (poc.response.result == 0){
+				 if (poc.response == 'OK'){
 				 	 	poc.orderData.delCharge = poc.response.charge;
 
 				 	var confirmPopup = $ionicPopup.confirm({
@@ -251,11 +251,14 @@ angular.module('smartApp')
 								name 	: poc.orderData.name,
 								price 	: poc.orderData.price,
 								paytype : '1',
-								charge 	: poc.orderData.delCharge,
+								// charge 	: poc.orderData.delCharge,
+								charge 	: 10.00,
 								clat 	: poc.clat,
 								clng 	: poc.clng,
 								lat		: '43.825466', 
-								lng		: '-79.288094'
+								lng		: '-79.288094',
+								ready	: 1800,
+								tips	: 5.00
 
 			}
 

@@ -16,8 +16,8 @@ var paths;
    	})
 
 var drivers = [
-{ "did": "Xunrui", "available": 1432532133879, "off": 1432532233879, "location": "43.7935476,-79.2931461" },
-{ "did": "Aiden", "available": 1432532133879, "off": 1432532223879, "location": "43.7935476,-79.2931461" }
+{ "did": "23", "available": 1433625957749, "off": 1433642400000, "location": "43.825466,-79.288094" },
+{ "did": "Aiden", "available": 1433625957749, "off": 1433642400000, "location": "43.825466,-79.288094" }
 ];
 
 var getTables = function() {
@@ -63,23 +63,27 @@ var getTables = function() {
    	})
 
    		.then(function() {
-   			// console.log(drivers);
-   			// console.log(tasks);
-   			// console.log(paths);
-            console.log('call algorithm')
-   			var d         = new Date();
-   			var curTime   = d.getTime();
-            var data      = {"curTime":curTime, "drivers":drivers, "tasks":tasks, "paths":paths}
-   			
-            jobSchedule.search(JSON.stringify(data), function(array) {
-                return array
-            });
+            var deferred = Q.defer();
+       			// console.log(drivers);
+       			// console.log(tasks);
+       			// console.log(paths);
+                console.log('call algorithm')
+       			var d         = new Date();
+       			var curTime   = d.getTime();
+                var data      = {"curTime":curTime, "drivers":drivers, "tasks":tasks, "paths":paths}
+       			
+                jobSchedule.search(JSON.stringify(data), function(str) {
+                    var array = JSON.parse(str)
+                    deferred.resolve(array);
+                });
 
+            return deferred.promise;           
    	})
         .then(function(array) {
             var deferred = Q.defer();
                 console.log('update result')
-                node2.updateResult(array)
+                
+                node2.updateResult(array.schedules)
                     .then(function(result) {
                         console.log('done')
                         deferred.resolve(result);
@@ -88,6 +92,7 @@ var getTables = function() {
                          console.log('error')
                         deferred.reject(error);
                 })
+
             return deferred.promise;                    
     })
 
@@ -107,7 +112,7 @@ var getTables = function() {
 
 
 
-
+module.exports = {getTables:getTables};
 
 
 

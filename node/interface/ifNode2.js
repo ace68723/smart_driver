@@ -153,9 +153,9 @@ function Node2( ) {
                     lo_driver.available = lo_data.available;
                     lo_driver.location = lo_data.location;
                     lo_driver.off = lo_data.off;
-                    for(var lv_tid in lo_data.tid){
+                    for(var lv_tid in lo_data.tids){
                         var lo_assign = { };
-                        lo_assign.tid = lo_data.tid[lv_tid];
+                        lo_assign.tid = lo_data.tids[lv_tid];
                         lo_assign.did = lo_driver.did;
                         la_assign.push( lo_assign );
                     }
@@ -167,7 +167,7 @@ function Node2( ) {
                 redis.hashSet('Driver', la_driver).then( function (result){
                     if (la_assign.length > 0) { 
                         redis.hashSet('Assign', la_assign).then( function (result){
-                            resolve(result);
+                            resolve(la_assign);
                         }).catch(function(e) {
                             reject(e);
                         });
