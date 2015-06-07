@@ -88,9 +88,10 @@ angular.module('smartApp')
 
 		poc.areaCheck = function() {
 			poc.task_address = [poc.clat + ', ' + poc.clng , "43.825466, -79.288094"]
-			
+	
 
-			
+			poc.addresses.push(poc.clat + ', ' + poc.clng )
+			poc.addresses.push( "43.825466, -79.288094")
 			//split address
 			poc.g_addresses = _.chunk(poc.addresses, 25);
 
@@ -127,17 +128,20 @@ angular.module('smartApp')
 
 					    		var row = key
 					    		_.forEach(destinations, function(destination, key){
+					    			if(origin !== destination){
 
-					    			var duration = rows[row].elements[key].duration.value;
-					    			var distance = rows[row].elements[key].distance.value;
+					    				var duration = rows[row].elements[key].duration.value;
+					    				var distance = rows[row].elements[key].distance.value;
+					    				
+					    				poc.addresses_array.push({
+					    					start 	: origin,
+					    					end		: destination,
+					    					duration: duration,
+					    					distance: distance
+
+					    				})
+					    			}
 					    			
-					    			poc.addresses_array.push({
-					    				start 	: origin,
-					    				end		: destination,
-					    				duration: duration,
-					    				distance: distance
-
-					    			})
 
 					    		})
 					    	})

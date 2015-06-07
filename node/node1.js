@@ -145,20 +145,24 @@ smartApp.get('/get_addresses', function(req, res) {
     // get token to identity user
         var node2       = new ifNode2( ); 
         var addresses   = [];
-
+        var point_list  = [];
         node2.getTable( 'Path' )
             .then(function(result) {
                 paths = result;
                 _.forEach(paths, function(path, key) {
-                    var point = {'point': path.start}
-                    addresses.push(point);
-                    var point = {'point': path.end}
-                    addresses.push(point);
+                    var point = {'point_data': path.start}
+                    point_list.push(point);
+                    var point = {'point_data': path.end}
+                    point_list.push(point);
                 });
-                var uniq_addresses = _.uniq(addresses,'point');
-
+                
+                var uniq_addresses = _.uniq(point_list,'point');
+                 
+                 _.forEach(uniq_addresses,function(point, key) {
+                    addresses.push(point.point_data)
+                 })
                 res.status(200).send({
-                    addresses: uniq_addresses
+                    addresses: addresses
                 })
             })
             .catch(function(error) {
