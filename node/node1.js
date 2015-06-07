@@ -36,6 +36,19 @@ getSecret();
 
 //init secret end
 
+smartApp.get('/test12', function(req, res) {
+   
+   var driver = new ifDriver(pool); 
+   driver.checkin('eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1aWQiOjIzLCJleHBpcmVkIjoiMjAxNS0wNy0wNiAxNjowNToxNCIsImlhdCI6MTQzMzYyMTExNH0.XlsTYCL2k91Z9t2mh1hkrl4n44LXkv4gdHfztG6t9yM', '8')
+    .then( function(result) {
+     console.log(result);
+   })
+    driver.checkin('eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1aWQiOjI0LCJleHBpcmVkIjoiMjAxNS0wNy0wNiAxNjowNToyMyIsImlhdCI6MTQzMzYyMTEyM30.Z0Btz-R2ip-GZ4BgcTPN93MOMt1omCJuX_O_gyDB78U', '8')
+    .then( function(result) {
+     console.log(result);
+   })
+});
+
 smartApp.post('/tool', function(req, res) {
     
     //update secret

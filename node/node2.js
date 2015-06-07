@@ -95,6 +95,9 @@ var getTables = function() {
 
             return deferred.promise;                    
     })
+        .then(function() {
+            deferred.resolve('done');
+    })
 
    	.catch(function(error) {
    			console.log('error all',error);
