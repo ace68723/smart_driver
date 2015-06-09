@@ -86,18 +86,20 @@ void ALG::arrange_future_tasks(CDriver & driver, vector<CTask> & tasks)
 	driver.finishTime = 0;
 	driver.delayTime = 0;
 	CTime curTime = driver.available;
-	vector<bool> mark(driver.tasksAtHand.size(), false);
+	unsigned int n=driver.tasksAtHand.size();
+	vector<bool> mark(n, false);
+	vector<int> tempList(n, -1);
 	int curLoc = driver.iLocation;
-	for (unsigned int i=0; i<driver.tasksAtHand.size(); i++) {
+	for (unsigned int i=0; i<n; i++) {
 		int nextj = -1;
 		CTime bestTime = -1; //find the nearest as the next waypoint
-		for (unsigned int j=0; j<driver.tasksAtHand.size(); j++) if (!mark[j]) {
+		for (unsigned int j=0; j<n; j++) if (!mark[j]) {
 			int iTask = driver.tasksAtHand[j];
 			if (tasks[iTask].iPrevTask != -1 && tasks[tasks[iTask].iPrevTask].iDriver == -1) {
 				//assert tasks[tasks[iTask].iPrevTask].iAsgnDriver == this Driver)
 				bool bFeasible = true;
 				int iPrevTask = tasks[iTask].iPrevTask;
-				for (unsigned int k=0; k<driver.tasksAtHand.size(); k++)
+				for (unsigned int k=0; k<n; k++)
 					if (iPrevTask == driver.tasksAtHand[k]) {
 						bFeasible = mark[k];
 						break;
@@ -109,9 +111,10 @@ void ALG::arrange_future_tasks(CDriver & driver, vector<CTask> & tasks)
 				nextj = j;
 			}
 		}
-		//now go to nextTask
 		mark.at(nextj) = true;
 		int iTask = driver.tasksAtHand[nextj];
+		tempList[i] = iTask;
+		//now go to nextTask
 		curTime += map[curLoc][tasks[iTask].iVenue];
 		curLoc = tasks[iTask].iVenue;
 		if (tasks[iTask].deadline < curTime)
@@ -119,6 +122,8 @@ void ALG::arrange_future_tasks(CDriver & driver, vector<CTask> & tasks)
 		curTime = calNextAvailable(curTime, tasks[iTask].ready, linger);
 	}
 	driver.finishTime = curTime;
+	for (unsigned int i=0; i<n; i++) 
+		driver.tasksAtHand[i] = tempList[n-i-1];
 	return;
 }
 bool ALG::select_next_task(CDriver & driver, int iDriver, vector<CTask> & tasks, int & iSelectedTask)
@@ -218,7 +223,7 @@ void ALG::assignTaskToDriver(int iTask, int iDriver, vector<CDriver> & drivers, 
 		//assert the last taskAtHand is chosen 
 		int j=drivers[iDriver].tasksAtHand.size() - 1;
 		if (drivers[iDriver].tasksAtHand[j] != iTask) {
-			//printf("internal error while assigning task to driver!\n");
+			printf("internal error while assigning task to driver!\n");
 			return;
 		}
 		drivers[iDriver].tasksAtHand.pop_back();
@@ -230,6 +235,11 @@ void ALG::assignTaskToDriver(int iTask, int iDriver, vector<CDriver> & drivers, 
 		drivers[iDriver].tasksAtHand.push_back(j);
 		arrange_future_tasks(drivers[iDriver], tasks);
 	}
+	unsigned int n = drivers[iDriver].tasksAtHand.size();
+	printf("At %.0lf, Driver %d finishes task %d, with %d upcoming tasks:", drivers[iDriver].available, iDriver, iTask, n);
+	for (unsigned int i=0; i<n; i++)
+		printf(" %d ", drivers[iDriver].tasksAtHand[n-1-i]);
+	printf("\n");
 }
 int ALG::preProcess(CTime curTime, vector<CDriver> & drivers, vector<CTask> & tasks, vector<CPath> & paths, int &nLocations)
 {
