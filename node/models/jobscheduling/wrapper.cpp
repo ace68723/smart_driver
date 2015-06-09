@@ -4,7 +4,7 @@
 #include "jobSchedule.h"
 using namespace v8;
 
-bool parseInput(const char * cstr, CTime & curTime, vector<CDriver> & drivers, vector<CTask> & tasks, vector<CPath> & paths)
+bool parseInput(const char * cstr, CTime & curTime, CRTime &deliLimit, vector<CDriver> & drivers, vector<CTask> & tasks, vector<CPath> & paths)
 {
 	drivers.clear(); tasks.clear(); paths.clear(); 
 	Json::Reader reader;
@@ -16,6 +16,7 @@ bool parseInput(const char * cstr, CTime & curTime, vector<CDriver> & drivers, v
 		return false;
 	}
 	curTime = root["curTime"].asDouble();
+	deliLimit = root["deliLimit"].asDouble();
 	Json::Value driversA = root["drivers"];
 	Json::Value tasksA = root["tasks"];
 	Json::Value pathsA = root["paths"];
@@ -30,7 +31,7 @@ bool parseInput(const char * cstr, CTime & curTime, vector<CDriver> & drivers, v
 		CID id = tasksA[i]["tid"].asCString();
 		CLocationID venue = tasksA[i]["location"].asCString();
 		CTime deadline = tasksA[i]["deadline"].asDouble(); 
-		CTime readyTime = 0;  
+		CTime readyTime = tasksA[i]["ready"].asDouble();  
 		CID asgnDriverID = tasksA[i]["did"].isNull() ? NULL_ID : tasksA[i]["did"].asCString(); 
 		CID prevTaskID = tasksA[i]["depend"].isNull() ? NULL_ID : tasksA[i]["depend"].asCString(); 
 		tasks.push_back(CTask(id,venue,deadline,readyTime,asgnDriverID,prevTaskID));
@@ -85,13 +86,14 @@ void Method(const FunctionCallbackInfo<Value>& args) {
 
 	bool ret = false;
 	CTime curTime;
+	CRTime deliLimit;
 	vector<CDriver> drivers;
 	vector<CTask> tasks;
 	vector<CPath> paths;
 	vector<CScheduleItem> schedule;
 	schedule.clear();
-	if (parseInput(cstr, curTime, drivers, tasks, paths))
-		ret = ALG::findScheduleGreedy(curTime, drivers, tasks, paths, schedule);
+	if (parseInput(cstr, curTime, deliLimit, drivers, tasks, paths))
+		ret = ALG::findScheduleGreedy(curTime, deliLimit, drivers, tasks, paths, schedule);
 	if (ret != E_NORMAL) {
 		printf("search algorithm returned %d.\n", ret);
 	}

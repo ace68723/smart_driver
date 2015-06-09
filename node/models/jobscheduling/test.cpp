@@ -191,8 +191,7 @@ void testCase1()
 	tasks0 = tasks;
 	paths0 = paths;
 	bool ret;
-	//ret = ALG::findScheduleBasic(0, drivers, tasks, paths, schedule);
-	ret = ALG::findScheduleGreedy(0, drivers, tasks, paths, schedule);
+	ret = ALG::findScheduleGreedy(0, 9000, drivers, tasks, paths, schedule);
 	cout << "returned: " << ret << endl;
 	checkConstraints(drivers0, tasks0, paths0, schedule);
 	printSchedule(schedule);
@@ -264,7 +263,7 @@ void testCase2()
 	tasks0 = tasks;
 	paths0 = paths;
 	bool ret;
-	ret = ALG::findScheduleGreedy(0, drivers, tasks, paths, schedule);
+	ret = ALG::findScheduleGreedy(0, 9000, drivers, tasks, paths, schedule);
 	cout << "returned: " << ret << endl;
 	checkConstraints(drivers0, tasks0, paths0, schedule);
 	printSchedule(schedule);
@@ -299,7 +298,7 @@ void testCase3() //after one task finished in testCase2
 	tasks0 = tasks;
 	paths0 = paths;
 	bool ret;
-	ret = ALG::findScheduleGreedy(0, drivers, tasks, paths, schedule);
+	ret = ALG::findScheduleGreedy(0, 9000, drivers, tasks, paths, schedule);
 	cout << "returned: " << ret << endl;
 	checkConstraints(drivers0, tasks0, paths0, schedule);
 	printSchedule(schedule);
@@ -334,7 +333,7 @@ void testCase4() // same map as testCase2, but two driver cannot complete all th
 	tasks0 = tasks;
 	paths0 = paths;
 	bool ret;
-	ret = ALG::findScheduleGreedy(0, drivers, tasks, paths, schedule);
+	ret = ALG::findScheduleGreedy(0, 9000, drivers, tasks, paths, schedule);
 	cout << "returned: " << ret << endl;
 	checkConstraints(drivers0, tasks0, paths0, schedule);
 	printSchedule(schedule);

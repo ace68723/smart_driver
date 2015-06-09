@@ -9,14 +9,14 @@ var drivers = [
 
 var tasks = [ { tid: '0,0,43.825466,-79.288094,1432600835310',
     location: '43.825466,-79.288094',
-    deadline: 1450602635310,
-    ready: 1432602635310,
+    deadline: 1450615243511,
+    ready: 1432615243511,
     depend: null,
     did: '' },
   { tid: '43.825466,-79.288094,43.7935474,-79.2931461,1432600835310',
     location: '43.7935474,-79.2931461',
-    deadline: 1450606235310,
-    ready: 1432602635310,
+    deadline: 1450618843511,
+    ready: 1432615243511,
     depend: '0,0,43.825466,-79.288094,1432600835310',
     did: '' } ];
 //[ 
@@ -56,5 +56,9 @@ function callbackFunc(str) {
 	console.log(str);
 }
 
-jobSchedule.search(JSON.stringify({"curTime":10, "drivers":drivers, "tasks":tasks, "paths":paths}), callbackFunc);
+var d = new Date();
+var curTime = d.getTime();
+var deliLimit = 10;
+console.log(JSON.stringify({"curTime":curTime, "deliLimit":deliLimit, "drivers":drivers, "tasks":tasks, "paths":paths}));
+jobSchedule.search(JSON.stringify({"curTime":curTime, "deliLimit":deliLimit, "drivers":drivers, "tasks":tasks, "paths":paths}), callbackFunc);
 //console.log(jobSchedule.search(JSON.stringify({"drivers":drivers, "tasks":tasks, "paths":paths})));

@@ -2,12 +2,22 @@
 #include "jobSchedule.h"
 
 double ALG::map[MAXNLOCATIONS][MAXNLOCATIONS];
+CRTime ALG::linger = 0;
+
+CTime calNextAvailable(CTime tArrive, CTime tReady, CRTime linger)
+{
+	if (tReady > 0) 
+		return (tArrive > tReady) ? tArrive: tReady;
+	else
+		return tArrive + linger;
+}
 
 void ALG::calDFTime(int iStart, int iEnd, CDriver & driver, vector<CTask> & tasks, int curLoc, CTime & dTime, CTime & fTime)
 {
 	for (int i=iStart; i<iEnd; i++) {
 		int iNext = driver.tasksAtHand[i];
 		fTime += map[curLoc][tasks[iNext].iVenue];
+		fTime = calNextAvailable(fTime, tasks[iNext].ready, linger);
 		curLoc = tasks[iNext].iVenue;
 		if (fTime > tasks[iNext].deadline) 
 			dTime += fTime - tasks[iNext].deadline;
@@ -21,6 +31,7 @@ double ALG::tryAddTask(int iTask, int iDriver, CDriver & driver, vector<CTask> &
 	//calculate the new finish time and delay time
 	int curLoc = driver.iLocation;
 	fTime += map[curLoc][tasks[iTask].iVenue];
+	fTime = calNextAvailable(fTime, tasks[iTask].ready, linger);
 	curLoc = tasks[iTask].iVenue;
 	if (fTime > tasks[iTask].deadline) dTime += fTime - tasks[iTask].deadline;
 	if (tasks[iTask].iNextTask == -1) {
@@ -32,6 +43,7 @@ double ALG::tryAddTask(int iTask, int iDriver, CDriver & driver, vector<CTask> &
 		bestFTime = fTime + map[curLoc][tasks[introTask].iVenue];
 		if (bestFTime > tasks[introTask].deadline) 
 			bestDTime += bestFTime - tasks[introTask].deadline;
+		bestFTime = calNextAvailable(bestFTime, tasks[introTask].ready, linger);
 		calDFTime(0, driver.tasksAtHand.size(), driver, tasks, tasks[introTask].iVenue, bestDTime, bestFTime);
 		for (unsigned int i=0; i<driver.tasksAtHand.size(); i++) {
 			CTime tempd, tempf;
@@ -41,6 +53,7 @@ double ALG::tryAddTask(int iTask, int iDriver, CDriver & driver, vector<CTask> &
 			tempf += map[iLoc][tasks[introTask].iVenue];
 			if (tempf > tasks[introTask].deadline) 
 				tempd += tempf - tasks[introTask].deadline;
+			tempf = calNextAvailable(tempf, tasks[introTask].ready, linger);
 			iLoc = tasks[introTask].iVenue;
 			calDFTime(i+1, driver.tasksAtHand.size(), driver, tasks, iLoc, tempd, tempf);
 			if (tempf > driver.off) continue;
@@ -77,7 +90,7 @@ void ALG::arrange_future_tasks(CDriver & driver, vector<CTask> & tasks)
 	int curLoc = driver.iLocation;
 	for (unsigned int i=0; i<driver.tasksAtHand.size(); i++) {
 		int nextj = -1;
-		CTime bestTime = -1;
+		CTime bestTime = -1; //find the nearest as the next waypoint
 		for (unsigned int j=0; j<driver.tasksAtHand.size(); j++) if (!mark[j]) {
 			int iTask = driver.tasksAtHand[j];
 			if (tasks[iTask].iPrevTask != -1 && tasks[tasks[iTask].iPrevTask].iDriver == -1) {
@@ -91,7 +104,7 @@ void ALG::arrange_future_tasks(CDriver & driver, vector<CTask> & tasks)
 					}
 				if (!bFeasible) continue;
 			}
-			if (bestTime == -1 || bestTime > map[curLoc][tasks[iTask].iVenue]) {
+			if (bestTime < 0 || bestTime > map[curLoc][tasks[iTask].iVenue]) {
 				bestTime = map[curLoc][tasks[iTask].iVenue];
 				nextj = j;
 			}
@@ -103,6 +116,7 @@ void ALG::arrange_future_tasks(CDriver & driver, vector<CTask> & tasks)
 		curLoc = tasks[iTask].iVenue;
 		if (tasks[iTask].deadline < curTime)
 			driver.delayTime += curTime - tasks[iTask].deadline;
+		curTime = calNextAvailable(curTime, tasks[iTask].ready, linger);
 	}
 	driver.finishTime = curTime;
 	return;
@@ -137,9 +151,10 @@ bool ALG::select_next_task(CDriver & driver, int iDriver, vector<CTask> & tasks,
 	return (iSelectedTask != -1);
 }
 //assume each task has only one prevTask or nextTask
-int ALG::findScheduleGreedy(CTime curTime, vector<CDriver> & drivers, vector<CTask> & tasks, vector<CPath> & paths, vector<CScheduleItem> &schedule)
+int ALG::findScheduleGreedy(CTime curTime, CRTime deliLimit, vector<CDriver> & drivers, vector<CTask> & tasks, vector<CPath> & paths, vector<CScheduleItem> &schedule)
 {
 	int nLocations;
+	linger = deliLimit;
 	int ret = preProcess(curTime, drivers, tasks, paths, nLocations);
 	if (ret != E_NORMAL) 
 		return ret;
@@ -177,6 +192,7 @@ int ALG::findScheduleGreedy(CTime curTime, vector<CDriver> & drivers, vector<CTa
 		if (drivers[i].origin_available <= curTime && drivers[i].taskList.size() > 0) {
 			int idx = drivers[i].taskList[0];
 			si.available = curTime + map[drivers[i].iOrigin_location][tasks[idx].iVenue]; 
+			si.available = calNextAvailable(si.available, tasks[idx].ready, linger);
 			si.location = tasks[idx].location;
 			si.updated = true;
 		}
@@ -196,6 +212,7 @@ void ALG::assignTaskToDriver(int iTask, int iDriver, vector<CDriver> & drivers, 
 	drivers[iDriver].taskList.push_back(iTask);
 	tasks[iTask].iDriver = iDriver;
 	drivers[iDriver].available += map[drivers[iDriver].iLocation][tasks[iTask].iVenue];
+	drivers[iDriver].available = calNextAvailable(drivers[iDriver].available, tasks[iTask].ready, linger);
 	drivers[iDriver].iLocation = tasks[iTask].iVenue;
 	if (tasks[iTask].iAsgnDriver == iDriver) {
 		//assert the last taskAtHand is chosen 
@@ -315,9 +332,10 @@ int ALG::preProcess(CTime curTime, vector<CDriver> & drivers, vector<CTask> & ta
 
 	return E_NORMAL;
 }
-int ALG::findScheduleBasic(CTime curTime, vector<CDriver> & drivers, vector<CTask> & tasks, vector<CPath> & paths, vector<CScheduleItem> &schedule)
+int ALG::findScheduleBasic(CTime curTime, CRTime deliLimit, vector<CDriver> & drivers, vector<CTask> & tasks, vector<CPath> & paths, vector<CScheduleItem> &schedule)
 {
 	int nLocations;
+	linger = deliLimit;
 	int ret = preProcess(0, drivers, tasks, paths, nLocations); 
 	if (ret != E_NORMAL)
 		return ret;
@@ -352,6 +370,7 @@ int ALG::findScheduleBasic(CTime curTime, vector<CDriver> & drivers, vector<CTas
 		if (drivers[i].origin_available <= curTime && drivers[i].taskList.size() > 0) {
 			int idx = drivers[i].taskList[0];
 			si.available = curTime + map[drivers[i].iOrigin_location][tasks[idx].iVenue]; 
+			si.available = calNextAvailable(si.available, tasks[idx].ready, linger);
 			si.location = tasks[idx].location;
 			si.updated = 1;
 		}

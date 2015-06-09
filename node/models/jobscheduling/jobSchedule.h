@@ -103,8 +103,8 @@ public:
 #define E_UNKNOWN_DEPEND_TASK 5
 class ALG{
 public:
-	static int findScheduleGreedy(CTime curTime, vector<CDriver> & drivers, vector<CTask> & tasks, vector<CPath> & paths, vector<CScheduleItem> &schedule);
-	static int findScheduleBasic(CTime curTime, vector<CDriver> & drivers, vector<CTask> & tasks, vector<CPath> & paths, vector<CScheduleItem> &schedule);
+	static int findScheduleGreedy(CTime curTime, CRTime deliLimit, vector<CDriver> & drivers, vector<CTask> & tasks, vector<CPath> & paths, vector<CScheduleItem> &schedule);
+	static int findScheduleBasic(CTime curTime, CRTime deliLimit, vector<CDriver> & drivers, vector<CTask> & tasks, vector<CPath> & paths, vector<CScheduleItem> &schedule);
 private:
 	static int preProcess(CTime curTime, vector<CDriver> & drivers, vector<CTask> & tasks, vector<CPath> & paths, int &nLocations);
 	static void assignTaskToDriver(int iTask, int iDriver, vector<CDriver> & drivers, vector<CTask> & tasks);
@@ -115,5 +115,6 @@ private:
 	//return 0 if infeasible or the next job at hand is better chosen as the next task
 	static void calDFTime(int iStart, int iEnd, CDriver & driver, vector<CTask> & tasks, int curLoc, CTime & dTime, CTime & fTime);
 	static double map[MAXNLOCATIONS][MAXNLOCATIONS];
+	static CRTime linger;
 };
 #endif
