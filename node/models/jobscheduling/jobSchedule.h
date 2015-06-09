@@ -61,8 +61,8 @@ public:
 	/******* may be changed in algorithm:  iAsgnDriver ********************/
 protected:
 	int	iVenue;
-	int	iAsgnDriver; //corresponds to asgnDriverID, >= 0 if it appears in driver's tasksAtHand
-	int	iDriver; //working index, assigned only this task appears in driver's taskList
+	int	iAsgnDriver; //corresponds to did, >= 0 if it appears in driver's tasksAtHand
+	int	iDriver; //working index, >=0 only if this task appears in driver's taskList, i.e., its execution rank has been determined
 	int	iPrevTask;
 	int	iNextTask;
 	friend class ALG;
