@@ -12,11 +12,11 @@ angular.module('smartApp')
   		poc.orderData = {};
 
 //for address test
-  	poc.areaCheckData.address = '2620 Kennedy Rd';
+  	// poc.areaCheckData.address = '2620 Kennedy Rd';
 
-  	poc.areaCheckData.city = 'Scarborough';
+  	// poc.areaCheckData.city = 'Scarborough';
 
-  	poc.areaCheckData.postalCode = 'M1T 3H1';
+  	// poc.areaCheckData.postalCode = 'M1T 3H1';
 
   	poc.orderData.name = 'aiden';
 
@@ -28,6 +28,61 @@ angular.module('smartApp')
 
   	poc.orderData.price = '35.99';
 //test address end
+
+	// var test_data_list =[
+	// 				{'address'		:'8 Scoville Square',
+	// 				 'city'			:'Scarborough',
+	// 				 'postalCode'	:'M1V'
+	// 				},{
+	// 				 'address'		:'250 Front St W',
+	// 				 'city'			:'Toronto',
+	// 				 'postalCode'	:'M5V 3G5'
+	// 				},{
+	// 				 'address'		:'225 High Tech Rd',
+	// 				 'city'			:'Richmond Hill',
+	// 				 'postalCode'	:'L4B 4V5'
+	// 				},{
+	// 				 'address'		:'365 prince of wales Dr',
+	// 				 'city'			:'mississauga',
+	// 				 'postalCode'	:'L5B 0G6'
+	// 				},{
+	// 				 'address'		:'35 Megan Ave',
+	// 				 'city'			:'Scarborough',
+	// 				 'postalCode'	:'M1E 4A7'
+	// 				},{
+	// 				 'address'		:'32 Fordover Dr',
+	// 				 'city'			:'Scarborough',
+	// 				 'postalCode'	:'M1E 1V1'
+	// 				},{
+	// 				 'address'		:'505 Wilfred Murison Ave',
+	// 				 'city'			:'Markham',
+	// 				 'postalCode'	:'L6C 2J9'
+	// 				},{
+	// 				 'address'		:'2 Quinton Dr',
+	// 				 'city'			:'Gormley',
+	// 				 'postalCode'	:'L0H 1G0'
+	// 				}
+	// ]
+
+		var test_data_list =[{
+					 'address'		:'35 Megan Ave',
+					 'city'			:'Scarborough',
+					 'postalCode'	:'M1E 4A7'
+					},{
+					 'address'		:'32 Fordover Dr',
+					 'city'			:'Scarborough',
+					 'postalCode'	:'M1E 1V1'
+					},{
+					 'address'		:'505 Wilfred Murison Ave',
+					 'city'			:'Markham',
+					 'postalCode'	:'L6C 2J9'
+					},{
+					 'address'		:'2 Quinton Dr',
+					 'city'			:'Gormley',
+					 'postalCode'	:'L0H 1G0'
+					}
+		]
+
 
   	//disable native scroll when keyboard is opened
 		if (window.cordova && window.cordova.plugins.Keyboard) {
@@ -52,10 +107,12 @@ angular.module('smartApp')
 			geocoder.geocode(request, function(results, status) {
 		    	if (status === google.maps.GeocoderStatus.OK) {
 	    	     	
-	         	console.log(results);
+	         	// console.log(results);
 	    			poc.cformatted_address 	= results[0].formatted_address;
 	    			poc.clat 				= results[0].geometry.location.A;
-					poc.clng 				= results[0].geometry.location.F;		    	
+					poc.clng 				= results[0].geometry.location.F;	
+					//start
+						poc.getAddresses()	    	
 		    	} else {
 		    		
 		    		// console.log(status);
@@ -106,7 +163,7 @@ angular.module('smartApp')
 				  	} else{
 				  		key = key;
 				  	};
-				console.log(destinations);
+				// console.log(destinations);
 				
 				$timeout(function() {
 					var request = {
@@ -196,18 +253,16 @@ angular.module('smartApp')
 
 					    		})
 					    	})
-					    } else {
-					      	
+					    	poc.preorderSubmit()
+					    } else { 
 					      	console.log(response)
-					       	
-					      // alert('Google route unsuccesfull!');
 					    }
 					});
 
-				 }, 2000);
-
+				 }, key+2000);
+		
 				
-			});
+				});
 			
 		};	
 		poc.preorderSubmit = function(preorderData) {
@@ -230,40 +285,19 @@ angular.module('smartApp')
 		    }
 
 			poc.url = 'preorder/'
-
+			console.log(preorderData);
 			postService.post(preorderData, poc.url).then(function(response) {
-				console.log(response);
+				// console.log(response);
 				poc.response = response.data
 
 				 if (poc.response == 'OK'){
 				 	 	poc.orderData.delCharge = poc.response.charge;
 
-				 	var confirmPopup = $ionicPopup.confirm({
-				 	    title	: poc.response.msg,
-				 	    template: 'Time:' + poc.response.wait + ' Total:' + poc.response.charge
-				 	  });
-				 	  confirmPopup.then(function(res) {
-				 	    if(res) {
+				 
+
 				 	    	poc.orderSubmit();
-				 	    } else {
-
-				 	    }
-				 	  });
+				 	    
 				 	
-
-
-					if (window.cordova) {
-				     	
-			     	 	$timeout(function() {
-			     		       
-			     		    	$cordovaDialogs.alert('下单成功,感谢您使用馋猫订餐', '单号:' + poc.response.oid , '确认')
-       					     	.then(function() {
-       					     	   $location.path( "/tab/home" );
-       					     	});
-
-			     		    }, 3000);
-				     	
-				    }
 
 				 } else{
 				 	poc.error_msg = poc.response.error_msg
@@ -292,7 +326,7 @@ angular.module('smartApp')
 				    }
 				 }
 			},function(error) {
-				console.log(error);
+				// console.log(error);
 			})
 
 		}
@@ -318,6 +352,7 @@ angular.module('smartApp')
 			}
 
 			poc.url = 'order/'
+			console.log('done')
 			postService.post(submitData, poc.url).then(function(response) {
 
 
@@ -334,7 +369,7 @@ angular.module('smartApp')
     				$location.path( "/tab/summary" );
    
  	    		} else{
- 	    			console.log(response);
+ 	    			// console.log(response);
  	    		};
 			},function(error) {
 				console.log(error)
@@ -364,5 +399,30 @@ angular.module('smartApp')
 			}
 
 		};
+
+		//test func
+			
+			var t = 1
+			// _.forEach(test_data_list, function(test_data, key){
+			// 		var DTime  = t * 10000 + 10000;
+			// 		 t += 1;
+			// 		$timeout(function() {
+
+			// 			poc.areaCheckData.address 		= test_data.address;
+
+			// 			poc.areaCheckData.city 			= test_data.city;
+
+			// 			poc.areaCheckData.postalCode 	= test_data.postalCode;
+						
+			// 			poc.getCodeAddress()
+
+			// 		},DTime);
+
+				
+
+			// })
+
+
+		//test func end
 
   });

@@ -156,7 +156,7 @@ smartApp.get('/get_addresses', function(req, res) {
                     point_list.push(point);
                 });
                 
-                var uniq_addresses = _.uniq(point_list,'point');
+                var uniq_addresses = _.uniq(point_list,'point_data');
                  
                  _.forEach(uniq_addresses,function(point, key) {
                     addresses.push(point.point_data)

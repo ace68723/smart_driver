@@ -74,7 +74,8 @@ function Rr(ir_pool) {
                             lo_task.tid = iv_lat+','+iv_lng+','+iv_clat+','+iv_clng+','+moment(new Date()).utc();
                             lo_task.location = iv_clat+','+iv_clng;              
                             lo_task.deadline = moment(new Date()).utc()+(iv_ready + 5400)*1000; 
-                            lo_task.ready = moment(new Date()).utc()+iv_ready*1000; 
+                            // lo_task.ready = moment(new Date()).utc()+iv_ready*1000; 
+                            lo_task.ready   = 0;
                             lo_task.depend = lv_depend_id;
                             la_task.push(lo_task);
                             

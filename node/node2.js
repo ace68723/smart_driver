@@ -1,8 +1,9 @@
 
-var moment 			= require('moment');
-var Q 				= require('q');
+var moment 			  = require('moment');
+var Q 				    = require('q');
 var jobSchedule 	= require('./models/jobscheduling/build/Release/jobSchedule');
-var ifNode2         = require("./interface/ifNode2");
+var ifNode2       = require("./interface/ifNode2");
+var fs            = require('fs');
 
 var node2 = new ifNode2( ); 
 
@@ -28,6 +29,15 @@ var getTables = function() {
 		.then(function(result) {
             console.log('get driver')
      		drivers = result;
+
+            fs.writeFile('drivers.json', JSON.stringify(drivers, null, 4), function(err) {
+                if(err) {
+                   console.log(err)
+                } else {
+                    console.log("JSON drivers saved")
+                }
+            }); 
+
      		console.log(drivers)
      		return drivers
    	})
@@ -38,6 +48,15 @@ var getTables = function() {
 			node2.getTable( 'Task' )
 				.then(function(result) {
 		     		tasks = result;
+
+                    fs.writeFile('tasks.json', JSON.stringify(tasks, null, 4), function(err) {
+                        if(err) {
+                           console.log(err)
+                        } else {
+                            console.log("JSON tasks saved")
+                        }
+                    }); 
+
 		     		console.log(tasks)
 		     		deferred.resolve(tasks);//get task resolve -T
 		   		})
@@ -53,6 +72,15 @@ var getTables = function() {
 			node2.getTable( 'Path' )
 				.then(function(result) {
 		     		paths = result;
+                    
+                    fs.writeFile('paths.json', JSON.stringify(paths, null, 4), function(err) {
+                        if(err) {
+                           console.log(err)
+                        } else {
+                            console.log("JSON paths saved")
+                        }
+                    }); 
+
 		     		console.log(paths)
 		     		deferred.resolve(paths);//get Path resolve -P
 		   		})
@@ -74,6 +102,15 @@ var getTables = function() {
        			
                 jobSchedule.search(JSON.stringify(data), function(str) {
                     var array = JSON.parse(str)
+
+                    fs.writeFile('jobs.json', JSON.stringify(array, null, 4), function(err) {
+                        if(err) {
+                           console.log(err)
+                        } else {
+                            console.log("JSON jobs saved")
+                        }
+                    }); 
+
                     deferred.resolve(array);
                 });
 
