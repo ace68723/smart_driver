@@ -48,6 +48,7 @@ smartApp.get('/test12', function(req, res) {
     .then( function(result) {
      console.log(result);
    })
+    res.status(200).send('ok')
 });
 
 smartApp.post('/tool', function(req, res) {
@@ -125,15 +126,22 @@ smartApp.get('/get_sumamry', function(req, res) {
 })
 
 smartApp.post('/action', function(req, res) {
-    var headers                = req.headers;
-    var authorizationSplit     = headers.authorization.split(" ", 2);
-    var token                  = authorizationSplit[1]
+    // var headers                = req.headers;
+    // var authorizationSplit     = headers.authorization.split(" ", 2);
+    // var token                  = authorizationSplit[1]
     // get token to identity user
-    console.log(token);
-    res.status(200).send({
-        result: 1,
-        msg   : 'message'
-    })
+    rr.action(iv_token, iv_secret, iv_oid, iv_action)
+        .then(function(result) {
+            res.status(200).send({
+                result: result,
+                msg   : 'message'
+            })
+        })
+        .catch(function(error) {
+            console.log(error)
+        })
+
+
 
 
 })

@@ -29,42 +29,20 @@ angular.module('smartApp')
   	poc.orderData.price = '35.99';
 //test address end
 
-	// var test_data_list =[
-	// 				{'address'		:'8 Scoville Square',
-	// 				 'city'			:'Scarborough',
-	// 				 'postalCode'	:'M1V'
-	// 				},{
-	// 				 'address'		:'250 Front St W',
-	// 				 'city'			:'Toronto',
-	// 				 'postalCode'	:'M5V 3G5'
-	// 				},{
-	// 				 'address'		:'225 High Tech Rd',
-	// 				 'city'			:'Richmond Hill',
-	// 				 'postalCode'	:'L4B 4V5'
-	// 				},{
-	// 				 'address'		:'365 prince of wales Dr',
-	// 				 'city'			:'mississauga',
-	// 				 'postalCode'	:'L5B 0G6'
-	// 				},{
-	// 				 'address'		:'35 Megan Ave',
-	// 				 'city'			:'Scarborough',
-	// 				 'postalCode'	:'M1E 4A7'
-	// 				},{
-	// 				 'address'		:'32 Fordover Dr',
-	// 				 'city'			:'Scarborough',
-	// 				 'postalCode'	:'M1E 1V1'
-	// 				},{
-	// 				 'address'		:'505 Wilfred Murison Ave',
-	// 				 'city'			:'Markham',
-	// 				 'postalCode'	:'L6C 2J9'
-	// 				},{
-	// 				 'address'		:'2 Quinton Dr',
-	// 				 'city'			:'Gormley',
-	// 				 'postalCode'	:'L0H 1G0'
-	// 				}
-	// ]
-
-		var test_data_list =[{
+	var test_data_list =[
+					{
+					 'address'		:'250 Front St W',
+					 'city'			:'Toronto',
+					 'postalCode'	:'M5V 3G5'
+					},{
+					 'address'		:'225 High Tech Rd',
+					 'city'			:'Richmond Hill',
+					 'postalCode'	:'L4B 4V5'
+					},{
+					 'address'		:'365 prince of wales Dr',
+					 'city'			:'mississauga',
+					 'postalCode'	:'L5B 0G6'
+					},{
 					 'address'		:'35 Megan Ave',
 					 'city'			:'Scarborough',
 					 'postalCode'	:'M1E 4A7'
@@ -81,7 +59,26 @@ angular.module('smartApp')
 					 'city'			:'Gormley',
 					 'postalCode'	:'L0H 1G0'
 					}
-		]
+	]
+
+		// var test_data_list =[{
+		// 			 'address'		:'35 Megan Ave',
+		// 			 'city'			:'Scarborough',
+		// 			 'postalCode'	:'M1E 4A7'
+		// 			},{
+		// 			 'address'		:'32 Fordover Dr',
+		// 			 'city'			:'Scarborough',
+		// 			 'postalCode'	:'M1E 1V1'
+		// 			},{
+		// 			 'address'		:'505 Wilfred Murison Ave',
+		// 			 'city'			:'Markham',
+		// 			 'postalCode'	:'L6C 2J9'
+		// 			},{
+		// 			 'address'		:'2 Quinton Dr',
+		// 			 'city'			:'Gormley',
+		// 			 'postalCode'	:'L0H 1G0'
+		// 			}
+		// ]
 
 
   	//disable native scroll when keyboard is opened

@@ -3,7 +3,7 @@
 /*jshint -W099*/
 
 angular.module('smartApp')
-  	.controller('PlaceOrderCtrl', function (API_URL,$q,postService,$timeout,$ionicPopup,$location) {
+  	.controller('PlaceOrderCtrl', function (API_URL,$scope,$q,postService,$timeout,$ionicPopup,$location) {
 
   		var poc = this;
 
@@ -12,11 +12,11 @@ angular.module('smartApp')
   		poc.orderData = {};
 
 //for address test
-  	poc.areaCheckData.address = '2620 Kennedy Rd';
+  	// poc.areaCheckData.address = '2620 Kennedy Rd';
 
-  	poc.areaCheckData.city = 'Scarborough';
+  	// poc.areaCheckData.city = 'Scarborough';
 
-  	poc.areaCheckData.postalCode = 'M1T 3H1';
+  	// poc.areaCheckData.postalCode = 'M1T 3H1';
 
   	poc.orderData.name = 'aiden';
 
@@ -42,22 +42,28 @@ angular.module('smartApp')
 		poc.addresses_array = [];
 
 		poc.getCodeAddress = function(destination) {
+			poc.showError = null;
 
 			poc.destination  = poc.areaCheckData.address + ', ' + poc.areaCheckData.city + ', ' + poc.areaCheckData.postalCode;
 			// console.log(destination);
 
 			var request = { 'address' : poc.destination};
-			
+				
 			// call google api to get format address
 			geocoder.geocode(request, function(results, status) {
 		    	if (status === google.maps.GeocoderStatus.OK) {
 	    	     	
 	         	console.log(results);
-	    			poc.cformatted_address 	= results[0].formatted_address;
-	    			poc.clat 				= results[0].geometry.location.A;
-					poc.clng 				= results[0].geometry.location.F;		    	
+	         	$scope.$apply(function () {
+            			poc.cformatted_address 	= results[0].formatted_address;
+            			poc.clat 				= results[0].geometry.location.A;
+        				poc.clng 				= results[0].geometry.location.F;
+	         	});
+	    					    	
 		    	} else {
-		    		
+		    		$scope.$apply(function () {
+		    			poc.showError = true;
+	         		});
 		    		// console.log(status);
 		    	    
 		    	 
@@ -67,26 +73,58 @@ angular.module('smartApp')
 		
 		};
 
+	// //get all tasks' addresses from backend
+	// 	poc.getAddresses = 	function() {
+	// 		// var deferred = $q.defer();
+			
+	// 		postService.get('get_addresses')
+	// 		.then(function(response) {
+	// 			poc.addresses = response.data.addresses;
+	// 			// show  submit form
+	// 			poc.showOrderSubmit = true;
+	// 			// deferred.resolve(poc.addresses);
+	// 		},function(error) {
+	// 			console.log(error);
+	// 			// deferred.reject(error);
+	// 		})
+
+	// 		// return deferred.promise;
+	// 	};
+	// // get tasks' addresses end
+
+
 	//get all tasks' addresses from backend
 		poc.getAddresses = 	function() {
+
+			
 			postService.get('get_addresses')
 			.then(function(response) {
 				poc.addresses = response.data.addresses;
 				// show  submit form
 				poc.showOrderSubmit = true;
-				poc.areaCheck();
-			},function(error) {
+			})
+			.then(function() {
+				poc.areaCheck()
+			})
+			.catch(function(error) {
 				console.log(error)
+				alert('error')
 			})
 
-			
 		};
 	// get tasks' addresses end
 
-	//start creat a addresses array
-		poc.addresses_array = [];
+
+
+
+
+
+
 
 		poc.areaCheck = function() {
+			//start creat a addresses array
+			poc.addresses_array = [];
+			
 			poc.task_address = [poc.clat + ',' + poc.clng , "43.825466,-79.288094"]
 	
 
