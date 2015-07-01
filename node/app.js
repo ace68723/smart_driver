@@ -112,36 +112,28 @@ smartApp.post('/authorize', function(req, res) {
 
 })
 
-smartApp.get('/get_summary', function(req, res) {
+smartApp.get('/get_sumamry', function(req, res) {
     // var headers                = req.headers;
     // var authorizationSplit     = headers.authorization.split(" ", 2);
     // var token                  = authorizationSplit[1]
         // get token to identity user
     // console.log(token);
-    // if (!secret) {
-    //     getSecret();
-    // };
-    var iv_token    = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1aWQiOjIwLCJleHBpcmVkIjoiMjAxNS0wNi0yMSAwMDoxMDo0MyIsImlhdCI6MTQzMjI2Nzg0M30.xAPktfkYkQMIu3L1wkq4m13IpUk8OKyVvjK8IjR_nFo";
-    var iv_secret   = secret;
+    if (!secret) {
+        getSecret();
+    };
 
-    login.authorize(iv_token,iv_secret).then(function(auth_result) {
-            console.log(auth_result)
-            var iv_uid     = auth_result.uid;
-            return iv_uid;
+    login.authorize(token,secret).then(function(result) {
+            console.log(result)
+            
         })
-        .then(function(iv_uid) {
-            var deferred = Q.defer();
-                node2.get_fb_order(iv_uid)
-                    .then(function(order) {
-                       deferred.resolve(order)
-                    }) 
-                    .catch(function(error) {
-                        deferred.reject(error)
-                    })
-            return deferred.promise;      
+        .then(function() {
+
         })
-        .then(function(order) {
-            res.status(200).send(order)
+        .then(function() {
+            res.status(200).send({
+                actions:'actions',
+                orders:'orders'
+            })
         })
         .catch(function(error) {
             console.log(error);
@@ -274,36 +266,30 @@ smartApp.post('/order', function(req, res) {
     rr.order(iv_token, iv_secret, iv_lat, iv_lng, iv_addr, iv_city, iv_unit, iv_postal, iv_tel, iv_name, iv_price, iv_paytype, iv_charge, iv_tips, iv_ready, iv_clat, iv_clng)
     .then( function (result) {
         var deferred = Q.defer();
-            // node2.getTables()
-            //     .then(function(result) {
-                    var iv_oid = result.oid
-                    deferred.resolve(iv_oid);
-                // })
-                // .catch(function(error) {
-                //     deferred.reject(error);
-                // });
+            node2.getTables()
+                .then(function(result) {
+                    deferred.resolve(result);
+                })
+                .catch(function(error) {
+                    deferred.reject(error);
+                });
         return deferred.promise;
-
     })
-    .then(function(iv_oid) {
+    .then(function() {
         var deferred = Q.defer();
             login.authorize(iv_token,iv_secret)
                 .then(function(auth_result) {
-                    var iv_uid     = auth_result.uid;
-                    var iv_oid_uid = {iv_oid:iv_oid,iv_uid:iv_uid}
-                    console.log('get uid',iv_uid)
-                    deferred.resolve(iv_oid_uid);
+                    var iv_uid = auth_result.uid;
+                    deferred.resolve(iv_uid);
                 })
                 .catch(function(error) {
                         deferred.reject(error);   
                 })
         return deferred.promise;        
     })
-    .then(function(iv_oid_uid) {
-        var iv_oid = iv_oid_uid.iv_oid;    
-        var iv_uid = iv_oid_uid.iv_uid;
+    .then(function(iv_uid) {
         var deferred = Q.defer();
-            node2.set_fb_order(iv_uid,iv_oid,iv_lat, iv_lng, iv_addr, iv_city, iv_unit, iv_postal, iv_tel, iv_name, iv_price, iv_paytype, iv_charge, iv_tips, iv_ready, iv_clat, iv_clng)
+            node2.set_fb_order(iv_uid,iv_lat, iv_lng, iv_addr, iv_city, iv_unit, iv_postal, iv_tel, iv_name, iv_price, iv_paytype, iv_charge, iv_tips, iv_ready, iv_clat, iv_clng)
                 .then(function(result) {
                     deferred.resolve(result);
                 })
@@ -312,7 +298,7 @@ smartApp.post('/order', function(req, res) {
                 })
         return deferred.promise;        
     })
-    .then(function(result) {
+    .then(function() {
         res.status(200).send(result);
     })
     .catch(function(error){

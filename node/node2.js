@@ -1,9 +1,12 @@
 
 var moment 			  = require('moment');
-var Q 				    = require('q');
-var jobSchedule 	= require('./models/jobscheduling/build/Release/jobSchedule');
-var ifNode2       = require("./interface/ifNode2");
-var fs            = require('fs');
+var Q 				  = require('q');
+var jobSchedule 	  = require('./models/jobscheduling/build/Release/jobSchedule');
+var ifNode2           = require("./interface/ifNode2");
+var fs                = require('fs');
+var Firebase          = require('firebase');
+var dataRef           = new Firebase('https://ajaxsmart.firebaseio.com/');
+var rrclient_ref      = dataRef.child('rrclient');
 
 var node2 = new ifNode2( ); 
 
@@ -122,7 +125,7 @@ var getTables = function() {
                 
                 node2.updateResult(array.schedules)
                     .then(function(result) {
-                        console.log('done')
+                        console.log('update done')
                         deferred.resolve(result);
                 })
                     .catch(function(error) {
@@ -149,10 +152,57 @@ var getTables = function() {
    	return deferred.promise;	
 };
 
+function set_fb_order(iv_uid,iv_oid, iv_lat, iv_lng, iv_addr, iv_city, iv_unit, iv_postal, iv_tel, iv_name, iv_price, iv_paytype, iv_charge, iv_tips, iv_ready, iv_clat, iv_clng) {
+    var deferred = Q.defer();
+        var set_data = {    addr    : iv_addr,
+                            city    : iv_city,
+                            unit    : iv_unit,
+                            postal  : iv_postal, 
+                            tel     : iv_tel,
+                            name    : iv_name,
+                            price   : iv_price,
+                            paytype : iv_paytype,
+                            charge  : iv_charge,
+                            clat    : iv_clat,
+                            clng    : iv_clng,
+                            lat     : iv_lat, 
+                            lng     : iv_lat,
+                            ready   : iv_ready,
+                            tips    : iv_tips
+                        }
+        console.log('set_fb_order')
+        
+        rrclient_ref.child(iv_uid).child(iv_oid).set(set_data,function(error) {
+            if (error) {
+                deferredreject(error)
+            } else{
+                deferred.resolve('save success')
+            };
+        });
+    
+    return deferred.promise;  
+};
 
-
-
-module.exports = {getTables:getTables};
+function get_fb_order(iv_uid){
+    var deferred = Q.defer();
+        rrclient_ref.child(iv_uid).on("value", function(snapshot) {
+                var order = snapshot.val();
+                if (order) {
+                    deferred.resolve(order);
+                } else{
+                    deferred.reject('no data');
+                };
+                
+            }, function (errorObject) {
+              console.log("The read failed: " + errorObject.code);
+                deferred.reject(errorObject.code);
+            })
+    return deferred.promise;
+}
+module.exports = {getTables:getTables,
+                  set_fb_order:set_fb_order,
+                  get_fb_order:get_fb_order
+                  };
 
 
 

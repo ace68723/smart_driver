@@ -79,11 +79,10 @@ function Rr(ir_pool) {
                             lo_task.depend = lv_depend_id;
                             la_task.push(lo_task);
                             
-                            
                             node2.setTable('Task', la_task).then( function (redis_result){
                                 eo_result.result = 0;
 //                                eo_result.message = e;
-                                resolve(0);
+                                resolve(order_result[0]);
                             }).catch(function(e) {
                                 eo_result.result = 1;
                                 eo_result.message = e;

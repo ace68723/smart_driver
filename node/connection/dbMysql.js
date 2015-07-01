@@ -14,13 +14,20 @@ function Mysql() {
     //       database        : 'node'    
     // });  
 
+   // this.pool = mysql.createPool({
+   //       connectionLimit : 30,
+   //       host            : 'localhost',
+   //       user            : 'root',
+   //       password        : 'MySmartSQL',
+   //       database        : 'node'    
+   // });     
    this.pool = mysql.createPool({
          connectionLimit : 30,
-         host            : 'localhost',
+         host            : '45.33.95.211',
          user            : 'root',
          password        : 'MySmartSQL',
          database        : 'node'    
-   });      
+   });    
 };
 
 module.exports = Mysql;

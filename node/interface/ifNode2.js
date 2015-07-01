@@ -139,7 +139,7 @@ function Node2( ) {
     
     
     this.updateResult = function( ia_data ) {
-        
+        // console.log('ifnode2 updata result')
         return new Promise(function (resolve, reject) {
             var la_assign = [ ] ;
             var la_driver = [ ] ;
@@ -163,6 +163,7 @@ function Node2( ) {
                 }    
                 
             }
+            console.log(la_driver.length)
             if (la_driver.length > 0) { 
                 redis.hashSet('Driver', la_driver).then( function (result){
                     if (la_assign.length > 0) { 
@@ -176,6 +177,8 @@ function Node2( ) {
                     reject(e);
                 });
                            
+            }else{
+                reject('error');
             }
         });
     }            
