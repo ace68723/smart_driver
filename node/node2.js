@@ -14,10 +14,10 @@ var drivers;
 var tasks;
 var paths;
 
-   	node2.getTable( 'Task' ).then( function(result) {
-     	tasks = result;
-     	console.log(tasks)
-   	})
+   	// node2.getTable( 'Task' ).then( function(result) {
+    //  	tasks = result;
+    //  	console.log(tasks)
+   	// })
 
 var drivers = [
 { "did": "23", "available": 1433625957749, "off": 1433642400000, "location": "43.825466,-79.288094" },
@@ -152,7 +152,7 @@ var getTables = function() {
    	return deferred.promise;	
 };
 
-function set_fb_order(iv_uid,iv_oid, iv_lat, iv_lng, iv_addr, iv_city, iv_unit, iv_postal, iv_tel, iv_name, iv_price, iv_paytype, iv_charge, iv_tips, iv_ready, iv_clat, iv_clng) {
+function set_fb_order(iv_uid,iv_oid, iv_lat, iv_lng, iv_addr, iv_city, iv_unit, iv_postal, iv_tel, iv_name, iv_price, iv_paytype, iv_charge, iv_tips, iv_ready, iv_clat, iv_clng, iv_status, iv_message) {
     var deferred = Q.defer();
         var set_data = {    addr    : iv_addr,
                             city    : iv_city,
@@ -168,9 +168,11 @@ function set_fb_order(iv_uid,iv_oid, iv_lat, iv_lng, iv_addr, iv_city, iv_unit, 
                             lat     : iv_lat, 
                             lng     : iv_lat,
                             ready   : iv_ready,
-                            tips    : iv_tips
+                            tips    : iv_tips,
+                            status  : iv_status,
+                            message : iv_message
                         }
-        console.log('set_fb_order')
+        console.log('set_fb_order',iv_status)
         
         rrclient_ref.child(iv_uid).child(iv_oid).set(set_data,function(error) {
             if (error) {

@@ -267,9 +267,10 @@ smartApp.post('/order', function(req, res) {
     var iv_clng     =   order.clng;
     var iv_tips     =   order.tips;
     var iv_ready    =   order.ready;
-
-    var iv_token    = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1aWQiOjIwLCJleHBpcmVkIjoiMjAxNS0wNi0yMSAwMDoxMDo0MyIsImlhdCI6MTQzMjI2Nzg0M30.xAPktfkYkQMIu3L1wkq4m13IpUk8OKyVvjK8IjR_nFo";
-    var iv_secret   = secret;
+    var iv_status   =   0; 
+    var iv_message  =   "New Order"; 
+    var iv_token    =   "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1aWQiOjIwLCJleHBpcmVkIjoiMjAxNS0wNi0yMSAwMDoxMDo0MyIsImlhdCI6MTQzMjI2Nzg0M30.xAPktfkYkQMIu3L1wkq4m13IpUk8OKyVvjK8IjR_nFo";
+    var iv_secret   =   secret;
 
     rr.order(iv_token, iv_secret, iv_lat, iv_lng, iv_addr, iv_city, iv_unit, iv_postal, iv_tel, iv_name, iv_price, iv_paytype, iv_charge, iv_tips, iv_ready, iv_clat, iv_clng)
     .then( function (result) {
@@ -303,7 +304,7 @@ smartApp.post('/order', function(req, res) {
         var iv_oid = iv_oid_uid.iv_oid;    
         var iv_uid = iv_oid_uid.iv_uid;
         var deferred = Q.defer();
-            node2.set_fb_order(iv_uid,iv_oid,iv_lat, iv_lng, iv_addr, iv_city, iv_unit, iv_postal, iv_tel, iv_name, iv_price, iv_paytype, iv_charge, iv_tips, iv_ready, iv_clat, iv_clng)
+            node2.set_fb_order(iv_uid,iv_oid,iv_lat, iv_lng, iv_addr, iv_city, iv_unit, iv_postal, iv_tel, iv_name, iv_price, iv_paytype, iv_charge, iv_tips, iv_ready, iv_clat, iv_clng, iv_status, iv_message)
                 .then(function(result) {
                     deferred.resolve(result);
                 })
