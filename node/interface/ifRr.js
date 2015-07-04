@@ -62,7 +62,7 @@ function Rr(ir_pool) {
                             var la_task = [];
                             var lo_task = { };
                             
-                            lo_task = order_result.oid;
+                            lo_task.oid = order_result.oid;
                             lo_task.tid = '0,0,'+iv_lat+','+iv_lng+','+moment(new Date()).utc();
                             var lv_depend_id = lo_task.tid ;
                             lo_task.location = iv_lat+','+iv_lng;              
@@ -72,7 +72,7 @@ function Rr(ir_pool) {
                             la_task.push(lo_task);
                             
                             lo_task = { };
-                            lo_task = order_result.oid;
+                            lo_task.oid = order_result.oid;
                             lo_task.tid = iv_lat+','+iv_lng+','+iv_clat+','+iv_clng+','+moment(new Date()).utc();
                             lo_task.location = iv_clat+','+iv_clng;              
                             lo_task.deadline = moment(new Date()).utc()+(iv_ready + 5400)*1000; 
