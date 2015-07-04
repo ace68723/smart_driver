@@ -79,7 +79,6 @@ function Node2( ) {
                                     var lo_task = JSON.parse(task_result[lv_task_i]);
                                     var lo_data = { };
                                     lo_data.tid   = lo_task.tid;
-                                    lo_data.oid   = lo_task.oid;
                                     lo_data.location = lo_task.location;
                                     lo_data.deadline = Number(lo_task.deadline);
                                     lo_data.ready = Number(lo_task.ready);
@@ -164,7 +163,8 @@ function Node2( ) {
                 }    
                 
             }
-            console.log(la_driver.length)
+            console.log('updateResult ia_data ',ia_data)
+            console.log('updateResult ifNode2 ',la_driver.length)
             if (la_driver.length > 0) { 
                 redis.hashSet('Driver', la_driver).then( function (result){
                     if (la_assign.length > 0) { 

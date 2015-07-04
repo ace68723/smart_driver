@@ -184,7 +184,7 @@ function set_fb_order(iv_uid,iv_oid, iv_lat, iv_lng, iv_addr, iv_city, iv_unit, 
         
         rrclient_ref.child(iv_uid).child('orders').child(iv_oid).set(set_data,function(error) {
             if (error) {
-
+                console.log(error)
                 deferred.reject(error)
             } else{
                 deferred.resolve('save success')
@@ -262,7 +262,17 @@ function tid_to_oid(tid) {
             var tasks_tids = result;
             console.log(tasks_tids)
             var oid = _.result(_.find(tasks_tids, {'tid':tid}), 'oid');
-            deferred.resolve(oid);//get task resolve -T
+            var depend = _.result(_.find(tasks_tids, {'tid':tid}), 'depend');
+            if (depend == null) {
+                var task_type = 'take';
+            } else{
+                var task_type = 'delivery';
+            };
+            var order_info = {};
+            order_info.oid = oid;
+            order_info.task_type = task_type
+            console.log(order_info)
+            deferred.resolve(order_info);//get task resolve -T
         })
         .catch(function(error) {
             deferred.reject(error);//get task reject -T

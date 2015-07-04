@@ -2,11 +2,13 @@
   "name": "SmartDriver",
   "version": "0.0.0",
   "dependencies": {
-    "ionic": "v1.0.1"
+    "ionic": "v1.0.1",
+    "firebase": "~2.2.7",
+    "angularfire": "~1.1.2",
+    "lodash": "~3.10.0"
   },
   "devDependencies": {
     "angular-mocks": "~1.2.17",
     "angular-scenario": "~1.2.17"
   }
 }
-

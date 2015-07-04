@@ -110,7 +110,7 @@ function Order(ir_pool) {
         var lv_area = iv_area;     
         var lv_status = iv_status;           
         var sql_select_order = "SELECT * FROM ?? WHERE ?? = ? LIMIT 1";
-        var parameter_select_order = ['orders', 'order', lv_oid];
+        var parameter_select_order = ['orders', 'oid', lv_oid];
  
         ir_pool.queryAsync(sql_select_order, parameter_select_order).spread( function (rows, columns) {
             if (rows[0] != null) {
