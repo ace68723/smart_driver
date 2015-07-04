@@ -79,6 +79,7 @@ function Node2( ) {
                                     var lo_task = JSON.parse(task_result[lv_task_i]);
                                     var lo_data = { };
                                     lo_data.tid   = lo_task.tid;
+                                    lo_data.oid   = lo_task.oid;
                                     lo_data.location = lo_task.location;
                                     lo_data.deadline = Number(lo_task.deadline);
                                     lo_data.ready = Number(lo_task.ready);
