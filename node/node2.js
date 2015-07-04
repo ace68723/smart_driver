@@ -138,7 +138,7 @@ var getTables = function() {
             return deferred.promise;                    
     })
         .then(function(array) {
-                console.log('before fb driver',array)
+                console.log('before fb driver',array.schedules[0].tids)
                 set_fb_driver(array.schedules).then(function() {
                      deferred.resolve('done');
                      console.log('all done')
@@ -254,10 +254,27 @@ function get_fb_driver(iv_did){
     return deferred.promise;
 };
 
+function tid_to_oid(tid) {
+    var deferred = Q.defer();//get task defer -T
+    console.log('get Task')
+    node2.getTable( 'Task' )
+        .then(function(result) {
+            var tasks_tids = result;
+            console.log(tasks_tids)
+            var oid = _.result(_.find(tasks_tids, {'tid':tid}), 'oid');
+            deferred.resolve(oid);//get task resolve -T
+        })
+        .catch(function(error) {
+            deferred.reject(error);//get task reject -T
+        })
+        return deferred.promise;//return get taskpromise -T
+};
+
 module.exports = {  getTables     :getTables,
                     set_fb_order  :set_fb_order,
                     get_fb_order  :get_fb_order,
-                    get_fb_driver :get_fb_driver
+                    get_fb_driver :get_fb_driver,
+                    tid_to_oid    :tid_to_oid
                   };
 
 

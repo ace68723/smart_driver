@@ -58,11 +58,27 @@ function Order(ir_pool) {
         });
     };
 
-    
+    var reorder = this;
+    reorder.findOne = function( iv_oid ) {
+        return new Promise(function (resolve, reject) {
+            console.log(iv_oid)
+            var sql_select_order = "SELECT * FROM ?? WHERE ?? = ? LIMIT 1";
+            var parameter_select_order = ['orders', 'oid', iv_oid];
+            ir_pool.queryAsync(sql_select_order, parameter_select_order).spread( function (rows, columns) {
+                if (rows[0] != null) {
+                    resolve( rows[0] );
+                }
+            }).catch(function(e) {
+                reject(e);
+            }); 
+        });
+    };
+
     this.findStartEnd = function( iv_oid ) {
         return new Promise(function (resolve, reject) {
             
-            this.findOne( iv_oid ).then( function(lo_order) {
+            reorder.findOne( iv_oid ).then( function(lo_order) {
+                console.log(lo_order)
                     var lm_address = new modelAddress(ir_pool);
                     lm_address.findOne( lo_order.aid ).then( function(order_address_result) {
                         var lm_rr = new modelRr(ir_pool);

@@ -115,16 +115,22 @@ function Rr(ir_pool) {
     
     this.action = function(iv_token, iv_secret, iv_oid, iv_action ) {
         return new Promise(function (resolve, reject) {
+
            var lr_login = new ifLogin(ir_pool);
+
            var eo_result = { };
-           var node2 = new node2;    
+           var node2 = new ifNode2;    
+
            lr_login.authorize(iv_token, iv_secret).then( function(auth_result) {
+
               if (auth_result.uid != 0) {    
                  if (iv_action == 1) {
+
                     var order = new modelOrder(ir_pool);
                     var eo_result = { };
+                     // console.log(iv_oid)
                     order.findStartEnd( iv_oid ).then( function (order_result){
-
+                         console.log(order_result)
 
                         var la_task = [];
                         var lo_task = { };
@@ -149,7 +155,8 @@ function Rr(ir_pool) {
                         node2.setTable('Task', la_task).then( function (result_redis){
                             eo_result.result = 0;
                             eo_result.message = result_redis;
-                            resolve(0);
+                           
+                            resolve(order_result[0]);
                         }).catch(function(error_redis) {
                             eo_result.result = 1;
                             eo_result.message = error_redis;
@@ -174,7 +181,7 @@ function Rr(ir_pool) {
                 reject(eo_result);
            });
         });
-                  
+                 
     }
     
 	
