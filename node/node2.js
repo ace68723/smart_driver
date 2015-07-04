@@ -1,12 +1,14 @@
 
 var moment 			  = require('moment');
 var Q 				  = require('q');
+var _                 = require('lodash');
 var jobSchedule 	  = require('./models/jobscheduling/build/Release/jobSchedule');
 var ifNode2           = require("./interface/ifNode2");
 var fs                = require('fs');
 var Firebase          = require('firebase');
 var dataRef           = new Firebase('https://ajaxsmart.firebaseio.com/');
 var rrclient_ref      = dataRef.child('rrclient');
+var drivers_ref       = dataRef.child('drivers');
 
 var node2 = new ifNode2( ); 
 
@@ -20,8 +22,8 @@ var paths;
    	// })
 
 var drivers = [
-{ "did": "23", "available": 1433625957749, "off": 1433642400000, "location": "43.825466,-79.288094" },
-{ "did": "Aiden", "available": 1433625957749, "off": 1433642400000, "location": "43.825466,-79.288094" }
+    { "did": "23", "available": 1433625957749, "off": 1433642400000, "location": "43.825466,-79.288094" },
+    { "did": "Aiden", "available": 1433625957749, "off": 1433642400000, "location": "43.825466,-79.288094" }
 ];
 
 var getTables = function() {
@@ -105,7 +107,7 @@ var getTables = function() {
        			
                 jobSchedule.search(JSON.stringify(data), function(str) {
                     var array = JSON.parse(str)
-
+                    console.log(array)
                     fs.writeFile('jobs.json', JSON.stringify(array, null, 4), function(err) {
                         if(err) {
                            console.log(err)
@@ -126,7 +128,7 @@ var getTables = function() {
                 node2.updateResult(array.schedules)
                     .then(function(result) {
                         console.log('update done')
-                        deferred.resolve(result);
+                        deferred.resolve(array);
                 })
                     .catch(function(error) {
                          console.log('error')
@@ -135,8 +137,13 @@ var getTables = function() {
 
             return deferred.promise;                    
     })
-        .then(function() {
-            deferred.resolve('done');
+        .then(function(array) {
+                console.log('before fb driver',array)
+                set_fb_driver(array.schedules).then(function() {
+                     deferred.resolve('done');
+                     console.log('all done')
+                });
+               
     })
 
    	.catch(function(error) {
@@ -170,17 +177,45 @@ function set_fb_order(iv_uid,iv_oid, iv_lat, iv_lng, iv_addr, iv_city, iv_unit, 
                             ready   : iv_ready,
                             tips    : iv_tips,
                             status  : iv_status,
-                            message : iv_message
+                            message : iv_message,
+                            oid     : iv_oid
                         }
-        console.log('set_fb_order',iv_status)
+        console.log('set_fb_order',iv_oid)
         
-        rrclient_ref.child(iv_uid).child(iv_oid).set(set_data,function(error) {
+        rrclient_ref.child(iv_uid).child('orders').child(iv_oid).set(set_data,function(error) {
             if (error) {
-                deferredreject(error)
+
+                deferred.reject(error)
             } else{
                 deferred.resolve('save success')
             };
         });
+    
+    return deferred.promise;  
+};
+
+function set_fb_driver(schedules) {
+    var deferred = Q.defer();
+        _.forEach(schedules,function(schedule,key){
+            var set_data = {    available   : schedule.available, 
+                                did         : schedule.did, 
+                                location    : schedule.location, 
+                                off         : schedule.off, 
+                                tids        : schedule.tids, 
+                                updated     : schedule.updated
+                            }
+
+            console.log('set_fb_driver')
+            
+            drivers_ref.child(schedule.did).set(set_data,function(error) {
+                if (error) {
+
+                    deferredreject(error)
+                }
+            });
+        })
+        console.log('fb driver save success')
+        deferred.resolve('save success')
     
     return deferred.promise;  
 };
@@ -200,10 +235,29 @@ function get_fb_order(iv_uid){
                 deferred.reject(errorObject.code);
             })
     return deferred.promise;
-}
-module.exports = {getTables:getTables,
-                  set_fb_order:set_fb_order,
-                  get_fb_order:get_fb_order
+};
+
+function get_fb_driver(iv_did){
+    var deferred = Q.defer();
+        drivers_ref.child(iv_did).on("value", function(snapshot) {
+                var driver = snapshot.val();
+                if (driver) {
+                    deferred.resolve(driver);
+                } else{
+                    deferred.reject('no data');
+                };
+                
+            }, function (errorObject) {
+              console.log("The read failed: " + errorObject.code);
+                deferred.reject(errorObject.code);
+            })
+    return deferred.promise;
+};
+
+module.exports = {  getTables     :getTables,
+                    set_fb_order  :set_fb_order,
+                    get_fb_order  :get_fb_order,
+                    get_fb_driver :get_fb_driver
                   };
 
 

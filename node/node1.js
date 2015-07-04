@@ -66,7 +66,7 @@ smartApp.post('/login', function(req, res) {
 
     var name        = user.username;
     var password    = user.password;
-    
+    var channel     = user.channel;
     //check secret
     if (!secret) {
         getSecret();
@@ -89,17 +89,17 @@ smartApp.post('/login', function(req, res) {
 
 smartApp.post('/authorize', function(req, res) {
     
-    var authorize = req.body;
-    console.log(authorize);
+    // var authorize = req.body;
+    // console.log(authorize);
 
-    var token        = authorize.token;
-
+    var iv_token    = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1aWQiOjIwLCJleHBpcmVkIjoiMjAxNS0wNi0yMSAwMDoxMDo0MyIsImlhdCI6MTQzMjI2Nzg0M30.xAPktfkYkQMIu3L1wkq4m13IpUk8OKyVvjK8IjR_nFo";
+    var iv_secret   = secret;
     //check secret
     if (!secret) {
         getSecret();
     };
 
-    login.authorize(token,secret).then(function(result) {
+    login.authorize(iv_token,iv_secret).then(function(result) {
             console.log(result)
             res.status(200).send(result)
         })
@@ -150,7 +150,44 @@ smartApp.get('/get_summary', function(req, res) {
     
 
 })
+smartApp.get('/get_driver', function(req, res) {
+    // var headers                = req.headers;
+    // var authorizationSplit     = headers.authorization.split(" ", 2);
+    // var token                  = authorizationSplit[1]
+        // get token to identity user
+    // console.log(token);
+    // if (!secret) {
+    //     getSecret();
+    // };
+    var iv_token    = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1aWQiOjIwLCJleHBpcmVkIjoiMjAxNS0wNi0yMSAwMDoxMDo0MyIsImlhdCI6MTQzMjI2Nzg0M30.xAPktfkYkQMIu3L1wkq4m13IpUk8OKyVvjK8IjR_nFo";
+    var iv_secret   = secret;
 
+    login.authorize(iv_token,iv_secret).then(function(auth_result) {
+            console.log(auth_result)
+            var iv_uid     = auth_result.uid;
+            return iv_uid;
+        })
+        .then(function(iv_uid) {
+            var deferred = Q.defer();
+                node2.get_driver(iv_did)
+                    .then(function(driver) {
+                       deferred.resolve(driver)
+                    }) 
+                    .catch(function(error) {
+                        deferred.reject(error)
+                    })
+            return deferred.promise;      
+        })
+        .then(function(driver) {
+            res.status(200).send(driver)
+        })
+        .catch(function(error) {
+            console.log(error);
+            res.status(401).send(error)
+        })
+    
+
+})
 smartApp.post('/action', function(req, res) {
     // var headers                = req.headers;
     // var authorizationSplit     = headers.authorization.split(" ", 2);
@@ -292,7 +329,7 @@ smartApp.post('/order', function(req, res) {
                 .then(function(auth_result) {
                     var iv_uid     = auth_result.uid;
                     var iv_oid_uid = {iv_oid:iv_oid,iv_uid:iv_uid}
-                    console.log('get uid',iv_uid)
+                    console.log('get oid',iv_oid)
                     deferred.resolve(iv_oid_uid);
                 })
                 .catch(function(error) {
@@ -301,7 +338,8 @@ smartApp.post('/order', function(req, res) {
         return deferred.promise;        
     })
     .then(function(iv_oid_uid) {
-        var iv_oid = iv_oid_uid.iv_oid;    
+        var iv_oid = iv_oid_uid.iv_oid;  
+        console.log('oid test',iv_oid);
         var iv_uid = iv_oid_uid.iv_uid;
         var deferred = Q.defer();
             node2.set_fb_order(iv_uid,iv_oid,iv_lat, iv_lng, iv_addr, iv_city, iv_unit, iv_postal, iv_tel, iv_name, iv_price, iv_paytype, iv_charge, iv_tips, iv_ready, iv_clat, iv_clng, iv_status, iv_message)

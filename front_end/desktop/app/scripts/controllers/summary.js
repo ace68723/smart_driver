@@ -12,7 +12,7 @@ angular.module('smartApp')
     var sc = this;
 
 	sc.getSumamry = function() {
-		postService.get('get_sumamry')
+		postService.get('get_summary')
 			.then(function(response) {
 				console.log(response)
 				sc.actions 	= response.data.actions;

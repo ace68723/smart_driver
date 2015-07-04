@@ -12,11 +12,11 @@ angular.module('smartApp')
   		poc.orderData = {};
 
 //for address test
-  	// poc.areaCheckData.address = '2620 Kennedy Rd';
+  	poc.areaCheckData.address = '2620 Kennedy Rd';
 
-  	// poc.areaCheckData.city = 'Scarborough';
+  	poc.areaCheckData.city = 'Scarborough';
 
-  	// poc.areaCheckData.postalCode = 'M1T 3H1';
+  	poc.areaCheckData.postalCode = 'M1T 3H1';
 
   	poc.orderData.name = 'aiden';
 
