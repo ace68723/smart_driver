@@ -28,6 +28,7 @@ function Driver(ir_pool) {
                       eo_result.result = 0;
                       resolve(eo_result);
                  }).catch(function(e) {
+                        console.log(e)
                       eo_result.result = 1;
                       eo_result.message = e;
                       reject(eo_result);
@@ -37,6 +38,7 @@ function Driver(ir_pool) {
              }).catch(function(error_login) {
                     eo_result.result = 1;
                     eo_result.message = error_login;
+                    console.log(eo_result)
                     reject(eo_result.message);
              });
         });

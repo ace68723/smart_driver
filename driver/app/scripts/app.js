@@ -6,7 +6,7 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
-angular.module('SmartDriver', ['ionic', 'config', 'SmartDriver.controllers','firebase'])
+angular.module('SmartDriver', ['ionic', 'config', 'SmartDriver.controllers','firebase','ngCordova'])
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
@@ -37,7 +37,7 @@ angular.module('SmartDriver', ['ionic', 'config', 'SmartDriver.controllers','fir
       views: {
         'menuContent' :{
             templateUrl: 'templates/task.html',
-            controller: 'TaskCtrl'
+            controller: 'TaskCtrl as tc'
         }
       }
     })

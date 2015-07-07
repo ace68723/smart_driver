@@ -65,20 +65,25 @@ function Rr(ir_pool) {
 
                             lo_task.tid = '0,0,'+iv_lat+','+iv_lng+','+moment(new Date()).utc();
                             var lv_depend_id = lo_task.tid ;
-                            lo_task.location = iv_lat+','+iv_lng;              
+                            lo_task.location = iv_lat+','+iv_lng;    
+                            lo_task.oid     = order_result[0].oid;          
                             lo_task.deadline = moment(new Date()).utc()+(iv_ready + 1800)*1000; 
                             lo_task.ready = moment(new Date()).utc()+iv_ready*1000;
                             lo_task.depend = null;
+                            
+                            // console.log('create',lo_task)
                             la_task.push(lo_task);
                             
                             lo_task = { };
 
                             lo_task.tid = iv_lat+','+iv_lng+','+iv_clat+','+iv_clng+','+moment(new Date()).utc();
-                            lo_task.location = iv_clat+','+iv_clng;              
+                            lo_task.location = iv_clat+','+iv_clng;  
+                            lo_task.oid     = order_result[0].oid;            
                             lo_task.deadline = moment(new Date()).utc()+(iv_ready + 5400)*1000; 
                             // lo_task.ready = moment(new Date()).utc()+iv_ready*1000; 
                             lo_task.ready   = 0;
-                            lo_task.depend = lv_depend_id;
+                            lo_task.depend  = lv_depend_id;
+                           
                             la_task.push(lo_task);
                             
                             node2.setTable('Task', la_task).then( function (redis_result){

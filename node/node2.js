@@ -180,16 +180,24 @@ function set_fb_order(iv_uid,iv_oid, iv_lat, iv_lng, iv_addr, iv_city, iv_unit, 
                             message : iv_message,
                             oid     : iv_oid
                         }
-        console.log('set_fb_order',iv_oid)
-        
-        rrclient_ref.child(iv_uid).child('orders').child(iv_oid).set(set_data,function(error) {
+        console.log('set_fb_order',iv_uid)
+        rrclient_ref.child('all_orders').child(iv_oid).set(set_data,function(error) {
             if (error) {
                 console.log(error)
                 deferred.reject(error)
             } else{
-                deferred.resolve('save success')
+                rrclient_ref.child(iv_uid).child('orders').child(iv_oid).set(set_data,function(error) {
+                    if (error) {
+                        console.log(error)
+                        deferred.reject(error)
+                    } else{
+                        console.log('save success')
+                        deferred.resolve('save success')
+                    };
+                });
             };
         });
+        
     
     return deferred.promise;  
 };
@@ -205,7 +213,7 @@ function set_fb_driver(schedules) {
                                 updated     : schedule.updated
                             }
 
-            console.log('set_fb_driver')
+            console.log('node2.js set_fb_driver')
             
             drivers_ref.child(schedule.did).set(set_data,function(error) {
                 if (error) {
@@ -261,14 +269,15 @@ function tid_to_oid(tid) {
         .then(function(result) {
             var tasks_tids = result;
             console.log(tasks_tids)
-            var oid = _.result(_.find(tasks_tids, {'tid':tid}), 'oid');
-            var depend = _.result(_.find(tasks_tids, {'tid':tid}), 'depend');
+            var oid     = _.result(_.find(tasks_tids, {'tid':tid}), 'oid');
+            var depend  = _.result(_.find(tasks_tids, {'tid':tid}), 'depend');
             if (depend == null) {
                 var task_type = 'take';
             } else{
                 var task_type = 'delivery';
             };
             var order_info = {};
+            console.log(oid)
             order_info.oid = oid;
             order_info.task_type = task_type
             console.log(order_info)

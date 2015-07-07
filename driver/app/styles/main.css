@@ -1,1 +1,11 @@
 /* Your application styles go here */
+.orange{
+	color:#ff7e00;
+}
+.button.button-orange {
+	border-color: #ff7e00;
+	background-color: #ff7e00;
+	color: #ffffff;
+	font-size: 20px;
+	font-weight: 900;
+}

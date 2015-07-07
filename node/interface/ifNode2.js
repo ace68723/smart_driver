@@ -11,6 +11,7 @@ function Node2( ) {
     
     this.delItem = function( iv_name, ia_key ) {
         return new Promise(function (resolve, reject) {
+            console.log(ia_key);
             var redis = new modelRedis(client);
             var lv_name = redis.getTableName( iv_name );
             switch (iv_name){
@@ -24,6 +25,7 @@ function Node2( ) {
                     });
                 case 'Task':
                     redis.sortDel(lv_name, ia_key).then( function (sort_result){
+                        console.log(sort_result)
                         resolve(0);
                     }).catch(function(e) {
                         reject(e);
@@ -76,14 +78,14 @@ function Node2( ) {
                             redis.getAll(1, lv_task).then( function (task_result){
                             
                                 for(var lv_task_i in task_result){
-                                    var lo_task = JSON.parse(task_result[lv_task_i]);
-                                    var lo_data = { };
-                                    lo_data.tid   = lo_task.tid;
-                                    lo_data.location = lo_task.location;
-                                    lo_data.deadline = Number(lo_task.deadline);
-                                    lo_data.ready = Number(lo_task.ready);
-                                    lo_data.depend = lo_task.depend;
-                                
+                                    var lo_task         = JSON.parse(task_result[lv_task_i]);
+                                    var lo_data         = { };
+                                    lo_data.tid         = lo_task.tid;
+                                    lo_data.location    = lo_task.location;
+                                    lo_data.deadline    = Number(lo_task.deadline);
+                                    lo_data.ready       = Number(lo_task.ready);
+                                    lo_data.depend      = lo_task.depend;
+                                    lo_data.oid         = lo_task.oid
                                     if (assign_result != null) {
                                         for(var lv_assign_i in assign_result){
                                             var lo_assign = JSON.parse(task_result[lv_task_i]);
@@ -116,7 +118,7 @@ function Node2( ) {
     }  
 
     this.setTable = function( iv_name, ia_data ) {
-
+        // console.log('set reids order',ia_data)
         return new Promise(function (resolve, reject) {
             var redis = new modelRedis(client);
 //            var lv_name = iv_name + (moment(new Date())).format("YYYYMMDD");
@@ -147,7 +149,7 @@ function Node2( ) {
             
             for(var lv_data in ia_data){
                 var lo_data = ia_data[lv_data];
-                if (lo_data.updated == 1) {
+                // if (lo_data.updated == 1) {
                     var lo_driver = { };
                     lo_driver.did = lo_data.did;
                     lo_driver.available = lo_data.available;
@@ -160,7 +162,7 @@ function Node2( ) {
                         la_assign.push( lo_assign );
                     }
                     la_driver.push( lo_driver );
-                }    
+                // }    
                 
             }
             console.log('updateResult ia_data ',ia_data)

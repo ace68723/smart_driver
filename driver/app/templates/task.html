@@ -1,22 +1,53 @@
 <ion-view title="Tasks">
   	<ion-content class="has-header">
-    	<div class="list card" ng-repeat="(id,task) in tasks">
+    	<div class="list card" >
 
-    	  <div class="item item-avatar">
-    	    <img src="avatar.jpg">
-    	    <h2>Pretty Hate Machine</h2>
-    	    <p>Nine Inch Nails</p>
+    	  <div class="item item-avatar"ng-if="tc.task_type == 'take'">
+    	    <img src="img/take.png">
+    	    <h2 >Take Order</h2>
+            <p>Order Number: {{tc.order_info.oid}}</p>
     	  </div>
 
-    	  <div class="item item-image">
-    	    <img src="cover.jpg">
-    	  </div>
+          <div class="item item-avatar"ng-if="tc.task_type == 'delivery'">
+            <img src="img/delivery.png">
+            <h2 >Delivery Order</h2>
+            <p>Order Number: {{tc.order_info.oid}}</p>
+          </div>
 
-    	  <a class="item item-icon-left assertive" href="#">
-    	    <i class="icon ion-music-note"></i>
-    	    Start listening
-    	  </a>
+        	<div class="list item" ng-if="tc.task_type == 'delivery'">
+                <div class="item item-divider">
+                  Address:
+                </div>
+                <div class="item item-text-wrap" ng-click="tc.direction()">
+                  {{tc.order_info.addr}}
+                </div>
+                <a class="item item-icon-left" href="#" ng-if="tc.order_info.unit">
+                  <i class="icon ion-chatbubble-working"></i>
+                   Unit:   {{tc.order_info.unit}}
+                  
+                </a>
+                <a class="item item-icon-left" href="#">
+                  <i class="icon ion-chatbubble-working"></i>
+                   Name:   {{tc.order_info.name}}
+                  
+                </a>
 
+                <a class="item item-icon-left item-icon-right" href="#">
+                  <i class="icon ion-mic-a"></i>
+                  Tel:   {{tc.order_info.tel}}
+                  <i class="icon ion-ios-telephone-outline"></i>
+                </a>
+                <a class="item item-icon-left" href="#">
+                  <i class="icon ion-chatbubble-working"></i>
+                   Price:   {{tc.order_info.price}}
+                  
+                </a>
+
+            </div>
+
+        	<button class="button button-block button-orange" ng-click="tc.driver_action()">
+                Finish
+            </button>
     	</div>
   	</ion-content>
 </ion-view>

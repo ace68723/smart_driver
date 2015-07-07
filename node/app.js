@@ -44,10 +44,15 @@ smartApp.get('/test12', function(req, res) {
     .then( function(result) {
      console.log(result);
    })
+    .catch(function(error) {
+        console.log(error)
+    })
     driver.checkin('eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1aWQiOjI0LCJleHBpcmVkIjoiMjAxNS0wNy0wNiAxNjowNToyMyIsImlhdCI6MTQzMzYyMTEyM30.Z0Btz-R2ip-GZ4BgcTPN93MOMt1omCJuX_O_gyDB78U', '8')
     .then( function(result) {
      console.log(result);
-   })
+   }).catch(function(error) {
+        console.log(error)
+    })
     res.status(200).send('ok')
 });
 
@@ -239,6 +244,7 @@ smartApp.post('/tid_to_oid', function(req, res) {
             var deferred = Q.defer();
                 node2.tid_to_oid(tid)
                     .then(function(order_info) {
+                        console.log(order_info)
                        deferred.resolve(order_info)
                     }) 
                     .catch(function(error) {
@@ -292,6 +298,18 @@ smartApp.post('/driver_action', function(req, res) {
     var iv_action   = req.body.action;
     console.log(req.body)
     driver.action(iv_token, iv_secret, iv_tid, iv_action)
+
+        .then(function() {
+            var deferred = Q.defer();
+                node2.getTables()
+                    .then(function(result) {
+                        deferred.resolve(result);
+                    })
+                    .catch(function(error) {
+                        deferred.reject(error);
+                    });
+            return deferred.promise;
+        })
         .then(function(result) {
             res.status(200).send({
                 result: result,

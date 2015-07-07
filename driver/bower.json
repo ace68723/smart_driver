@@ -5,7 +5,8 @@
     "ionic": "v1.0.1",
     "firebase": "~2.2.7",
     "angularfire": "~1.1.2",
-    "lodash": "~3.10.0"
+    "lodash": "~3.10.0",
+    "ngCordova": "~0.1.17-alpha"
   },
   "devDependencies": {
     "angular-mocks": "~1.2.17",
