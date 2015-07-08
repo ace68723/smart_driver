@@ -213,7 +213,32 @@ smartApp.post('/action', function(req, res) {
 
 
 })
+smartApp.post('/driver_action', function(req, res) {
+    var driver = new ifDriver(pool); 
+    // var headers                = req.headers;
+    // var authorizationSplit     = headers.authorization.split(" ", 2);
+    // var token                  = authorizationSplit[1]
+    // get token to identity user
+    var iv_token    = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1aWQiOjIwLCJleHBpcmVkIjoiMjAxNS0wNi0yMSAwMDoxMDo0MyIsImlhdCI6MTQzMjI2Nzg0M30.xAPktfkYkQMIu3L1wkq4m13IpUk8OKyVvjK8IjR_nFo";
+    var iv_secret   = secret;
+    var iv_oid      = req.body.ord;
+    var iv_action   = req.body.action;
 
+    driver.action(iv_token, iv_secret, iv_oid, iv_action)
+        .then(function(result) {
+            res.status(200).send({
+                result: result,
+                msg   : 'message'
+            })
+        })
+        .catch(function(error) {
+            console.log(error)
+        })
+
+
+
+
+})
 smartApp.get('/get_addresses', function(req, res) {
     // var headers          = req.headers;
     // var authorizationSplit   = headers.authorization.split(" ", 2);

@@ -6,7 +6,7 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
-angular.module('SmartDriver', ['ionic', 'config', 'SmartDriver.controllers'])
+angular.module('SmartDriver', ['ionic', 'config', 'SmartDriver.controllers','firebase','ngCordova'])
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
@@ -32,6 +32,15 @@ angular.module('SmartDriver', ['ionic', 'config', 'SmartDriver.controllers'])
       controller: 'AppCtrl'
     })
 
+    .state('app.task', {
+      url: '/task',
+      views: {
+        'menuContent' :{
+            templateUrl: 'templates/task.html',
+            controller: 'TaskCtrl as tc'
+        }
+      }
+    })
     .state('app.search', {
       url: '/search',
       views: {
@@ -69,6 +78,6 @@ angular.module('SmartDriver', ['ionic', 'config', 'SmartDriver.controllers'])
       }
     });
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/app/playlists');
+  $urlRouterProvider.otherwise('/app/task');
 });
 

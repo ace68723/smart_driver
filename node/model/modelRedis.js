@@ -81,6 +81,7 @@ function Redis(ir_client) {
 
     this.hashDel = function(iv_tb_name, ia_key) {   
         return new Promise(function (resolve, reject) {
+
             var la_param = [ iv_tb_name ];
             for(var i = 0; i < ia_key.length; i++) {
                 la_param.push( ia_key[i] );
@@ -97,6 +98,7 @@ function Redis(ir_client) {
     
     this.sortSet = function(iv_tb_name, ia_items) {
         return new Promise(function (resolve, reject) {
+
             var lv_tb_name = iv_tb_name + (moment(new Date())).format("YYYYMMDD");
             var la_param = [ lv_tb_name ];
             for(var i = 0; i < ia_items.length; i++) {
@@ -117,11 +119,14 @@ function Redis(ir_client) {
 
     this.sortDel = function(iv_tb_name, ia_key) {
         return new Promise(function (resolve, reject) {
+             console.log('model redis',iv_tb_name,ia_key)
             var la_param = [ iv_tb_name ];
             for(var i = 0; i < ia_key.length; i++) {
                 la_param.push( ia_key[i] );
             }
+            console.log(la_param)
             ir_client.zremAsync( la_param ).then( function(result){
+                console.log('result',result)
                 resolve(result);
             }).catch(function(e) {
                 reject(e);
