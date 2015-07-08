@@ -8,11 +8,12 @@
  * Controller of the smartDriverApp
  */
 angular.module('SmartDriver')
-  .controller('TaskCtrl', function ($scope,$firebaseArray,$firebaseObject,$timeout,$http,$cordovaGeolocation,$cordovaDialogs) {
+  .controller('TaskCtrl', 
+    function ($scope,$firebaseArray,$firebaseObject,$timeout,$http,$cordovaGeolocation,$cordovaDialogs,$cordovaSms,API_URL) {
     var tc = this;
     var ref         = new Firebase("https://ajaxsmart.firebaseio.com/drivers/23/tids");
     var order_ref   = new Firebase("https://ajaxsmart.firebaseio.com/rrclient/all_orders");
-    tc.tasks    = $firebaseArray(ref);
+    tc.tasks        = $firebaseArray(ref);
 
     
     $timeout(function() {
@@ -27,7 +28,7 @@ angular.module('SmartDriver')
     function get_order_id (argument) {
     	tc.cur_tid = tc.tasks[0].$value;
 		var cur_tid_data = {'tid':tc.cur_tid}
-		$http.post('http://localhost:3000/tid_to_oid', cur_tid_data).
+		$http.post(API_URL + 'tid_to_oid', cur_tid_data).
 		  success(function(data, status, headers, config) {
 		    console.log(data)
             tc.task_type = data.task_type;
@@ -44,19 +45,36 @@ angular.module('SmartDriver')
          console.log(tc.order_info)
 
     }
+    tc.send_message = function() {
+        //CONFIGURATION
+        var options = {
+            replaceLineBreaks: false, // true to replace \n by a new line, false by default
+            android: {
+                intent: 'INTENT'  // send SMS with the native android SMS messaging
+                //intent: '' // send SMS without open any other app
+            }
+        };
 
+        $cordovaSms
+          .send(tc.order_info.tel, 'TEST', options)
+          .then(function() {
+            // Success! SMS was sent
+          }, function(error) {
+            // An error occurred
+          });
+    };
     tc.driver_action = function () {
 
         var tid_data     = {};
         tid_data.tid     = tc.cur_tid;
         tid_data.action  = 1;
-        $cordovaDialogs.confirm('message', 'title', ['button 1','button 2'])
+        $cordovaDialogs.confirm('Task Finish', 'Action', ['Confirm','Cancel'])
             .then(function(buttonIndex) {
                 // no button = 0, 'OK' = 1, 'Cancel' = 2
                 var btnIndex = buttonIndex;
                 console.log('btnIndex',btnIndex)
                 if (btnIndex == 1) {
-                    $http.post('http://localhost:3000/driver_action', tid_data).
+                    $http.post(API_URL+'driver_action', tid_data).
                       success(function(data, status, headers, config) {
                         console.log(data)
                         get_order_id()

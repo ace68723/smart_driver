@@ -1,4 +1,4 @@
-//#include <stdio.h>
+#include <stdio.h>
 #include "jobSchedule.h"
 
 double ALG::map[MAXNLOCATIONS][MAXNLOCATIONS];

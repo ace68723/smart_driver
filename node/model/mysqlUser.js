@@ -8,49 +8,55 @@ var modelRr = require("./../model/mysqlRr");
 function User(ir_pool) { 
        
 	this.create = function(iv_username, iv_password, iv_email, iv_name, iv_type, iv_secret) { 
-		var lv_username = iv_username;
-        var lv_email = iv_email;
-        var lv_name = iv_name;
-        var lv_type = iv_type;
-        var lv_status = 0;
-        var lv_secret = iv_secret;
-        var lv_date = new Date(); 
-        var lv_created = moment(lv_date).format("YYYY-MM-DD HH:mm:ss");
-        var salt = bcrypt.genSaltSync( Number( moment(lv_date).format("S") ));
-        var lv_password = bcrypt.hashSync(iv_password, salt);
+		return new Promise(function (resolve, reject) {
+            var lv_username = iv_username;
+            var lv_email = iv_email;
+            var lv_name = iv_name;
+            var lv_type = iv_type;
+            var lv_status = 0;
+            var lv_secret = iv_secret;
+            var lv_date = new Date(); 
+            var lv_created = moment(lv_date).format("YYYY-MM-DD HH:mm:ss");
+            var salt = bcrypt.genSaltSync( Number( moment(lv_date).format("S") ));
+            var lv_password = bcrypt.hashSync(iv_password, salt);
 
-        var sql_insert_user = "INSERT INTO user SET ?";
-        var value_insert_user = { };   
-        value_insert_user.username = lv_username;
-        value_insert_user.password = lv_password;
-        value_insert_user.email = lv_email;
-        value_insert_user.name = lv_name;
-        value_insert_user.type = lv_type;
-        value_insert_user.status = lv_status;
-        value_insert_user.created = lv_created;
-        var parameter_insert_user = [ value_insert_user ];
-        
-        ir_pool.queryAsync(sql_insert_user, parameter_insert_user).spread( function (rows) {
-                    console.log( rows );
-                    console.log( rows.affectedRows );
-                    if (rows.affectedRows != 0) {
-                        var lv_expired = moment(lv_date).add(lv_extension, 'days').format("YYYY-MM-DD HH:mm:ss");
-                        var lv_token = jwt.sign( { uid: rows.insertId, expired : lv_expired }, lv_secret);
-                        
-                        var sql_update_user = "UPDATE user SET ? WHERE ?? = ? ";
-                        var value_update_user = { };     
-                        value_update_user.token = lv_token;
-                        value_update_user.expired = lv_expired;
-                        var parameter_update_user = [ value_update_user, 'uid' , rows.insertId ];
-                        ir_pool.queryAsync(sql_update_user, parameter_update_user).spread( function (result) {
-                            console.log('changed ' + result.changedRows + ' rows');   
-                        }).catch(function(e) {
-                            console.log("Exception " + e);
-                        }); 
-                    }
-                }).catch(function(e) {
-                    console.log("Exception " + e);
-         });
+            var sql_insert_user = "INSERT INTO user SET ?";
+            var value_insert_user = { };   
+            value_insert_user.username = lv_username;
+            value_insert_user.password = lv_password;
+            value_insert_user.email = lv_email;
+            value_insert_user.name = lv_name;
+            value_insert_user.type = lv_type;
+            value_insert_user.status = lv_status;
+            value_insert_user.created = lv_created;
+            var parameter_insert_user = [ value_insert_user ];
+            
+            ir_pool.queryAsync(sql_insert_user, parameter_insert_user).spread( function (rows) {
+                        console.log( rows );
+                        console.log( rows.affectedRows );
+                        if (rows.affectedRows != 0) {
+                            var lv_expired = moment(lv_date).add(lv_extension, 'days').format("YYYY-MM-DD HH:mm:ss");
+                            var lv_token = jwt.sign( { uid: rows.insertId, expired : lv_expired }, lv_secret);
+                            
+                            var sql_update_user = "UPDATE user SET ? WHERE ?? = ? ";
+                            var value_update_user = { };     
+                            value_update_user.token = lv_token;
+                            value_update_user.expired = lv_expired;
+                            var parameter_update_user = [ value_update_user, 'uid' , rows.insertId ];
+                            ir_pool.queryAsync(sql_update_user, parameter_update_user).spread( function (result) {
+                                console.log('changed ' + result.changedRows + ' rows');  
+                                resolve(result); 
+                            }).catch(function(e) {
+                                console.log("Exception " + e);
+                                reject(e);
+                            }); 
+                        }
+                    }).catch(function(e) {
+                        console.log("Exception " + e);
+                         reject(e);
+                    });
+             
+        });            
     }; 
 
     this.login = function(iv_username, iv_password, iv_secret) {

@@ -79,5 +79,6 @@ angular.module('SmartDriver', ['ionic', 'config', 'SmartDriver.controllers','fir
     });
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/app/task');
-});
+})
+.constant('API_URL', 'http://ajaxmart.ca:3001/');//api url constant
 

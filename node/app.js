@@ -12,6 +12,8 @@ var ifLogin         = require("./interface/ifLogin");
 var ifNode2         = require("./interface/ifNode2");
 var ifDriver        = require("./interface/ifDriver");
 var ifRr            = require("./interface/ifRr");
+var modelUser       = require("./model/mysqlUser");
+
 
 var node2           = require("./node2");
 
@@ -131,6 +133,34 @@ smartApp.post('/authorize', function(req, res) {
     };
 
     login.authorize(iv_token,iv_secret).then(function(result) {
+            console.log(result)
+            res.status(200).send(result)
+        })
+        .catch(function(error) {
+            console.log(error);
+            res.status(401).send(error)
+        })
+
+
+
+})
+smartApp.get('/register', function(req, res) {
+     var lr_modelUser = new modelUser(pool);
+    // var authorize = req.body;
+    // console.log(authorize);
+
+    var iv_secret   = secret;
+    //check secret
+    if (!secret) {
+        getSecret();
+    };
+    var iv_username = 'aiden123';
+    var iv_password = 'aiden1234';
+    var iv_email    = '12312123@123.ca';
+    var iv_name     = 'aiden';
+    var iv_type     = '000';
+
+    lr_modelUser.create(iv_username, iv_password, iv_email, iv_name, iv_type, iv_secret).then(function(result) {
             console.log(result)
             res.status(200).send(result)
         })
