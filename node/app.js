@@ -106,17 +106,19 @@ smartApp.post('/driver_login', function(req, res) {
         getSecret();
     };
 
-    login.login(name,password,secret).then(function(result) {
-        console.log('login')
-        console.log(result)
-        res.status(200).send(result)
-    })
-    .catch(function(error) {
-        console.log(error);
-         res.status(401).send(error)
-    })
-
-
+    // login.login(name,password,secret).then(function(result) {
+    //     console.log('login')
+    //     console.log(result)
+    //     res.status(200).send(result)
+    // })
+    // .catch(function(error) {
+    //     console.log(error);
+    //      res.status(401).send(error)
+    // })
+    var test_data   = {};
+    test_data.token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1aWQiOjIzLCJleHBpcmVkIjoiMjAxNS0wNy0wNiAxNjowNToxNCIsImlhdCI6MTQzMzYyMTExNH0.XlsTYCL2k91Z9t2mh1hkrl4n44LXkv4gdHfztG6t9yM'
+    test_data.uid   = 23 
+    res.status(200).send(result)
 
 
 })
