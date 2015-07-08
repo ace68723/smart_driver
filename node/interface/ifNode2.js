@@ -24,7 +24,7 @@ function Node2( ) {
                         reject(e);
                     });
                 case 'Task':
-<<<<<<< HEAD
+
                     var la_key = [ ] ;
                     redis.getAll(1, lv_name).then( function (task_result){
                         for(var lv_task in task_result){
@@ -38,11 +38,7 @@ function Node2( ) {
                         }).catch(function(e) {
                             reject(e);
                         });   
-=======
-                    redis.sortDel(lv_name, ia_key).then( function (sort_result){
-                        console.log(sort_result)
-                        resolve(0);
->>>>>>> origin/master
+
                     }).catch(function(e) {
                         reject(e);
                     });
