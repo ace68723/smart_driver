@@ -29,8 +29,8 @@ function Node2( ) {
                     redis.getAll(1, lv_name).then( function (task_result){
                         for(var lv_task in task_result){
                             var lo_task = JSON.parse(task_result[lv_task]);
-                            for (var lo_task.tid in ia_key){
-                                if (lv_task == lv_key) la_key.push(lv_task);
+                            for (var lv_key in ia_key){
+                                if (lo_task.tid == lv_key) la_key.push(lv_task);
                             }
                         }
                         redis.sortDel(lv_name, la_key).then( function (sort_result){
