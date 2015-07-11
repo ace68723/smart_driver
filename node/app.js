@@ -118,7 +118,7 @@ smartApp.post('/driver_login', function(req, res) {
     var test_data   = {};
     test_data.token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1aWQiOjIzLCJleHBpcmVkIjoiMjAxNS0wNy0wNiAxNjowNToxNCIsImlhdCI6MTQzMzYyMTExNH0.XlsTYCL2k91Z9t2mh1hkrl4n44LXkv4gdHfztG6t9yM'
     test_data.uid   = 23 
-    res.status(200).send(result)
+    res.status(200).send(test_data)
 
 
 })
@@ -350,7 +350,7 @@ smartApp.post('/driver_action', function(req, res) {
         })
         .catch(function(error) {
             console.log(error)
-        })
+        });
 
 
 

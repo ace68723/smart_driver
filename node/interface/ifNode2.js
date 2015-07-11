@@ -30,9 +30,10 @@ function Node2( ) {
                         for(var lv_task in task_result){
                             var lo_task = JSON.parse(task_result[lv_task]);
                             for (var lv_key in ia_key){
-                                if (lo_task.tid == lv_key) la_key.push(lv_task);
+                                if (ia_key[lv_key] == lo_task.tid) la_key.push(task_result[lv_task]);
                             }
                         }
+                        console.log('delItem', lv_name, la_key)                        ;
                         redis.sortDel(lv_name, la_key).then( function (sort_result){
                             resolve(0);
                         }).catch(function(e) {

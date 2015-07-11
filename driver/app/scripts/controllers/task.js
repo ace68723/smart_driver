@@ -10,8 +10,11 @@
 angular.module('SmartDriver')
   .controller('TaskCtrl', 
     function ($scope,$firebaseArray,$firebaseObject,$timeout,$http,$cordovaGeolocation,$cordovaDialogs,$cordovaSms,API_URL) {
-    var tc = this;
-    var ref         = new Firebase("https://ajaxsmart.firebaseio.com/drivers/23/tids");
+    var tc          = this;
+    var uid         = localStorage.getItem("uid");
+    console.log('uid',uid)
+    var ref         = new Firebase("https://ajaxsmart.firebaseio.com/drivers/"+ uid +"/tids");
+    console.log("https://ajaxsmart.firebaseio.com/drivers/"+ uid +"/tids");
     var order_ref   = new Firebase("https://ajaxsmart.firebaseio.com/rrclient/all_orders");
     tc.tasks        = $firebaseArray(ref);
 
@@ -24,8 +27,9 @@ angular.module('SmartDriver')
     // 		if (t_str[0]) {} else{};
     // 	})
     get_order_id();
-    },1500)
+    },2500)
     function get_order_id (argument) {
+      console.log(tc.tasks)
     	tc.cur_tid = tc.tasks[0].$value;
 		var cur_tid_data = {'tid':tc.cur_tid}
 		$http.post(API_URL + 'tid_to_oid', cur_tid_data).
