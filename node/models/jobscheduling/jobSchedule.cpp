@@ -131,18 +131,11 @@ bool ALG::select_next_task(CDriver & driver, int iDriver, vector<CTask> & tasks,
 {
 	iSelectedTask = -1;
 	double bestEva = 0;
-	for (unsigned int j=0; j<tasks.size(); j++) if (tasks[j].iDriver == -1) { //for each unsigned tasks
+	for (unsigned int j=0; j<tasks.size(); j++) if (tasks[j].iDriver == -1) { //for each not fixed tasks
 		if (tasks[j].iPrevTask>=0 && tasks[tasks[j].iPrevTask].iDriver == -1)
 			continue;
 		if (tasks[j].iAsgnDriver>=0) { 
-			/*
-			if (tasks[j].iAsgnDriver != iDriver) 
-				continue; //this task cannot be assigned to this driver	
-			int iEnd = driver.tasksAtHand.size() -1;
-			if (driver.tasksAtHand.at(iEnd) != j) 
-				continue; //since the future jobs have been arranged, we only consider the next job
-				*/
-			continue; //only consider the job that can be assigned to this driver in this loop
+			continue; //this task is a driver's furture task
 		}
 		double evaluation = tryAddTask(j, iDriver, driver, tasks);
 		if (evaluation > bestEva) {
@@ -184,7 +177,7 @@ int ALG::findScheduleGreedy(CTime curTime, CRTime deliLimit, vector<CDriver> & d
 	}
 	//set up schedule according to each driver's taskList
 	schedule.clear();
-	for (unsigned int i=0; i<drivers.size(); i++) //if (drivers[i].taskList.size()){
+	for (unsigned int i=0; i<drivers.size(); i++) 
 	{
 		CScheduleItem si;
 		si.did = drivers[i].did;
@@ -231,9 +224,11 @@ void ALG::assignTaskToDriver(int iTask, int iDriver, vector<CDriver> & drivers, 
 	}
 	if (tasks[iTask].iNextTask >= 0) {
 		int j = tasks[iTask].iNextTask;
-		tasks[j].iAsgnDriver = iDriver;
-		drivers[iDriver].tasksAtHand.push_back(j);
-		arrange_future_tasks(drivers[iDriver], tasks);
+		if (tasks[j].iAsgnDriver == -1) {
+			tasks[j].iAsgnDriver = iDriver;
+			drivers[iDriver].tasksAtHand.push_back(j);
+			arrange_future_tasks(drivers[iDriver], tasks);
+		}
 	}
 	unsigned int n = drivers[iDriver].tasksAtHand.size();
 	printf("At %.0lf, Driver %d finishes task %d, with %d upcoming tasks:", drivers[iDriver].available, iDriver, iTask, n);
