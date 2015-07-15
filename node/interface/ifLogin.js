@@ -16,10 +16,11 @@ function Login(ir_pool) {
            
            user.login(iv_username, iv_password, iv_secret).then( function (result){
                eo_result.result = 0;
-               eo_result.token = result.token;
-               eo_result.type = result.type;
-               eo_result.lat = result.lat;
-               eo_result.lng = result.lng;
+               eo_result.token  = result.token;
+               eo_result.uid    = result.uid;
+               eo_result.type   = result.type;
+               eo_result.lat    = result.lat;
+               eo_result.lng    = result.lng;
                resolve (eo_result);   
            }).catch(function(e) {
 //               eo_result.result = 1;
@@ -28,6 +29,7 @@ function Login(ir_pool) {
            });
        });
     };
+    
 
     this.authorize = function(iv_token, iv_secret) { 
         

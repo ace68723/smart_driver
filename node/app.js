@@ -42,7 +42,7 @@ getSecret();
 smartApp.get('/test12', function(req, res) {
    
    var driver = new ifDriver(pool); 
-   driver.checkin('eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1aWQiOjIzLCJleHBpcmVkIjoiMjAxNS0wNy0wNiAxNjowNToxNCIsImlhdCI6MTQzMzYyMTExNH0.XlsTYCL2k91Z9t2mh1hkrl4n44LXkv4gdHfztG6t9yM', '8')
+   driver.checkin('eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1aWQiOjIwLCJleHBpcmVkIjoiMjAxNS0wNy0yMCAyMzo1NToxMiIsImlhdCI6MTQzNDg1ODkxMn0.steD0mo2JwNofGrJWLa0997wuQFH33Zs1rhGY_YDcao', '8')
     .then( function(result) {
      console.log(result);
    })
@@ -56,6 +56,13 @@ smartApp.get('/test12', function(req, res) {
         console.log(error)
     })
     res.status(200).send('ok')
+});
+smartApp.get('/task_test', function(req, res) {
+    var node2       = new ifNode2( ); 
+    node2.getTask().then(function(task_result) {
+        res.status(200).send(task_result) 
+    })
+    
 });
 
 smartApp.post('/tool', function(req, res) {
@@ -78,7 +85,7 @@ smartApp.post('/login', function(req, res) {
     if (!secret) {
         getSecret();
     };
-
+    
     login.login(name,password,secret).then(function(result) {
         console.log('login')
         console.log(result)
@@ -106,19 +113,19 @@ smartApp.post('/driver_login', function(req, res) {
         getSecret();
     };
 
-    // login.login(name,password,secret).then(function(result) {
-    //     console.log('login')
-    //     console.log(result)
-    //     res.status(200).send(result)
-    // })
-    // .catch(function(error) {
-    //     console.log(error);
-    //      res.status(401).send(error)
-    // })
-    var test_data   = {};
-    test_data.token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1aWQiOjIzLCJleHBpcmVkIjoiMjAxNS0wNy0wNiAxNjowNToxNCIsImlhdCI6MTQzMzYyMTExNH0.XlsTYCL2k91Z9t2mh1hkrl4n44LXkv4gdHfztG6t9yM'
-    test_data.uid   = 23 
-    res.status(200).send(test_data)
+    login.login(name,password,secret).then(function(result) {
+        console.log('login')
+        console.log(result)
+        res.status(200).send(result)
+    })
+    .catch(function(error) {
+        console.log(error);
+         res.status(401).send(error)
+    })
+    // var test_data   = {};
+    // test_data.token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1aWQiOjIzLCJleHBpcmVkIjoiMjAxNS0wNy0wNiAxNjowNToxNCIsImlhdCI6MTQzMzYyMTExNH0.XlsTYCL2k91Z9t2mh1hkrl4n44LXkv4gdHfztG6t9yM'
+    // test_data.uid   = 23 
+    // res.status(200).send(test_data)
 
 
 })
@@ -401,7 +408,7 @@ smartApp.post('/preorder', function(req, res) {
     
     var preorder    = req.body;
     
-    console.log(req.body);
+    // console.log(req.body);
 
     var iv_lat  = preorder.lat;
     var iv_lng  = preorder.lng;

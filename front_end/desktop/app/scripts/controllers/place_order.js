@@ -336,23 +336,22 @@ angular.module('smartApp')
 		}
 
 		poc.orderSubmit = function(submitData) {
-			submitData = { 		addr 	: poc.cformatted_address,
-								city 	: poc.areaCheckData.city,
-								unit 	: poc.orderData.apt,
-								postal 	: poc.areaCheckData.postalCode,	
-								tel 	: poc.orderData.tel,
-								name 	: poc.orderData.name,
-								price 	: poc.orderData.price,
-								paytype : '1',
-								// charge 	: poc.orderData.delCharge,
-								charge 	: 10.00,
-								clat 	: poc.clat,
-								clng 	: poc.clng,
-								lat		: '43.825466', 
-								lng		: '-79.288094',
-								ready	: 1800,
-								tips	: 5.00
-
+			submitData = { 	addr 	: poc.cformatted_address,
+							city 	: poc.areaCheckData.city,
+							unit 	: poc.orderData.apt,
+							postal 	: poc.areaCheckData.postalCode,	
+							tel 	: poc.orderData.tel,
+							name 	: poc.orderData.name,
+							price 	: poc.orderData.price,
+							paytype : poc.orderData.paytype,
+							// charge 	: poc.orderData.delCharge,
+							charge 	: 10.00,
+							clat 	: poc.clat,
+							clng 	: poc.clng,
+							lat		: '43.825466', 
+							lng		: '-79.288094',
+							ready	: 1800,
+							tips	: poc.orderData.tips
 			}
 
 			poc.url = 'order/'

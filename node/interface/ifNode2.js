@@ -25,7 +25,7 @@ function Node2( ) {
                     });
                 case 'Task':
 
-                    var la_key = [ ] ;
+                    var la_key = [ ];
                     redis.getAll(1, lv_name).then( function (task_result){
                         for(var lv_task in task_result){
                             var lo_task = JSON.parse(task_result[lv_task]);
@@ -33,7 +33,6 @@ function Node2( ) {
                                 if (ia_key[lv_key] == lo_task.tid) la_key.push(task_result[lv_task]);
                             }
                         }
-                        console.log('delItem', lv_name, la_key)                        ;
                         redis.sortDel(lv_name, la_key).then( function (sort_result){
                             resolve(0);
                         }).catch(function(e) {
@@ -90,7 +89,7 @@ function Node2( ) {
                         redis.getAll(2, lv_assign).then( function (assign_result){
                             
                             redis.getAll(1, lv_task).then( function (task_result){
-                            
+                                
                                 for(var lv_task_i in task_result){
                                     var lo_task         = JSON.parse(task_result[lv_task_i]);
                                     var lo_data         = { };
@@ -98,15 +97,26 @@ function Node2( ) {
                                     lo_data.location    = lo_task.location;
                                     lo_data.deadline    = Number(lo_task.deadline);
                                     lo_data.ready       = Number(lo_task.ready);
-                                    lo_data.depend      = lo_task.depend;
-                                    lo_data.oid         = lo_task.oid
+                                    lo_data.depend      = null;
+                                    lo_data.oid         = lo_task.oid;
+                                    lo_data.did         = '';
+
+                                    for (var lv_task_j in task_result){
+                                        var lo_task_link  = JSON.parse(task_result[lv_task_j]);
+                                        if (lo_task.depend == lo_task_link.tid) 
+                                                lo_data.depend = lo_task.depend;
+                                                // console.log('depend vs ',lo_task.depend,' vs',lo_task_link.tid )  
+                                    }
+
                                     if (assign_result != null) {
                                         for(var lv_assign_i in assign_result){
-                                            var lo_assign = JSON.parse(task_result[lv_task_i]);
-                                            if ( lo_assign.tid == lo_data.tid ) { lo_data.did = Number(lo_assign.did); };
+                                            var lo_assign = JSON.parse(assign_result[lv_assign_i]);
+                                            // console.log('assign_result',assign_result[lv_assign_i])
+                                            if ( lo_assign.tid == lo_data.tid ) { 
+                                                 // console.log('ifNode2 assign',lo_assign.tid == lo_data.tid, ' did',lo_assign.did)
+                                                lo_data.did = lo_assign.did
+                                            };
                                         }
-                                    } else {
-                                        lo_data.did = '';
                                     }
                                     ea_data.push( lo_data );
                                 }
@@ -198,7 +208,24 @@ function Node2( ) {
                 reject('error');
             }
         });
-    }            
+    }  
+
+    this.getTask = function() {
+        return new Promise(function (resolve, reject) {
+            console.log('ifnode2 gettask')
+            var redis = new modelRedis(client);
+            var lv_task = 'Task' + (moment(new Date())).format("YYYYMMDD");
+            
+            redis.getAll(1, lv_task).then( function (tasks_result){
+                
+                resolve(tasks_result)
+
+            })
+            .catch(function(e) {
+                reject(e);
+            });
+        })
+    }         
             
 };   
 

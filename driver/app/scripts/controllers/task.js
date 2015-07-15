@@ -9,42 +9,74 @@
  */
 angular.module('SmartDriver')
   .controller('TaskCtrl', 
-    function ($scope,$firebaseArray,$firebaseObject,$timeout,$http,$cordovaGeolocation,$cordovaDialogs,$cordovaSms,API_URL) {
+    function ($scope,$firebaseArray,$firebaseObject,$timeout,$http,$cordovaGeolocation,$cordovaDialogs,$cordovaSms,API_URL,$rootScope) {
     var tc          = this;
-    var uid         = localStorage.getItem("uid");
-    console.log('uid',uid)
-    var ref         = new Firebase("https://ajaxsmart.firebaseio.com/drivers/"+ uid +"/tids");
-    console.log("https://ajaxsmart.firebaseio.com/drivers/"+ uid +"/tids");
-    var order_ref   = new Firebase("https://ajaxsmart.firebaseio.com/rrclient/all_orders");
-    tc.tasks        = $firebaseArray(ref);
 
+    var ref;
+    var order_ref   = new Firebase("https://ajaxsmart.firebaseio.com/rrclient/all_orders");
+    $rootScope.get_uid = function() {
+        var uid         = localStorage.getItem("uid");
+        console.log('uid',uid)
+        // var ref         = new Firebase("https://ajaxsmart.firebaseio.com/drivers/"+ uid +"/tids");
+        var ref         = new Firebase("https://ajaxsmart.firebaseio.com/drivers/"+ uid +"/tids");
+        console.log("https://ajaxsmart.firebaseio.com/drivers/"+ uid +"/tids");
+        
+        tc.tasks        = $firebaseArray(ref);
+
+        ref.on('value', function(dataSnapshot) {
+                console.log(dataSnapshot.hasChildren())
+                if (dataSnapshot.hasChildren()) {
+                     tc.has_tasks = true;
+                    $timeout(function() {
+                        get_order_id();
+                     }, 200);
+                }else{
+                    tc.has_tasks = false;
+                }
+            });
+    };
+
+
+   
     
-    $timeout(function() {
+    // $timeout(function() {
     // 	_.forEach($scope.tasks,function(task,id) {
     // 		console.log(task.$value)
     // 		var t_str = task.$value.split(',');
     // 		console.log(t_str)
     // 		if (t_str[0]) {} else{};
     // 	})
-    get_order_id();
-    },2500)
+    //     ref.on('value', function(dataSnapshot) {
+    //        console.log(dataSnapshot)
+    //     });
+    // },2500)
+
     function get_order_id (argument) {
       console.log(tc.tasks)
-    	tc.cur_tid = tc.tasks[0].$value;
-		var cur_tid_data = {'tid':tc.cur_tid}
-		$http.post(API_URL + 'tid_to_oid', cur_tid_data).
-		  success(function(data, status, headers, config) {
-		    console.log(data)
-            tc.task_type = data.task_type;
-             get_order_info(data.oid) 
-		  }).
-		  error(function(data, status, headers, config) {
-		    console.log(data)
-		  });
-
+            
+            tc.cur_tid = tc.tasks[0].$value;
+            var cur_tid_data = {'tid':tc.cur_tid}
+            $http.post(API_URL + 'tid_to_oid', cur_tid_data).
+              success(function(data, status, headers, config) {
+                console.log(data)
+                tc.task_type = data.task_type;
+                $timeout(function() {
+                    get_order_info(data.oid) 
+                }, 500);
+                 
+              }).
+              error(function(data, status, headers, config) {
+                console.log(data)
+              });
+         
     }
-		
+	function task_alart () {
+        if(!tc.has_tasks){
+
+        }
+    }	
     function get_order_info (oid) {
+        console.log(oid)
         tc.order_info =  $firebaseObject(order_ref.child(oid))
          console.log(tc.order_info)
 
@@ -81,7 +113,7 @@ angular.module('SmartDriver')
                     $http.post(API_URL+'driver_action', tid_data).
                       success(function(data, status, headers, config) {
                         console.log(data)
-                        get_order_id()
+                        // get_order_id()
                       }).
                       error(function(data, status, headers, config) {
                         console.log(data)

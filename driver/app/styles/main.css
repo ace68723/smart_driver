@@ -9,3 +9,28 @@
 	font-size: 20px;
 	font-weight: 900;
 }
+.button.button-lightBlue {
+	border-color: #ff7e00;
+	background-color: #ff7e00;
+	color: #0FA;
+	font-size: 20px;
+	font-weight: 900;
+}
+
+
+.button.button-lightBlue.button-outline {
+	border-color: #00AAFF;
+	background: transparent;
+	color: #00AAFF; }
+.button.button-lightBlue.button-outline.active, .button.button-lightBlue.button-outline.activated {
+	background-color: #00AAFF;
+	box-shadow: none;
+	color: #fff; }
+
+
+
+.button-border-radius{
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+	border-radius: 10px;
+}

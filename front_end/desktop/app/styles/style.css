@@ -146,13 +146,7 @@
 	height: 85px;
 }
 
-.summary-subheader {
-    top: 44px;
-    display: block;
-    height: 135px;
-  	border-bottom: solid;
-    border-bottom-color: #ff7e00;
-}
+
 .has-summary-subheader{
 	top: 179px;
 }

@@ -11,6 +11,7 @@ function Rr(ir_pool) {
     
     this.preorder = function(iv_token, iv_secret, iv_lat, iv_lng, iv_clat, iv_clng, ia_path) {
         return new Promise(function (resolve, reject) {
+            
             var eo_result = { };
             var lr_login = new ifLogin(ir_pool);
             lr_login.authorize(iv_token, iv_secret).then( function(login_result) {
@@ -31,6 +32,7 @@ function Rr(ir_pool) {
                         eo_result.result = 0;
                         resolve(node2_result);
                     }).catch(function(e) {
+
                         eo_result.result = 1;
                         eo_result.message = e;
                         reject(e);

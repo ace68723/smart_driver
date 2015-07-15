@@ -265,22 +265,48 @@ function get_fb_driver(iv_did){
 function tid_to_oid(tid) {
     var deferred = Q.defer();//get task defer -T
     console.log('get Task')
-    node2.getTable( 'Task' )
-        .then(function(result) {
-            var tasks_tids = result;
-            console.log(tasks_tids)
-            var oid     = _.result(_.find(tasks_tids, {'tid':tid}), 'oid');
-            var depend  = _.result(_.find(tasks_tids, {'tid':tid}), 'depend');
-            if (depend == null) {
-                var task_type = 'take';
-            } else{
-                var task_type = 'delivery';
-            };
-            var order_info = {};
-            console.log(oid)
-            order_info.oid = oid;
-            order_info.task_type = task_type
-            console.log(order_info)
+    node2.getTask()
+        .then(function(tasks_result) {
+            // console.log(tasks_result)
+
+           
+            var order_info  = {};
+            _.forEach(tasks_result, function(task, key) {
+              
+              var task = JSON.parse(task)
+                if(tid === task.tid){
+                    console.log('find')
+                    if (task.depend === null) {
+                       
+                        order_info.task_type   = 'take';
+                        order_info.oid         =  task.oid
+                    } else{
+                        order_info.task_type   = 'delivery';
+                        order_info.oid         =  task.oid
+                        console.log('delivery',order_info)
+
+                    };
+                }
+
+            });
+            // console.log(tasks_result)
+            // console.log('tid_to_oid', _.find(tasks_result, _.matchesProperty('ready', 0)))
+
+            // var oid     = _.result(_.find(tasks_result, {'tid':tid}), 'oid');
+            // var depend  = _.result(_.find(tasks_result, {'tid':tid}), 'depend');
+            // console.log(_.find(tasks_result, {'tid':tid}))
+            // if (depend === null) {
+            //     var task_type = 'take';
+            // } else{
+            //     var task_type = 'delivery';
+            // };
+
+            // var order_info = {};
+            // console.log(oid)
+            // console.log(task_type)
+            // order_info.oid = oid;
+            // order_info.task_type = task_type
+            // console.log(order_info)
             deferred.resolve(order_info);//get task resolve -T
         })
         .catch(function(error) {
@@ -288,7 +314,7 @@ function tid_to_oid(tid) {
         })
         return deferred.promise;//return get taskpromise -T
 };
-
+tid_to_oid("43.825466,-79.288094,43.8512045,-79.3643745,1436988156429")
 module.exports = {  getTables     :getTables,
                     set_fb_order  :set_fb_order,
                     get_fb_order  :get_fb_order,

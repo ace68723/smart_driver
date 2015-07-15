@@ -78,7 +78,7 @@ angular.module('SmartDriver', ['ionic', 'config', 'SmartDriver.controllers','fir
       }
     });
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/app/browse');
+  $urlRouterProvider.otherwise('/app/task');
 })
 .constant('API_URL', 'http://localhost:3000/');//api url constant
 

@@ -93,7 +93,7 @@ function User(ir_pool) {
                                 var lm_rr = new modelRr(ir_pool);
                                 
                                 lm_rr.getLatLng(lv_user.uid).then( function( rr_result) {
-                                    resolve( {'lat': rr_result.lat, 'lng':rr_result.lng, 'token': lv_token, 'type': lv_user.type  }); 
+                                    resolve( {'lat': rr_result.lat, 'lng':rr_result.lng, 'token': lv_token, 'type': lv_user.type,'uid': lv_user.uid  }); 
                                 }).catch(function(e) {
                                     console.log(e);
                                     reject(e);
