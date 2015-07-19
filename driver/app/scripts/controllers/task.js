@@ -9,7 +9,7 @@
  */
 angular.module('SmartDriver')
   .controller('TaskCtrl', 
-    function ($scope,$firebaseArray,$firebaseObject,$timeout,$http,$cordovaGeolocation,$cordovaDialogs,$cordovaSms,API_URL,$rootScope) {
+    function ($scope,$firebaseArray,$firebaseObject,$timeout,$http,$cordovaGeolocation,$cordovaDialogs,$cordovaSms,$cordovaProgress,API_URL,$rootScope) {
     var tc          = this;
 
     var ref;
@@ -27,10 +27,21 @@ angular.module('SmartDriver')
                 console.log(dataSnapshot.hasChildren())
                 if (dataSnapshot.hasChildren()) {
                      tc.has_tasks = true;
-                    $timeout(function() {
-                        get_order_id();
-                     }, 200);
+                     $timeout(function() {
+                        $cordovaProgress.hide();
+                        $cordovaDialogs.alert('^_^', 'New Task', 'ok')
+                            .then(function() {
+
+                               get_order_id();
+                            });
+                        
+                      }, 5000);
                 }else{
+                    $cordovaProgress.hide();
+                        $cordovaDialogs.alert('^_^', 'Finsih All Tasks', 'ok')
+                            .then(function() {
+
+                            });
                     tc.has_tasks = false;
                 }
             });
@@ -53,7 +64,7 @@ angular.module('SmartDriver')
 
     function get_order_id (argument) {
       console.log(tc.tasks)
-            
+        if(tc.tasks[0]){
             tc.cur_tid = tc.tasks[0].$value;
             var cur_tid_data = {'tid':tc.cur_tid}
             $http.post(API_URL + 'tid_to_oid', cur_tid_data).
@@ -68,7 +79,15 @@ angular.module('SmartDriver')
               error(function(data, status, headers, config) {
                 console.log(data)
               });
-         
+        }else{
+           $cordovaDialogs.alert('Error', 'Please check your internet connection', 'ok')
+               .then(function() {
+                  $timeout(function() {
+                        get_order_id();
+                      }, 5000);
+               });
+
+        } 
     }
 	function task_alart () {
         if(!tc.has_tasks){
@@ -92,7 +111,7 @@ angular.module('SmartDriver')
         };
 
         $cordovaSms
-          .send(tc.order_info.tel, 'TEST', options)
+          .send(tc.order_info.tel, 'Hi,this is food delivery guy, I\'m 3 minutes away please pay attention :)', options)
           .then(function() {
             // Success! SMS was sent
           }, function(error) {
@@ -100,12 +119,17 @@ angular.module('SmartDriver')
           });
     };
     tc.driver_action = function () {
+        
+       
 
         var tid_data     = {};
         tid_data.tid     = tc.cur_tid;
         tid_data.action  = 1;
         $cordovaDialogs.confirm('Task Finish', 'Action', ['Confirm','Cancel'])
             .then(function(buttonIndex) {
+                
+                $cordovaProgress.showSimple(true)
+
                 // no button = 0, 'OK' = 1, 'Cancel' = 2
                 var btnIndex = buttonIndex;
                 console.log('btnIndex',btnIndex)
@@ -113,9 +137,16 @@ angular.module('SmartDriver')
                     $http.post(API_URL+'driver_action', tid_data).
                       success(function(data, status, headers, config) {
                         console.log(data)
+                       
                         // get_order_id()
                       }).
                       error(function(data, status, headers, config) {
+                       $cordovaProgress.hide();
+
+                        $cordovaDialogs.alert('Error', 'Please check your internet connection', 'ok')
+                            .then(function() {
+                               
+                            });
                         console.log(data)
                       });
                 } else{

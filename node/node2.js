@@ -131,7 +131,7 @@ var getTables = function() {
                         deferred.resolve(array);
                 })
                     .catch(function(error) {
-                         console.log('error')
+                         console.log('error',error)
                         deferred.reject(error);
                 })
 
@@ -218,7 +218,7 @@ function set_fb_driver(schedules) {
             drivers_ref.child(schedule.did).set(set_data,function(error) {
                 if (error) {
 
-                    deferredreject(error)
+                    deferred.reject(error)
                 }
             });
         })
@@ -314,7 +314,7 @@ function tid_to_oid(tid) {
         })
         return deferred.promise;//return get taskpromise -T
 };
-tid_to_oid("43.825466,-79.288094,43.8512045,-79.3643745,1436988156429")
+// tid_to_oid("43.825466,-79.288094,43.8512045,-79.3643745,1436988156429")
 module.exports = {  getTables     :getTables,
                     set_fb_order  :set_fb_order,
                     get_fb_order  :get_fb_order,

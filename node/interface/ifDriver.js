@@ -19,7 +19,7 @@ function Driver(ir_pool) {
                  var la_driver = [ ] ;
                 
                  lo_driver.did = String(auth_result.uid);
-                 lo_driver.location = '43.825466,-79.288094';
+                 lo_driver.location = '43.6664587,-79.37461960000002';
                  lo_driver.available = parseInt(moment().format("x"));
                  lo_driver.off = parseInt(moment( moment().format("YYYY-MM-DD")+' 23:59:00'  ).format("x"));
                  la_driver.push( lo_driver );

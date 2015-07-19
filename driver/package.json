@@ -54,6 +54,7 @@
     "plugin.google.maps",
     "https://github.com/apache/cordova-plugin-geolocation.git",
     "https://github.com/apache/cordova-plugin-dialogs.git",
-    "https://github.com/cordova-sms/cordova-sms-plugin.git"
+    "https://github.com/cordova-sms/cordova-sms-plugin.git",
+    "https://github.com/pbernasconi/cordova-progressIndicator.git"
   ]
 }

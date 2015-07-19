@@ -85,7 +85,7 @@ smartApp.post('/login', function(req, res) {
     if (!secret) {
         getSecret();
     };
-    
+
     login.login(name,password,secret).then(function(result) {
         console.log('login')
         console.log(result)
@@ -163,11 +163,11 @@ smartApp.get('/register', function(req, res) {
     if (!secret) {
         getSecret();
     };
-    var iv_username = 'aiden123';
-    var iv_password = 'aiden1234';
-    var iv_email    = '12312123@123.ca';
-    var iv_name     = 'aiden';
-    var iv_type     = '000';
+    var iv_username = req.body.username;
+    var iv_password = req.body.password;
+    var iv_email    = req.body.email;
+    var iv_name     = req.body.name;
+    var iv_type     = req.body.type;
 
     lr_modelUser.create(iv_username, iv_password, iv_email, iv_name, iv_type, iv_secret).then(function(result) {
             console.log(result)

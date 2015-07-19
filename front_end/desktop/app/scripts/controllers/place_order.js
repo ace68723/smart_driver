@@ -14,8 +14,8 @@ angular.module('smartApp')
 //for address test
   	poc.areaCheckData.address = '2620 Kennedy Rd';
 
-  	poc.areaCheckData.city = 'Scarborough';
-
+  	 // poc.areaCheckData.city = 'Toronto';
+  	 poc.areaCheckData.city = 'S';
   	poc.areaCheckData.postalCode = 'M1T 3H1';
 
   	poc.orderData.name = 'aiden';
@@ -44,7 +44,7 @@ angular.module('smartApp')
 		poc.getCodeAddress = function(destination) {
 			poc.showError = null;
 
-			poc.destination  = poc.areaCheckData.address + ', ' + poc.areaCheckData.city + ', ' + poc.areaCheckData.postalCode;
+			poc.destination  = poc.areaCheckData.address + ', ' + poc.areaCheckData.city + ', ' + poc.areaCheckData.postalCode + ', ON, Canada ';
 			// console.log(destination);
 
 			var request = { 'address' : poc.destination};
@@ -125,11 +125,11 @@ angular.module('smartApp')
 			//start creat a addresses array
 			poc.addresses_array = [];
 			
-			poc.task_address = [poc.clat + ',' + poc.clng , "43.825466,-79.288094"]
+			poc.task_address = [poc.clat + ',' + poc.clng , "43.6664587,-79.37461960000002"]
 	
 
 			poc.addresses.push(poc.clat + ',' + poc.clng )
-			poc.addresses.push( "43.825466,-79.288094")
+			poc.addresses.push( "43.6664587,-79.37461960000002")
 			//split address
 			poc.g_addresses = _.chunk(poc.addresses, 25);
 
@@ -251,8 +251,8 @@ angular.module('smartApp')
 		poc.preorderSubmit = function(preorderData) {
 			
 			preorderData =	{
-				lat	: '43.825466', 
-				lng	: '-79.288094',
+				lat	: '43.6664587', 
+				lng	: '-79.37461960000002',
 				clat: poc.clat,
 				clng: poc.clng
 			}
@@ -348,8 +348,8 @@ angular.module('smartApp')
 							charge 	: 10.00,
 							clat 	: poc.clat,
 							clng 	: poc.clng,
-							lat		: '43.825466', 
-							lng		: '-79.288094',
+							lat		: '43.6664587', 
+							lng		: '-79.37461960000002',
 							ready	: 1800,
 							tips	: poc.orderData.tips
 			}

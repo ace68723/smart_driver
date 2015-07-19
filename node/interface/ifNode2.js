@@ -99,7 +99,7 @@ function Node2( ) {
                                     lo_data.ready       = Number(lo_task.ready);
                                     lo_data.depend      = null;
                                     lo_data.oid         = lo_task.oid;
-                                    lo_data.did         = '';
+                                    lo_data.did         = null;
 
                                     for (var lv_task_j in task_result){
                                         var lo_task_link  = JSON.parse(task_result[lv_task_j]);
@@ -193,19 +193,26 @@ function Node2( ) {
             console.log('updateResult ifNode2 ',la_driver.length)
             if (la_driver.length > 0) { 
                 redis.hashSet('Driver', la_driver).then( function (result){
+                    console.log('la_assign.length',la_assign.length)
                     if (la_assign.length > 0) { 
+                        console.log('start delete reids')
                         redis.hashSet('Assign', la_assign).then( function (result){
+                            console.log(' delete reids done')
                             resolve(la_assign);
                         }).catch(function(e) {
                             reject(e);
                         });
+                    }else if (la_assign.length === 0){
+                        resolve('finish all tasks');
+                    }else{
+                        reject('la_assign.length < 0');
                     }
                 }).catch(function(e) {
                     reject(e);
                 });
-                           
+                          
             }else{
-                reject('error');
+                reject('la_driver.length < 0');
             }
         });
     }  

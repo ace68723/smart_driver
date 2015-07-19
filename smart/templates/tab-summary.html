@@ -1,0 +1,130 @@
+<ion-view view-title="Summary" cache-view ="false">
+			
+  			<ion-content class="padding">
+	  			<div class="card animated fadeInDown" 
+	  				 ng-if="sc.showSummary">
+		  			<div class="list">
+		  				<div id="action">
+			  			    <div class="item item-divider orange">
+			  			    	Action 
+			  			    </div>
+
+			  			 	<div class="row summary-subheader">
+
+			  			 		<div class="col col-25 orange">
+					  			    Order No.
+				  			    </div>
+
+			  			 		<div class="col col-25 orange">
+					  			    Price:
+				  			    </div>
+								
+			  			 		<div class="col col-25 orange">
+					  			    Paytype:
+				  			    </div>
+
+			  			 		<div class="col col-50 orange">
+					  			    Reason:
+				  			    </div>
+
+				  			</div>
+							
+			  			 	<div class="item row"
+			  			 		 ng-repeat="(id, action) in sc.actions"
+			  			 		 ng-click="sc.doAction(id)">
+
+			  			 		<div class="col col-25">
+					  			    {{action.oid}}
+				  			    </div>
+
+			  			 		<div class="col col-25">
+					  			    {{action.price}}
+				  			    </div>
+								
+								<div class="col col-25">
+					  			    {{action.paytype}}
+				  			    </div>
+
+			  			 		<div class="col col-50">
+					  			    {{action.reason}}
+				  			    </div>
+
+				  			</div>
+				  		</div>
+
+				  		<div id="order">
+			  			    <div class="item item-divider orange">
+			  			    	Order 
+			  			    </div>
+
+			  			 	<div class="row summary-subheader">
+
+			  			 		<div class="col col-25 orange">
+					  			    Order No.
+				  			    </div>
+
+			  			 		<div class="col col-25 orange">
+					  			    Price:
+				  			    </div>
+								
+			  			 		<div class="col col-25 orange">
+					  			    Paytype:
+				  			    </div>
+
+			  			 		<div class="col col-50 orange">
+					  			    Status:
+				  			    </div>
+
+				  			</div>
+							
+			  			 	<!-- <div class="item row"
+			  			 		 ng-repeat="(id, order) in sc.orders">
+
+			  			 		<div class="col col-25">
+					  			    {{order.oid}}
+				  			    </div>
+
+			  			 		<div class="col col-25">
+					  			    {{order.price}}
+				  			    </div>
+
+			  			 		<div class="col col-25" ng-if="order.paytype == 1">
+					  			    Paid
+				  			    </div>
+
+			  			 		<div class="col col-25" ng-if="order.paytype == 2">
+					  			    Unpay
+				  			    </div>
+
+			  			 		<div class="col col-25" ng-if="order.paytype == 1">
+					  			    Credit
+				  			    </div>
+	
+			  			 		<div class="col col-50">
+					  			    {{order.message}}
+				  			    </div>
+
+				  			</div> -->
+				  			<ul class="list animated bounceInUp">
+			  	  			    
+			  	  			    <li class="item" ng-repeat="(id, order) in sc.orders">
+				  	  			  	<div class="row">
+				  	  			  	   <div class="col col-25">{{order.oid}}</div>
+				  	  			  	   <div class="col col-25"> {{order.price}}</div>
+				  	  			  	   <div class="col col-25" ng-if="order.paytype == 1">Paid</div>
+				  	  			  	   <div class="col col-25" ng-if="order.paytype == 2">Unpay</div>
+				  	  			  	   <div class="col col-25" ng-if="order.paytype == 3">Credit</div>
+				  	  			  	   <div class="col col-25">{{order.message}}</div>
+				  	  			  	
+				  	  			  	</div>
+			  	  			    </li>
+
+	  	  					</ul>
+				  		</div>
+
+			  			
+		  			</div>
+	  			</div>
+	  		</ion-content>
+
+</ion-view>

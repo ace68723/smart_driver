@@ -7,49 +7,54 @@
 	  			<div class="card placeOrderlist">
 	  			  	<div class="item item-text-wrap">
 		  	  			
-		  	  			<form name="placeOrderForm">
-	  				  	    <span class="input input--hoshi " ng-class="{'input--filled':placeOrderForm.address.$valid}">
-	  				  	      <input class="input__field input__field--hoshi"  
-	  				  	      		 type="text" 
-	  				  	      		 name="address" 
-	  				  	      		 ng-model="poc.areaCheckData.address" 
-	  				  	      		 ng-focus="focusAddress=true"
-	  				  	      		 ng-blur="focusAddress=false"
-	  				  	      		 required  />
-	  				  	      <label class="input__label input__label--hoshi input__label--hoshi-color-1" >
-	  				  	        <span class="input__label-content input__label-content--hoshi ">Address: </span>
-	  				  	      </label>
-	  				  	    </span>
+		  	  			<form name="placeOrderForm" >
+		  	  			<div class="row">
+		  	  				<div class="col col-33">
+		  	  					<span class="input input--hoshi " ng-class="{'input--filled':placeOrderForm.address.$valid}">
+		  	  					  <input class="input__field input__field--hoshi"  
+		  	  					  		 type="text" 
+		  	  					  		 name="address" 
+		  	  					  		 ng-model="poc.areaCheckData.address" 
+		  	  					  		 ng-focus="focusAddress=true"
+		  	  					  		 ng-blur="focusAddress=false"
+		  	  					  		 required  />
+		  	  					  <label class="input__label input__label--hoshi input__label--hoshi-color-1" >
+		  	  					    <span class="input__label-content input__label-content--hoshi ">Address: </span>
+		  	  					  </label>
+		  	  					</span>
+		  	  				</div>
+		  	  				<div class="col col-33">
+		  	  					<span class="input input--hoshi" ng-class="{'input--filled':placeOrderForm.postalCode.$valid}">
+		  	  					  <input class="input__field input__field--hoshi" 
+		  	  					  		type="text"  
+		  	  					  		name="postalCode" 
+		  	  					  		ng-model="poc.areaCheckData.postalCode " 
+		  	  					  		ng-focus="focusPostalCode=true"
+		  	  					   		ng-blur="focusPostalCode=false"
+		  	  					  		required/>
+		  	  					  <label class="input__label input__label--hoshi input__label--hoshi-color-3">
+		  	  					    <span class="input__label-content input__label-content--hoshi">Postal Code:</span>
+		  	  					  </label>
+		  	  					</span>
+		  	  				</div>
+		  	  				<div class="col col-33">
+		  	  					<span class="input input--hoshi" ng-class="{'input--filled':placeOrderForm.city.$valid}">
+		  	  					  <input class="input__field input__field--hoshi" 
+		  	  					  		type="text"  
+		  	  					  		name="city" 
+		  	  					  		ng-model="poc.areaCheckData.city" 
+		  	  					  		ng-focus="focusCity=true"
+		  	  					   		ng-blur="focusCity=false"
+		  	  					  		required/>
+		  	  					  <label class="input__label input__label--hoshi input__label--hoshi-color-2">
+		  	  					    <span class="input__label-content input__label-content--hoshi">City:</span>
+		  	  					  </label>
+		  	  					</span>
 
+		  	  				</div>
 
-	  				  	   <span class="input input--hoshi" ng-class="{'input--filled':placeOrderForm.city.$valid}">
-	  				  	     <input class="input__field input__field--hoshi" 
-	  				  	     		type="text"  
-	  				  	     		name="city" 
-	  				  	     		ng-model="poc.areaCheckData.city" 
-	  				  	     		ng-focus="focusCity=true"
-	  				  	      		ng-blur="focusCity=false"
-	  				  	     		required/>
-	  				  	     <label class="input__label input__label--hoshi input__label--hoshi-color-2">
-	  				  	       <span class="input__label-content input__label-content--hoshi">City:</span>
-	  				  	     </label>
-	  				  	   </span>
-
-
-	  				  	   <span class="input input--hoshi" ng-class="{'input--filled':placeOrderForm.postalCode.$valid}">
-	  				  	     <input class="input__field input__field--hoshi" 
-	  				  	     		type="text"  
-	  				  	     		name="postalCode" 
-	  				  	     		ng-model="poc.areaCheckData.postalCode " 
-	  				  	     		ng-focus="focusPostalCode=true"
-	  				  	      		ng-blur="focusPostalCode=false"
-	  				  	     		required/>
-	  				  	     <label class="input__label input__label--hoshi input__label--hoshi-color-3">
-	  				  	       <span class="input__label-content input__label-content--hoshi">Postal Code:</span>
-	  				  	     </label>
-	  				  	   </span>
-
-	  				  	   <span class="input input--hoshi" 
+		  	  			</div>
+	  				  	  <span class="input input--hoshi" 
 	  				  	   			
 	  				  	   			ng-if=" !focusAddress && 
 	  				  	   					!focusCity && 
@@ -116,108 +121,116 @@
 			  	  			Delivery Charge: {{poc.orderData.delCharge | currency}}
 			  	  			
 			  	  			<form name="submitOrderForm">
-		  				  	    <span class="input input--hoshi" ng-class="{'input--filled':submitOrderForm.formattedAddress.$valid}">
-		  				  	   		 
-		  				  	   		 <input disabled="true"
-		  				  	   		 		class="input__field input__field--hoshi disabled-color" 
-		  				  	     			type="text"  
-		  				  	     			name="formattedAddress" 
-		  				  	     			ng-model="poc.cformatted_address" 
-		  				  	     			required/>
-		  				  	    
-			  				  	     <label class="input__label input__label--hoshi input__label--hoshi-color-4">
-			  				  	        <span ng-if="!poc.showError"
-			  				  	       		class="input__label-content input__label-content--hoshi">
-			  				  	       			Address:
-										</span>
+			  	  			<div class="row">
+			  	  				<div class="col col-50">
+			  				  	    <span class="input input--hoshi" ng-class="{'input--filled':submitOrderForm.formattedAddress.$valid}">
+			  				  	   		 
+			  				  	   		 <input disabled="true"
+			  				  	   		 		class="input__field input__field--hoshi disabled-color" 
+			  				  	     			type="text"  
+			  				  	     			name="formattedAddress" 
+			  				  	     			ng-model="poc.cformatted_address" 
+			  				  	     			required/>
+			  				  	    
+				  				  	     <label class="input__label input__label--hoshi input__label--hoshi-color-4">
+				  				  	        <span ng-if="!poc.showError"
+				  				  	       		class="input__label-content input__label-content--hoshi">
+				  				  	       			Address:
+											</span>
 
+				  				  	     </label>
+			  				  	   
+			  				  	    </span>
+			  				  	    <span class="input input--hoshi " ng-class="{'input--filled':submitOrderForm.name.$valid}">
+			  				  	      <input class="input__field input__field--hoshi"  
+				  				  	      		type="text" 
+				  				  	      		name="name" 
+				  				  	      		ng-model="poc.orderData.name" 
+						  	      		 		ng-focus="focusName=true"
+						  	      		  		ng-blur="focusName=false"
+			  				  	      		    required  />
+			  				  	      <label class="input__label input__label--hoshi input__label--hoshi-color-1" >
+			  				  	        <span class="input__label-content input__label-content--hoshi ">Name(option): </span>
+			  				  	      </label>
+			  				  	    </span>
+
+
+			  				  	   <span class="input input--hoshi" ng-class="{'input--filled':submitOrderForm.tel.$valid}">
+			  				  	     <input class="input__field input__field--hoshi" 
+			  				  	     		type="text"  
+			  				  	     		name="tel" 
+			  				  	     		ng-model="poc.orderData.tel" 
+					  	      		 		ng-focus="focusTel=true"
+					  	      		  		ng-blur="focusTel=false"
+			  				  	     		required/>
+			  				  	     <label class="input__label input__label--hoshi input__label--hoshi-color-2">
+			  				  	       <span class="input__label-content input__label-content--hoshi">Tel:</span>
 			  				  	     </label>
+			  				  	   </span>
+
+
+			  				  	  	<span class="input input--hoshi" ng-class="{'input--filled':submitOrderForm.apt.$valid}">
+				  				  	     <input class="input__field input__field--hoshi" 
+				  				  	     		type="text"  
+				  				  	     		name="apt" 
+				  				  	     		ng-model="poc.orderData.apt" 
+		  				  	     				ng-focus="focusApt=true"
+		  				  	     		 		ng-blur="focusApt=false"
+				  				  	     		required/>
+				  				  	     <label class="input__label input__label--hoshi input__label--hoshi-color-3">
+				  				  	       <span class="input__label-content input__label-content--hoshi">Unit/Apt No.(option):</span>
+				  				  	     </label>
+			  				  	   	</span>
+
+			  				  	   	
+
+			  	  				</div>
 		  				  	   
-		  				  	    </span>
-		  				  	    <span class="input input--hoshi " ng-class="{'input--filled':submitOrderForm.name.$valid}">
-		  				  	      <input class="input__field input__field--hoshi"  
-			  				  	      		type="text" 
-			  				  	      		name="name" 
-			  				  	      		ng-model="poc.orderData.name" 
-					  	      		 		ng-focus="focusName=true"
-					  	      		  		ng-blur="focusName=false"
-		  				  	      		    required  />
-		  				  	      <label class="input__label input__label--hoshi input__label--hoshi-color-1" >
-		  				  	        <span class="input__label-content input__label-content--hoshi ">Name(option): </span>
-		  				  	      </label>
-		  				  	    </span>
+		  				  	   	<div class="col col-50">
+		  				  	   		<span class="input input--hoshi" ng-class="{'input--filled':submitOrderForm.pretax.$valid}">
+				  				  	     <input class="input__field input__field--hoshi" 
+				  				  	     		type="text"  
+				  				  	     		name="pretax" 
+				  				  	     		ng-model="poc.orderData.price " 
+		  				  	     				ng-focus="focusPretax=true"
+		  				  	     		 		ng-blur="focusPretax=false"
+				  				  	     		required/>
+				  				  	     <label class="input__label input__label--hoshi input__label--hoshi-color-5">
+				  				  	       <span class="input__label-content input__label-content--hoshi">Total:</span>
+				  				  	     </label>
+			  				  	   	</span>
+   			  				  	   	<span class="input input--hoshi" ng-class="{'input--filled':submitOrderForm.tips.$valid}">
+   				  				  	     <input class="input__field input__field--hoshi" 
+   				  				  	     		type="text"  
+   				  				  	     		name="tips" 
+   				  				  	     		ng-model="poc.orderData.tips " 
+   		  				  	     				ng-focus="focusTips=true"
+   		  				  	     		 		ng-blur="focusTips=false"
+   				  				  	     		required/>
+   				  				  	     <label class="input__label input__label--hoshi input__label--hoshi-color-5">
+   				  				  	       <span class="input__label-content input__label-content--hoshi">Tips:</span>
+   				  				  	     </label>
+   			  				  	   	</span>
+   									<button ng-init="poc.orderData.paytype=1"
+   											class="button button-outline button-lightBlue button-border-radius"
+   											ng-click="poc.orderData.paytype=1"
+   											ng-class="{active:poc.orderData.paytype==1}">
+   									 Paid
+   									</button>
+   			  				  	    <button class="button button-outline button-lightBlue button-border-radius"
+   			  				  	    		ng-click="poc.orderData.paytype=2"
+   											ng-class="{active:poc.orderData.paytype==2}">
+   									  Unpay
 
 
-		  				  	   <span class="input input--hoshi" ng-class="{'input--filled':submitOrderForm.tel.$valid}">
-		  				  	     <input class="input__field input__field--hoshi" 
-		  				  	     		type="text"  
-		  				  	     		name="tel" 
-		  				  	     		ng-model="poc.orderData.tel" 
-				  	      		 		ng-focus="focusTel=true"
-				  	      		  		ng-blur="focusTel=false"
-		  				  	     		required/>
-		  				  	     <label class="input__label input__label--hoshi input__label--hoshi-color-2">
-		  				  	       <span class="input__label-content input__label-content--hoshi">Tel:</span>
-		  				  	     </label>
-		  				  	   </span>
-
-
-		  				  	  	<span class="input input--hoshi" ng-class="{'input--filled':submitOrderForm.apt.$valid}">
-			  				  	     <input class="input__field input__field--hoshi" 
-			  				  	     		type="text"  
-			  				  	     		name="apt" 
-			  				  	     		ng-model="poc.orderData.apt" 
-	  				  	     				ng-focus="focusApt=true"
-	  				  	     		 		ng-blur="focusApt=false"
-			  				  	     		required/>
-			  				  	     <label class="input__label input__label--hoshi input__label--hoshi-color-3">
-			  				  	       <span class="input__label-content input__label-content--hoshi">Unit/Apt No.(option):</span>
-			  				  	     </label>
-		  				  	   	</span>
-
-		  				  	   	<span class="input input--hoshi" ng-class="{'input--filled':submitOrderForm.pretax.$valid}">
-			  				  	     <input class="input__field input__field--hoshi" 
-			  				  	     		type="text"  
-			  				  	     		name="pretax" 
-			  				  	     		ng-model="poc.orderData.price " 
-	  				  	     				ng-focus="focusPretax=true"
-	  				  	     		 		ng-blur="focusPretax=false"
-			  				  	     		required/>
-			  				  	     <label class="input__label input__label--hoshi input__label--hoshi-color-5">
-			  				  	       <span class="input__label-content input__label-content--hoshi">Total:</span>
-			  				  	     </label>
-		  				  	   	</span>
-		  				  	   	
-		  				  	   	<span class="input input--hoshi" ng-class="{'input--filled':submitOrderForm.tips.$valid}">
-			  				  	     <input class="input__field input__field--hoshi" 
-			  				  	     		type="text"  
-			  				  	     		name="tips" 
-			  				  	     		ng-model="poc.orderData.tips " 
-	  				  	     				ng-focus="focusTips=true"
-	  				  	     		 		ng-blur="focusTips=false"
-			  				  	     		required/>
-			  				  	     <label class="input__label input__label--hoshi input__label--hoshi-color-5">
-			  				  	       <span class="input__label-content input__label-content--hoshi">Tips:</span>
-			  				  	     </label>
-		  				  	   	</span>
-								<button ng-init="poc.orderData.paytype=1"
-										class="button button-outline button-lightBlue button-border-radius"
-										ng-click="poc.orderData.paytype=1"
-										ng-class="{active:poc.orderData.paytype==1}">
-								 Paid
-								</button>
-		  				  	    <button class="button button-outline button-lightBlue button-border-radius"
-		  				  	    		ng-click="poc.orderData.paytype=2"
-										ng-class="{active:poc.orderData.paytype==2}">
-								  Unpay
-
-
-								</button>
-								<button class="button button-outline button-lightBlue button-border-radius"
-										ng-click="poc.orderData.paytype=3"
-										ng-class="{active:poc.orderData.paytype==3}">
-								  Credit
-								</button>
+   									</button>
+   									<button class="button button-outline button-lightBlue button-border-radius"
+   											ng-click="poc.orderData.paytype=3"
+   											ng-class="{active:poc.orderData.paytype==3}">
+   									  Credit
+   									</button>
+		  				  	   	</div>
+		  				  	   </div>
 		  				  	    <button class="button button-login  button-orange button-border-radius" 
 		  				  	    		ng-click="poc.preorderSubmit()"
 		  				  	    		ng-disabled="
@@ -231,7 +244,7 @@
 		  				  	      Submit
 		  				  	    </button>
 				  	  		</form>	
-			  	  			   
+		     				  	   
 			  	  			  
 					  	  		<br>
 			  	  			    <br>

@@ -56,7 +56,7 @@ function Rr(ir_pool) {
                    
                     var address = new modelAddress(ir_pool);
                     var lv_uid = auth_result.uid;
-                    address.create(iv_lat, iv_lng, iv_addr, iv_city, iv_unit, iv_postal, iv_tel, iv_name).then( function(address_result) {
+                    address.create(iv_clat, iv_clng, iv_addr, iv_city, iv_unit, iv_postal, iv_tel, iv_name).then( function(address_result) {
                         var order = new modelOrder(ir_pool);
                         order.create(lv_uid, address_result[0].aid, Number(iv_price), Number(iv_paytype), Number(iv_charge), 0, 0, Number(iv_tips), Number(iv_ready)).then( function(order_result) {
                             
