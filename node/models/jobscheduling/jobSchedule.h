@@ -6,6 +6,9 @@
 using std::string;
 using std::vector;
 #define MAXNLOCATIONS  1000
+//delayed task +5 min
+#define DELAYED_TASK_ESTIMATION_MS   300000
+
 
 /*
    class CTime
@@ -28,9 +31,10 @@ class ALG;
 class CDriver
 {
 public:
-	CDriver(CID driverID=NULL_ID, CTime availableTime=0, CTime offWorkTime=0, CLocationID availableLoc=NULL_ID)
-		:did(driverID), available(availableTime), off(offWorkTime), location(availableLoc){};
+	CDriver(CID driverID=NULL_ID, CTime availableTime=0, CTime offWorkTime=0, CLocationID availableLoc=NULL_ID, CID currentTask=NULL_ID)
+		:did(driverID), curtask(currentTask), available(availableTime), off(offWorkTime), location(availableLoc){};
 	CID 	did;
+	CID 	curtask;
 	/******* may be changed in algorithm: available ********************/
 	CTime	available; 
 	CTime	off; // when he gets off work
@@ -54,7 +58,7 @@ public:
 	CID 	tid;
 	CLocationID	location;
 	CTime	deadline; 
-	CTime	ready;  // set this to positive values if the driver has to wait when he arrives at the restaurant
+	CTime	ready;  // set this to a positive value if the driver has to wait when he arrives at the restaurant
 	CID	did; //if != NULL_DRIVERID, this task can only be assigned to this driver
 	CID	depend; // this task can only start after prevTaskID, and be carried out by the same driver
 	//double	profit, penalty; //reserved for adjusting algorithm's behavior
@@ -62,7 +66,7 @@ public:
 protected:
 	int	iVenue;
 	int	iAsgnDriver; //corresponds to did, >= 0 if it appears in driver's tasksAtHand
-	int	iDriver; //working index, >=0 only if this task appears in driver's taskList, i.e., its execution rank has been determined
+	int	iDriver; //>=0 only if this task appears in driver's taskList, i.e., its execution rank has been determined
 	int	iPrevTask;
 	int	iNextTask;
 	friend class ALG;

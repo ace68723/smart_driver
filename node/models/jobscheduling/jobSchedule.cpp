@@ -208,6 +208,10 @@ void ALG::assignTaskToDriver(int iTask, int iDriver, vector<CDriver> & drivers, 
 {
 	//printf("assign task %d to driver %d\n", iTask, iDriver);
 	drivers[iDriver].taskList.push_back(iTask);
+	if (tasks[iTask].iDriver != -1) {
+		fprintf(stderr, "internal error while assigning task to driver! task already assigned.\n");
+		return;
+	}
 	tasks[iTask].iDriver = iDriver;
 	drivers[iDriver].available += map[drivers[iDriver].iLocation][tasks[iTask].iVenue];
 	drivers[iDriver].available = calNextAvailable(drivers[iDriver].available, tasks[iTask].ready, linger);
@@ -216,11 +220,11 @@ void ALG::assignTaskToDriver(int iTask, int iDriver, vector<CDriver> & drivers, 
 		//assert the last taskAtHand is chosen 
 		int j=drivers[iDriver].tasksAtHand.size() - 1;
 		if (drivers[iDriver].tasksAtHand[j] != iTask) {
-			printf("internal error while assigning task to driver!\n");
+			fprintf(stderr, "internal error while assigning task to driver! poping task mismatch.\n");
 			return;
 		}
 		drivers[iDriver].tasksAtHand.pop_back();
-		//assert j==drivers[iDriver].tasksAtHand.size() //note we have erase the element
+		tasks[iTask].iAsgnDriver = -1; //just for consistency: iDriver>=0 --> iAsgnDriver ==-1
 	}
 	if (tasks[iTask].iNextTask >= 0) {
 		int j = tasks[iTask].iNextTask;
@@ -239,6 +243,7 @@ void ALG::assignTaskToDriver(int iTask, int iDriver, vector<CDriver> & drivers, 
 int ALG::preProcess(CTime curTime, vector<CDriver> & drivers, vector<CTask> & tasks, vector<CPath> & paths, int &nLocations)
 {
 	vector<CLocationID> locationIDs;
+	//set locations and paths
 	for (unsigned int i=0; i<paths.size(); i++) {
 		int findID = -1;
 		for (unsigned int j=0; j<locationIDs.size(); j++)
@@ -281,9 +286,13 @@ int ALG::preProcess(CTime curTime, vector<CDriver> & drivers, vector<CTask> & ta
 					map[i][j] = map[i][k] + map[k][j];
 			}
 		}
+	// set drivers, the tasklist maybe updated later according to curtask
 	for (unsigned int i=0; i<drivers.size(); i++) {
-		if (drivers[i].available <= curTime)
+		if (drivers[i].available <= curTime) {
 			drivers[i].available = curTime;
+			if (drivers[i].curtask != NULL_ID) 
+				drivers[i].available += DELAYED_TASK_ESTIMATION_MS;
+		}
 		drivers[i].tasksAtHand.clear();
 		drivers[i].taskList.clear();
 		drivers[i].origin_available = drivers[i].available;
@@ -301,15 +310,21 @@ int ALG::preProcess(CTime curTime, vector<CDriver> & drivers, vector<CTask> & ta
 	for (unsigned int i=0; i<tasks.size(); i++) tasks[i].iNextTask = -1;
 	for (unsigned int i=0; i<tasks.size(); i++) {
 		tasks[i].iDriver = -1;
+		for (unsigned int j=0; j<drivers.size(); j++) {
+			if (drivers[j].curtask == tasks[i].tid) {
+				tasks[i].iDriver = j;
+				drivers[j].taskList.push_back(i);
+				break;
+			}
+		}
 		tasks[i].iAsgnDriver = -1;
-		if (tasks[i].did != NULL_ID) {
+		if (tasks[i].iDriver == -1 && tasks[i].did != NULL_ID) { //ignore tasks[i].did if it is someone's curtask
 			for (unsigned int j=0; j<drivers.size(); j++)
 				if (drivers[j].did == tasks[i].did) {
 					drivers[j].tasksAtHand.push_back(i);
 					tasks[i].iAsgnDriver = j;
 					break;
 				} 
-			//assert(tasks[i].iAsgnDriver != -1); //or return false;
 			if (tasks[i].iAsgnDriver == -1) return E_UNKNOWN_DRIVER_TASK;
 		}
 		tasks[i].iPrevTask = -1;
@@ -320,7 +335,6 @@ int ALG::preProcess(CTime curTime, vector<CDriver> & drivers, vector<CTask> & ta
 					tasks[j].iNextTask = i;
 					break;
 				}
-			//assert(tasks[i].iPrevTask != -1); //or return false;
 			if (tasks[i].iPrevTask == -1) return E_UNKNOWN_DEPEND_TASK;
 		}
 		tasks[i].iVenue = -1;
@@ -329,14 +343,31 @@ int ALG::preProcess(CTime curTime, vector<CDriver> & drivers, vector<CTask> & ta
 				tasks[i].iVenue = j;
 				break;
 			}
-			//assert(tasks[i].iVenue != -1); //or return false;
-			if (tasks[i].iVenue == -1) return E_UNKNOWN_LOC_TASK;
+		if (tasks[i].iVenue == -1) return E_UNKNOWN_LOC_TASK;
 	}
+
+	for (unsigned int i=0; i<tasks.size(); i++)
+		if (tasks[i].iDriver >=0) {
+			int j = tasks[i].iDriver;
+			//check for consistency, not necessary 
+			if (tasks[i].iVenue != drivers[j].iLocation)
+				fprintf(stderr, "driver's available location and tasks's location mismatch.\n");
+			if (tasks[i].iNextTask >=0 && tasks[tasks[i].iNextTask].iAsgnDriver != j)
+				fprintf(stderr, "delivery task not properly pre-assigned.\n");
+		}
+
+	for (unsigned int i=0; i<drivers.size(); i++) {
+		if (drivers[i].curtask != NULL_ID && drivers[i].taskList.size() != 1)
+			return E_UNKNOWN_DRIVER_TASK;
+	}
+
+
 	for (unsigned int i=0; i<drivers.size(); i++) 
 		arrange_future_tasks(drivers[i], tasks); //after the arrangement, the tasks are in reverse order
 
 	return E_NORMAL;
 }
+/*
 int ALG::findScheduleBasic(CTime curTime, CRTime deliLimit, vector<CDriver> & drivers, vector<CTask> & tasks, vector<CPath> & paths, vector<CScheduleItem> &schedule)
 {
 	int nLocations;
@@ -388,4 +419,5 @@ int ALG::findScheduleBasic(CTime curTime, CRTime deliLimit, vector<CDriver> & dr
 	}
 	return E_NORMAL;
 }
+*/
 

@@ -25,7 +25,8 @@ bool parseInput(const char * cstr, CTime & curTime, CRTime &deliLimit, vector<CD
 		CTime avlbTime = driversA[i]["available"].asDouble();
 		CTime offWorkTime = driversA[i]["off"].asDouble();
 		CLocationID avlbLoc = driversA[i]["location"].asCString();
-		drivers.push_back(CDriver(driverID, avlbTime, offWorkTime, avlbLoc));
+		CID curTask = driversA[i]["curtask"].isNull() ? NULL_ID : driversA[i]["curtask"].asCString(); 
+		drivers.push_back(CDriver(driverID, avlbTime, offWorkTime, avlbLoc, curTask));
 	}
 	for (unsigned int i=0; i<tasksA.size(); i++) {
 		CID id = tasksA[i]["tid"].asCString();
