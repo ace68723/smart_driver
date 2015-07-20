@@ -85,7 +85,7 @@ void Method(const FunctionCallbackInfo<Value>& args) {
 	String::Utf8Value str(args[0]->ToString());
 	cstr = *str;
 
-	bool ret = false;
+	int ret;
 	CTime curTime;
 	CRTime deliLimit;
 	vector<CDriver> drivers;
