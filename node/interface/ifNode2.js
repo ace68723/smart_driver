@@ -179,6 +179,7 @@ function Node2( ) {
                     lo_driver.available = lo_data.available;
                     lo_driver.location = lo_data.location;
                     lo_driver.off = lo_data.off;
+                    lo_driver.curtask = lo_data.tids[0];
                     for(var lv_tid in lo_data.tids){
                         var lo_assign = { };
                         lo_assign.tid = lo_data.tids[lv_tid];
