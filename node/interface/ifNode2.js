@@ -79,6 +79,9 @@ function Node2( ) {
                             lo_data.location = lo_result.location;
                             lo_data.available = lo_result.available;
                             lo_data.off = lo_result.off;
+                            if (lo_result.curtask != null)
+                                lo_data.curtask = lo_result.curtask;
+                            else lo_data.curtask = null;
                             ea_data.push( lo_result );
                         }     
                         resolve(ea_data);
