@@ -82,5 +82,5 @@ angular.module('SmartDriver', ['ionic', 'config', 'SmartDriver.controllers','fir
 
   $httpProvider.interceptors.push('authInterceptor');
 })
-.constant('API_URL', 'http://localhost:3000/');//api url constant
+.constant('API_URL', 'http://ajaxmart.ca:3000/');//api url constant
 

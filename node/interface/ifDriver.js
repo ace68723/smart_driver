@@ -79,14 +79,13 @@ function Driver(ir_pool) {
                                 eo_result.message       = 'didn\'t check in timeout';
                                 eo_result.server_time   = server_time;    
                                 eo_result.off_time      = driver.off_time;         
-                                reject(eo_result); 
+                                resolve(eo_result); 
                             }
                         }
                     });
-                    var error           = {};
-                    error.result        = 1;
-                    error.message       = 'didn\'t check in';
-                    reject(error); 
+                    eo_result.result        = 1;
+                    eo_result.message       = 'didn\'t check in';
+                    resolve(eo_result); 
                 }).catch(function(e) {
                     console.log(e)
                     eo_result.result  = 1;
