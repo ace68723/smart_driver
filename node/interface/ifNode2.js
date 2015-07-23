@@ -11,7 +11,7 @@ function Node2( ) {
     
     this.delItem = function( iv_name, ia_key ) {
         return new Promise(function (resolve, reject) {
-            console.log(ia_key);
+            console.log('delItem',ia_key);
             var redis = new modelRedis(client);
             var lv_name = redis.getTableName( iv_name );
             switch (iv_name){
@@ -82,6 +82,7 @@ function Node2( ) {
                             if (lo_result.curtask != null)
                                 lo_data.curtask = lo_result.curtask;
                             else lo_data.curtask = null;
+                            console.log('lo_data.curtask',lo_data.curtask)
                             ea_data.push( lo_result );
                         }     
                         resolve(ea_data);
@@ -176,13 +177,20 @@ function Node2( ) {
             
             for(var lv_data in ia_data){
                 var lo_data = ia_data[lv_data];
+                console.log('ifNode2 lo_data', lo_data)
                 // if (lo_data.updated == 1) {
                     var lo_driver = { };
                     lo_driver.did = lo_data.did;
                     lo_driver.available = lo_data.available;
                     lo_driver.location = lo_data.location;
                     lo_driver.off = lo_data.off;
-                    lo_driver.curtask = lo_data.tids[0];
+                    
+                    if (lo_data.tids) {
+                        lo_driver.curtask = lo_data.tids[0];
+                    }else{
+                        lo_driver.curtask = null;
+                    }
+                   
                     for(var lv_tid in lo_data.tids){
                         var lo_assign = { };
                         lo_assign.tid = lo_data.tids[lv_tid];

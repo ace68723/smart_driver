@@ -4,6 +4,7 @@ var cors            = require('cors');
 var bodyParser      = require('body-parser');
 var Q               = require('q');
 var _               = require('lodash');
+var moment          = require('moment');
 
 var mysql           = require('./connection/dbMysql');
 var pool            = (new mysql).pool;
@@ -42,14 +43,14 @@ getSecret();
 smartApp.get('/test12', function(req, res) {
    
    var driver = new ifDriver(pool); 
-   driver.checkin('eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1aWQiOjIwLCJleHBpcmVkIjoiMjAxNS0wNy0yMCAyMzo1NToxMiIsImlhdCI6MTQzNDg1ODkxMn0.steD0mo2JwNofGrJWLa0997wuQFH33Zs1rhGY_YDcao', '8')
+   driver.checkin('eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1aWQiOjMzLCJleHBpcmVkIjoiMjAxNS0wOC0xNCAyMzoxMTowMyIsImlhdCI6MTQzNzAxNjI2M30.wQq-KUvj0pyO9JEeYRmwOrUd9XDLwaqybPX9h58crWw', '8')
     .then( function(result) {
      console.log(result);
    })
     .catch(function(error) {
         console.log(error)
     })
-    driver.checkin('eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1aWQiOjI0LCJleHBpcmVkIjoiMjAxNS0wNy0wNiAxNjowNToyMyIsImlhdCI6MTQzMzYyMTEyM30.Z0Btz-R2ip-GZ4BgcTPN93MOMt1omCJuX_O_gyDB78U', '8')
+    driver.checkin('eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1aWQiOjM0LCJleHBpcmVkIjoiMjAxNS0wOC0xNCAyMjoxNDo1MCIsImlhdCI6MTQzNzAxMjg5MH0.DS304gdn65z2ameTaAEvJ3gs2T_VYTZ9emQf3fcChSA', '8')
     .then( function(result) {
      console.log(result);
    }).catch(function(error) {
@@ -71,6 +72,7 @@ smartApp.post('/tool', function(req, res) {
    getSecret();
    res.status(200).send('ok')
 })
+
 
 
 smartApp.post('/login', function(req, res) {
@@ -129,17 +131,95 @@ smartApp.post('/driver_login', function(req, res) {
 
 
 })
+smartApp.post('/driver_checkin', function(req, res) {
+   var headers                = req.headers;
+   var body                   = req.body;
+   var authorizationSplit     = headers.authorization.split(" ", 2);
+   var token                  = authorizationSplit[1]
+   // console.log(req.body)
+   if (!secret) {
+       getSecret();
+   };//check secret
+
+   var iv_token    = token;
+   var iv_secret   = secret;
+
+   var driver = new ifDriver(pool); 
+   driver.checkin(token,secret)
+    .then(function(eo_result) {
+        res.status(200).send(eo_result)
+
+    })
+    .catch(function(eo_result) {
+        res.status(401).send(eo_result)
+    })
+  
+    
+});
+smartApp.post('/driver_ischeckin', function(req, res) {
+   var headers                = req.headers;
+   var body                   = req.body;
+   var authorizationSplit     = headers.authorization.split(" ", 2);
+   var token                  = authorizationSplit[1]
+   // console.log(req.body)
+   if (!secret) {
+       getSecret();
+   };//check secret
+
+   var iv_token    = token;
+   var iv_secret   = secret;
+
+   var driver = new ifDriver(pool); 
+   
+   driver.ischeckin(token,secret)
+    .then(function(eo_result) {
+        res.status(200).send(eo_result)
+
+    })
+    .catch(function(eo_result) {
+        res.status(401).send(eo_result)
+    })
+    
+});
+smartApp.post('/driver_checkout', function(req, res) {
+   var headers                = req.headers;
+   var body                   = req.body;
+   var authorizationSplit     = headers.authorization.split(" ", 2);
+   var token                  = authorizationSplit[1]
+   // console.log(req.body)
+   if (!secret) {
+       getSecret();
+   };//check secret
+
+   var iv_token    = token;
+   var iv_secret   = secret;
+
+   var driver = new ifDriver(pool); 
+   
+   driver.checkout(token,secret)
+    .then(function(eo_result) {
+        res.status(200).send(eo_result)
+
+    })
+    .catch(function(eo_result) {
+        res.status(401).send(eo_result)
+    })
+    
+});
 smartApp.post('/authorize', function(req, res) {
     
-    // var authorize = req.body;
-    // console.log(authorize);
+    var headers                = req.headers;
+    var authorizationSplit     = headers.authorization.split(" ", 2);
+    var token                  = authorizationSplit[1]
 
-    var iv_token    = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1aWQiOjIwLCJleHBpcmVkIjoiMjAxNS0wNi0yMSAwMDoxMDo0MyIsImlhdCI6MTQzMjI2Nzg0M30.xAPktfkYkQMIu3L1wkq4m13IpUk8OKyVvjK8IjR_nFo";
-    var iv_secret   = secret;
-    //check secret
     if (!secret) {
         getSecret();
-    };
+    };//check secret
+
+    var iv_token    = token;
+    var iv_secret   = secret;
+ 
+
 
     login.authorize(iv_token,iv_secret).then(function(result) {
             console.log(result)
@@ -183,15 +263,15 @@ smartApp.get('/register', function(req, res) {
 })
 
 smartApp.get('/get_summary', function(req, res) {
-    // var headers                = req.headers;
-    // var authorizationSplit     = headers.authorization.split(" ", 2);
-    // var token                  = authorizationSplit[1]
+    var headers                = req.headers;
+    var authorizationSplit     = headers.authorization.split(" ", 2);
+    var token                  = authorizationSplit[1]
         // get token to identity user
     // console.log(token);
-    // if (!secret) {
-    //     getSecret();
-    // };
-    var iv_token    = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1aWQiOjIwLCJleHBpcmVkIjoiMjAxNS0wNi0yMSAwMDoxMDo0MyIsImlhdCI6MTQzMjI2Nzg0M30.xAPktfkYkQMIu3L1wkq4m13IpUk8OKyVvjK8IjR_nFo";
+    if (!secret) {
+        getSecret();
+    };
+    var iv_token    = token;
     var iv_secret   = secret;
 
     login.authorize(iv_token,iv_secret).then(function(auth_result) {
@@ -221,15 +301,15 @@ smartApp.get('/get_summary', function(req, res) {
 
 })
 smartApp.get('/get_driver', function(req, res) {
-    // var headers                = req.headers;
-    // var authorizationSplit     = headers.authorization.split(" ", 2);
-    // var token                  = authorizationSplit[1]
+    var headers                = req.headers;
+    var authorizationSplit     = headers.authorization.split(" ", 2);
+    var token                  = authorizationSplit[1]
         // get token to identity user
-    // console.log(token);
-    // if (!secret) {
-    //     getSecret();
-    // };
-    var iv_token    = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1aWQiOjIwLCJleHBpcmVkIjoiMjAxNS0wNi0yMSAwMDoxMDo0MyIsImlhdCI6MTQzMjI2Nzg0M30.xAPktfkYkQMIu3L1wkq4m13IpUk8OKyVvjK8IjR_nFo";
+    console.log(token);
+    if (!secret) {
+        getSecret();
+    };
+    var iv_token    = token;
     var iv_secret   = secret;
 
     login.authorize(iv_token,iv_secret).then(function(auth_result) {
@@ -260,15 +340,14 @@ smartApp.get('/get_driver', function(req, res) {
 
 })
 smartApp.post('/tid_to_oid', function(req, res) {
-    // var headers                = req.headers;
-    // var authorizationSplit     = headers.authorization.split(" ", 2);
-    // var token                  = authorizationSplit[1]
+    var headers                = req.headers;
+    var authorizationSplit     = headers.authorization.split(" ", 2);
+    var token                  = authorizationSplit[1]
         // get token to identity user
-    // console.log(token);
-    // if (!secret) {
-    //     getSecret();
-    // };
-    var iv_token    = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1aWQiOjIwLCJleHBpcmVkIjoiMjAxNS0wNi0yMSAwMDoxMDo0MyIsImlhdCI6MTQzMjI2Nzg0M30.xAPktfkYkQMIu3L1wkq4m13IpUk8OKyVvjK8IjR_nFo";
+    if (!secret) {
+        getSecret();
+    };
+    var iv_token    = token;
     var iv_secret   = secret;
 
     var tid         = req.body.tid;
@@ -302,11 +381,16 @@ smartApp.post('/tid_to_oid', function(req, res) {
 
 })
 smartApp.post('/action', function(req, res) {
-    // var headers                = req.headers;
-    // var authorizationSplit     = headers.authorization.split(" ", 2);
-    // var token                  = authorizationSplit[1]
+    var headers                = req.headers;
+    var authorizationSplit     = headers.authorization.split(" ", 2);
+    var token                  = authorizationSplit[1]
     // get token to identity user
-    var iv_token    = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1aWQiOjIwLCJleHBpcmVkIjoiMjAxNS0wNi0yMSAwMDoxMDo0MyIsImlhdCI6MTQzMjI2Nzg0M30.xAPktfkYkQMIu3L1wkq4m13IpUk8OKyVvjK8IjR_nFo";
+    
+    if (!secret) {
+        getSecret();
+    };
+
+    var iv_token    = token;
     var iv_secret   = secret;
     var iv_oid      = req.body.oid;
     var iv_action   = req.body.action;
@@ -327,11 +411,16 @@ smartApp.post('/action', function(req, res) {
 })
 smartApp.post('/driver_action', function(req, res) {
     var driver = new ifDriver(pool); 
-    // var headers                = req.headers;
-    // var authorizationSplit     = headers.authorization.split(" ", 2);
-    // var token                  = authorizationSplit[1]
+    var headers                = req.headers;
+    var authorizationSplit     = headers.authorization.split(" ", 2);
+    var token                  = authorizationSplit[1]
     // get token to identity user
-    var iv_token    = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1aWQiOjIwLCJleHBpcmVkIjoiMjAxNS0wNi0yMSAwMDoxMDo0MyIsImlhdCI6MTQzMjI2Nzg0M30.xAPktfkYkQMIu3L1wkq4m13IpUk8OKyVvjK8IjR_nFo";
+
+        if (!secret) {
+        getSecret();
+    };
+
+    var iv_token    = token;
     var iv_secret   = secret;
     var iv_tid      = req.body.tid;
     var iv_action   = req.body.action;

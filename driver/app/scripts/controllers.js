@@ -1,7 +1,7 @@
 'use strict';
 angular.module('SmartDriver.controllers', [])
 
-.controller('AppCtrl', function($scope, $ionicModal, $timeout, $http,API_URL,$location, $rootScope) {
+.controller('AppCtrl', function($scope, $ionicModal, $timeout, $http,API_URL,$location, $rootScope,authToken) {
   // Form data for the login modal
   $scope.loginData = {};
 
@@ -28,7 +28,6 @@ angular.module('SmartDriver.controllers', [])
           $scope.login(); 
         }else{
             var auth_data   = {}
-            auth_data.token = token;
             $http.post(API_URL + 'authorize', auth_data).
               success(function(data, status, headers, config) {
                console.log(data)
@@ -51,7 +50,7 @@ angular.module('SmartDriver.controllers', [])
             var uid     = data.uid;
             var token   = data.token;
             localStorage.setItem("uid", uid);
-            localStorage.setItem("token", token);
+            authToken.setToken(token);
             $scope.closeLogin();
             $location.path('/app/task')
             $rootScope.get_uid()

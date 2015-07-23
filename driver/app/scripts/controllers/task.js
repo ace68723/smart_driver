@@ -9,7 +9,7 @@
  */
 angular.module('SmartDriver')
   .controller('TaskCtrl', 
-    function ($scope,$firebaseArray,$firebaseObject,$timeout,$http,$cordovaGeolocation,$cordovaDialogs,$cordovaSms,$cordovaProgress,API_URL,$rootScope) {
+    function ($scope,$firebaseArray,$firebaseObject,$timeout,$http,$cordovaGeolocation,$cordovaDialogs,$cordovaSms,API_URL,$rootScope,driver) {
     var tc          = this;
 
     var ref;
@@ -28,7 +28,7 @@ angular.module('SmartDriver')
                 if (dataSnapshot.hasChildren()) {
                      tc.has_tasks = true;
                      $timeout(function() {
-                        $cordovaProgress.hide();
+                        // $cordovaProgress.hide();
                         $cordovaDialogs.alert('^_^', 'New Task', 'ok')
                             .then(function() {
 
@@ -37,7 +37,7 @@ angular.module('SmartDriver')
                         
                       }, 5000);
                 }else{
-                    $cordovaProgress.hide();
+                    // $cordovaProgress.hide();
                         $cordovaDialogs.alert('^_^', 'Finsih All Tasks', 'ok')
                             .then(function() {
 
@@ -47,6 +47,96 @@ angular.module('SmartDriver')
             });
     };
 
+
+
+    $rootScope.do_checkin = function() {
+        $cordovaDialogs.confirm('Please Check In ', 'Action', ['Confirm','Cancel'])
+            .then(function(buttonIndex) {
+                
+                // $cordovaProgress.showSimple(true)
+
+                // no button = 0, 'OK' = 1, 'Cancel' = 2
+                var btnIndex = buttonIndex;
+                console.log('btnIndex',btnIndex)
+                if (btnIndex == 1) {
+                    driver.checkin()
+                    .then(function(io_result) {
+                        var result = io_result.result
+                        if (result == 0) {
+                            $rootScope.driver_checkin = true;     
+                        } else{
+                            $cordovaDialogs.alert('Error', 'Check in fail', 'ok')
+                            .then(function() {
+                               
+                            });
+                        };
+                    })
+                    .catch(function() {
+                        $cordovaDialogs.alert('Error', 'Please check your internet connection', 'ok')
+                        .then(function() {
+                           
+                        });
+                    })
+                   
+                } else{
+                    return
+                };
+            });
+    }
+    $rootScope.do_checkout = function() {
+        $cordovaDialogs.confirm('Check Out ', 'Action', ['Confirm','Cancel'])
+            .then(function(buttonIndex) {
+                
+                // $cordovaProgress.showSimple(true)
+
+                // no button = 0, 'OK' = 1, 'Cancel' = 2
+                var btnIndex = buttonIndex;
+                console.log('btnIndex',btnIndex)
+                if (btnIndex == 1) {
+                    driver.checkout()
+                    .then(function(io_result) {
+                        var result = io_result.result
+                        if (result == 0) {
+                            $rootScope.driver_checkin = false;     
+                        } else{
+                            $cordovaDialogs.alert('Error', 'Check out fail', 'ok')
+                            .then(function() {
+                               
+                            });
+                        };
+                    })
+                    .catch(function() {
+                        $cordovaDialogs.alert('Error', 'Please check your internet connection', 'ok')
+                        .then(function() {
+                           
+                        });
+                    })
+                   
+                } else{
+                    return
+                };
+            });
+    }
+
+    $rootScope.do_ischeckin = function() {
+        driver.ischeckin()
+        .then(function(io_result) {
+            var result = io_result.result;
+            if (result == 0) {
+                $rootScope.driver_checkin = true;          
+            } else{
+                $rootScope.driver_checkin = false;
+                $rootScope.do_checkin(); 
+            };
+        })
+        .catch(function() {
+            $cordovaDialogs.alert('Error', 'Please check your internet connection', 'ok')
+            .then(function() {
+               
+            });
+        })
+    }
+    $rootScope.do_ischeckin()
 
    
     
@@ -128,7 +218,7 @@ angular.module('SmartDriver')
         $cordovaDialogs.confirm('Task Finish', 'Action', ['Confirm','Cancel'])
             .then(function(buttonIndex) {
                 
-                $cordovaProgress.showSimple(true)
+                // $cordovaProgress.showSimple(true)
 
                 // no button = 0, 'OK' = 1, 'Cancel' = 2
                 var btnIndex = buttonIndex;
@@ -141,7 +231,7 @@ angular.module('SmartDriver')
                         // get_order_id()
                       }).
                       error(function(data, status, headers, config) {
-                       $cordovaProgress.hide();
+                       // $cordovaProgress.hide();
 
                         $cordovaDialogs.alert('Error', 'Please check your internet connection', 'ok')
                             .then(function() {

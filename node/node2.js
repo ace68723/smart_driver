@@ -138,7 +138,7 @@ var getTables = function() {
             return deferred.promise;                    
     })
         .then(function(array) {
-                console.log('before fb driver',array.schedules[0].tids)
+                console.log('before fb driver',array.schedules)
                 set_fb_driver(array.schedules).then(function() {
                      deferred.resolve('done');
                      console.log('all done')
