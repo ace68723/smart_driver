@@ -51,10 +51,13 @@
     "org.apache.cordova.statusbar",
     "org.apache.cordova.console",
     "org.apache.cordova.device",
-    "plugin.google.maps",
     "https://github.com/apache/cordova-plugin-geolocation.git",
     "https://github.com/apache/cordova-plugin-dialogs.git",
     "https://github.com/cordova-sms/cordova-sms-plugin.git",
-    "https://github.com/pbernasconi/cordova-progressIndicator.git"
+    "https://github.com/pbernasconi/cordova-progressIndicator.git",
+    "https://github.com/EddyVerbruggen/cordova-plugin-actionsheet.git",
+    "https://github.com/xu-li/cordova-plugin-wechat",
+    "https://github.com/wildabeast/BarcodeScanner.git",
+    "org.apache.cordova.network-information"
   ]
 }

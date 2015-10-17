@@ -1,0 +1,44 @@
+<ion-view title="配送列表">
+	<ion-nav-buttons side="right">
+	      <button  class="button ion-ios-camera-outline" style="font-size: 33px;" ng-click="tlc.scan_qrcode()">
+	        <!-- 123 -->
+	      </button>
+	</ion-nav-buttons>
+  	<ion-content class="has-header">
+		<div class="list">
+
+		  	<!-- <div class="item item-divider" ng-click="tlc.action(aid,'365 prince of wales drive')">
+		    	当前配送地址:
+		    	</br>365 prince of wales drive
+
+		  	</div>
+
+		  	<div class="item">
+		    	oid:1
+		  	</div> -->
+		  	<div ng-repeat="(id,lo_tasks) in tlc.la_tasks">
+	  		  	<div class="item item-divider" ng-click="tlc.set_destination('365 prince of wales drive')">
+	  		  	  	{{lo_tasks.addr}}
+
+	  			</div>
+	  			<div ng-repeat="(id,lo_task) in lo_tasks.subtasks" class="item">
+	  		    	订单号:{{lo_task.oid}}
+	  		    	</br>
+	  		    	税后总价:{{lo_task.total | currency}}
+	  		  	</div>
+		  	</div>
+		  	
+		  	<!-- <div class="item item-divider" ng-click="tlc.set_destination('365 prince of wales drive')">
+		  	  	388 prince of wales drive
+
+			</div>
+			<div class="item">
+		    	oid:1
+		  	</div>
+		  	{{tlc.la_tasks}} -->
+		</div>
+		<button ng-click="tlc.isWechatInstalled()">是否安装微信</button>
+		<button ng-click="tlc.doWechatAuth()">授权</button>
+
+	</ion-content>	
+</ion-view>

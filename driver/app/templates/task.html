@@ -1,6 +1,6 @@
 <ion-view title="Tasks">
   	<ion-content class="has-header">
-    	<div class="list card" >
+    	<div class="list card" ng-if="tc.has_tasks" >
 
     	  <div class="item item-avatar"ng-if="tc.task_type == 'take'">
     	    <img src="img/take.png">
@@ -77,5 +77,10 @@
                 Finish
             </button>
     	</div>
+      <div class="card"ng-if="!tc.has_tasks">
+        <div class="item item-text-wrap">
+          Ajaxmart.ca Driver
+        </div>
+      </div>
   	</ion-content>
 </ion-view>

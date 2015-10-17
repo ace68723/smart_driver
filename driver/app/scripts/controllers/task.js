@@ -9,7 +9,7 @@
  */
 angular.module('SmartDriver')
   .controller('TaskCtrl', 
-    function ($scope,$firebaseArray,$firebaseObject,$timeout,$http,$cordovaGeolocation,$cordovaDialogs,$cordovaSms,API_URL,$rootScope,driver) {
+    function ($scope,$firebaseArray,$firebaseObject,$timeout,$http,$cordovaGeolocation,$cordovaDialogs,$cordovaSms,$cordovaProgress,API_URL,$rootScope,driver) {
     var tc          = this;
 
     var ref;
@@ -26,18 +26,19 @@ angular.module('SmartDriver')
         ref.on('value', function(dataSnapshot) {
                 console.log(dataSnapshot.hasChildren())
                 if (dataSnapshot.hasChildren()) {
-                     tc.has_tasks = true;
+                     
                      $timeout(function() {
-                        // $cordovaProgress.hide();
+                        $cordovaProgress.hide();
                         $cordovaDialogs.alert('^_^', 'New Task', 'ok')
                             .then(function() {
 
                                get_order_id();
+                               tc.has_tasks = true;
                             });
                         
                       }, 5000);
                 }else{
-                    // $cordovaProgress.hide();
+                    $cordovaProgress.hide();
                         $cordovaDialogs.alert('^_^', 'Finsih All Tasks', 'ok')
                             .then(function() {
 
@@ -136,21 +137,8 @@ angular.module('SmartDriver')
             });
         })
     }
-    $rootScope.do_ischeckin()
+    // $rootScope.do_ischeckin()
 
-   
-    
-    // $timeout(function() {
-    // 	_.forEach($scope.tasks,function(task,id) {
-    // 		console.log(task.$value)
-    // 		var t_str = task.$value.split(',');
-    // 		console.log(t_str)
-    // 		if (t_str[0]) {} else{};
-    // 	})
-    //     ref.on('value', function(dataSnapshot) {
-    //        console.log(dataSnapshot)
-    //     });
-    // },2500)
 
     function get_order_id (argument) {
       console.log(tc.tasks)
@@ -218,7 +206,7 @@ angular.module('SmartDriver')
         $cordovaDialogs.confirm('Task Finish', 'Action', ['Confirm','Cancel'])
             .then(function(buttonIndex) {
                 
-                // $cordovaProgress.showSimple(true)
+                $cordovaProgress.showSimple(true)
 
                 // no button = 0, 'OK' = 1, 'Cancel' = 2
                 var btnIndex = buttonIndex;
@@ -231,7 +219,7 @@ angular.module('SmartDriver')
                         // get_order_id()
                       }).
                       error(function(data, status, headers, config) {
-                       // $cordovaProgress.hide();
+                       $cordovaProgress.hide();
 
                         $cordovaDialogs.alert('Error', 'Please check your internet connection', 'ok')
                             .then(function() {
@@ -240,7 +228,8 @@ angular.module('SmartDriver')
                         console.log(data)
                       });
                 } else{
-                    return
+                    $cordovaProgress.hide();
+                   
                 };
             });
         

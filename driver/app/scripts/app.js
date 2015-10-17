@@ -41,6 +41,15 @@ angular.module('SmartDriver', ['ionic', 'config', 'SmartDriver.controllers','fir
         }
       }
     })
+    .state('app.task_list', {
+      url: '/task_list',
+      views: {
+        'menuContent' :{
+            templateUrl: 'templates/task_list.html',
+            controller: 'TaskListCtrl as tlc'
+        }
+      }
+    })
     .state('app.search', {
       url: '/search',
       views: {
@@ -78,9 +87,9 @@ angular.module('SmartDriver', ['ionic', 'config', 'SmartDriver.controllers','fir
       }
     });
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/app/task');
+  $urlRouterProvider.otherwise('/app/task_list');
 
   $httpProvider.interceptors.push('authInterceptor');
 })
-.constant('API_URL', 'http://ajaxmart.ca:3000/');//api url constant
+.constant('API_URL', 'http://cmtest.littlesailing.com/index.php?r=Miss/');//api url constant
 

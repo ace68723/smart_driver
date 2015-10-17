@@ -1,7 +1,7 @@
 'use strict';
 angular.module('SmartDriver.controllers', [])
 
-.controller('AppCtrl', function($scope, $ionicModal, $timeout, $http,API_URL,$location, $rootScope,authToken) {
+.controller('AppCtrl', function($scope, $ionicModal, $timeout, $http,API_URL,$location, $rootScope,auth) {
   // Form data for the login modal
   $scope.loginData = {};
 
@@ -23,23 +23,23 @@ angular.module('SmartDriver.controllers', [])
     $scope.modal.show();
   };
 
-    $timeout(function() {
-        if(!token){
-          $scope.login(); 
-        }else{
-            var auth_data   = {}
-            $http.post(API_URL + 'authorize', auth_data).
-              success(function(data, status, headers, config) {
-               console.log(data)
-               localStorage.setItem("uid", data.uid);
-               $location.path('/app/task')
-                $rootScope.get_uid()
-              }).
-              error(function(data, status, headers, config) {
-                console.log(data)
-              });
-        }
-    }, 1000);
+    // $timeout(function() {
+    //     if(!token){
+    //       $scope.login(); 
+    //     }else{
+    //         var auth_data   = {}
+    //         $http.post(API_URL + 'authorize', auth_data).
+    //           success(function(data, status, headers, config) {
+    //            console.log(data)
+    //            localStorage.setItem("uid", data.uid);
+    //            $location.path('/app/task')
+    //             $rootScope.get_uid()
+    //           }).
+    //           error(function(data, status, headers, config) {
+    //             console.log(data)
+    //           });
+    //     }
+    // }, 1000);
   // Perform the login action when the user submits the login form
   $scope.doLogin = function() {
     console.log('Doing login', $scope.loginData);
@@ -50,7 +50,7 @@ angular.module('SmartDriver.controllers', [])
             var uid     = data.uid;
             var token   = data.token;
             localStorage.setItem("uid", uid);
-            authToken.setToken(token);
+            auth.setToken(token);
             $scope.closeLogin();
             $location.path('/app/task')
             $rootScope.get_uid()
