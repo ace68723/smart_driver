@@ -1,0 +1,1 @@
+cordova plugin add https://github.com/wf9a5m75/phonegap-googlemaps-plugin  --variable API_KEY_FOR_IOS="AIzaSyAwvxP_Fx1VicedRrOLK2ja5Hjj-muyRIw"
